@@ -1,0 +1,5 @@
+I have used Joomla: 4.0
+https://www.ostraining.com/books/je/pc/
+https://www.inmotionhosting.com/support/edu/joomla/how-to-log-in-to-administrative-dashboard/
+Wamp Server Difficulty: https://stackoverflow.com/questions/13932857/wamp-server-in-green-but-only-get-404/13933605
+https://www.youtube.com/watch?v=0XXw3oSln30&list=PLtaXuX0nEZk_4XIvoPA7O0xT_sYRKnTos&index=6
