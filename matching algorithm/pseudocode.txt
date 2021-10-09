@@ -53,7 +53,7 @@ Set<Match> form_matches
     potential_matches.shuffle()
     
     Set<Match> matches  // the new list of matches
-    Set<UserID> not_yet_matched_users = users_to_interests.keys()  // users that have not yet been matched
+    Set<UserID> not_yet_matched_users = users_to_interests.keys()  // users who have not yet been matched
     
     // Select matches from the potential ones
     for match in potential_matches {
@@ -65,10 +65,10 @@ Set<Match> form_matches
         }
     }
     
-    // the users that couldn't be matched at all
+    // the list of users who couldn't be matched at all
     Set<UserID> unmatchable_users = not_yet_matched_users
     
-    // Go through the users that were unable to be matched and match them with each other.
+    // Go through the users who were unable to be matched and match them with each other.
     // This part is unfortunately at least O(n²) so if there ends up being a lot of unmatched people, a different approach is needed.
     for i in 0..not_yet_matched_users.len()-1 {
         user_1 = not_yet_matched_users[i]
@@ -86,7 +86,7 @@ Set<Match> form_matches
         }
     }
     
-    (Store every user who couldn't be matched in `unmatchable_users` so you could do something like sending them messages about it and telling them to add more interests or something, or just match them without caring about their interests)
+    (Store every user who couldn't be matched (the users in `unmatchable_users`) so you could do something like sending them messages about it and telling them to add more interests or something, and/or just match them without caring about their interests)
     (As a special case if the number of users is odd, you might want to form a group of 3)
     
     return matches
