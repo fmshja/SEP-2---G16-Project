@@ -79,9 +79,12 @@ Set<Match> form_matches
             user_2_interests = users_to_interests[user_2]
             
             if user_1_interests intersects with user_2_interests {
-                matches.insert(new Match(user_1, user_2, ...))
-                unmatchable_users.remove(user_1)
-                unmatchable_users.remove(user_2)
+                Match potential_match = new Match(user_1, user_2, ...)
+                if potential_match is not in old_matches {
+                    matches.insert(potential_match)
+                    unmatchable_users.remove(user_1)
+                    unmatchable_users.remove(user_2)
+                }
             }
         }
     }
