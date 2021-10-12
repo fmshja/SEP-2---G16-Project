@@ -33,7 +33,7 @@ type Group {
 //
 // This returns the new list of formed groups, which doesn't contain repeats from the old list.
 
-Set<Group> form_matches(
+Set<Group> form_groups(
         Int min_group_size,
         Int group_size,
         Map<UserID, Set<Interest>> users_to_interests,
@@ -136,6 +136,7 @@ Map<Interest, Int> calculate_group_spots(
 
     return spots_per_interest
 }
+
 
 // A modified Hopcroft-Karp algorithm.
 //
