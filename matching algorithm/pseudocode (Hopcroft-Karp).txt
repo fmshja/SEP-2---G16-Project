@@ -35,6 +35,19 @@ type Group {
 // The maximum group size will be `group_size + min_group_size - 1`.
 //
 // This returns the new list of formed groups, which doesn't contain repeats from the old list.
+//
+// The function works in these steps:
+// 1. Allot Group Slots
+//     * Allot each Interest their "group slots" (how many people will form groups based on that interest)
+// 2. Create Initial Matching
+//     * Create the first crude matching
+// 3. Hopcroft-Karp
+//     * Use Hopcroft-Karp to iteratively get better matchings
+// 4. Form Groups
+//     * Create the groups from the matching
+// 5. Insert Small Groups
+//     * Add groups that were larger or equal to `min_group_size`
+//     * Append groups that were smaller than `min_group_size` to the existing groups
 
 Set<Group> form_groups(
         Int min_group_size,
@@ -44,6 +57,10 @@ Set<Group> form_groups(
         Set<Group> old_groups,
     )
 {
+    // ---
+    // STEP 1: ALLOT GROUP SLOTS
+    // ---
+
     // Allot group spots for each interest
     Map<Interest, Int> free_spots = calculate_group_spots(
         min_group_size,
@@ -51,6 +68,10 @@ Set<Group> form_groups(
         users_to_interests.len(),
         interests_to_users
     )
+
+    // ---
+    // STEP 2: CREATE INITIAL MATCHING
+    // ---
 
     // The matchings between users and interests used in the algorithm
     Map<UserID, Interest> matchings;
@@ -65,9 +86,17 @@ Set<Group> form_groups(
             }
         }
     }
+    
+    // ---
+    // STEP 3: HOPCROFT-KARP
+    // ---
 
     // Run the algorithm until the maximal matching has been found
     while(hopcroft_karp(users_to_interests, interests_to_users, &matchings) > 0) {}
+
+    // ---
+    // STEP 4: FORM GROUPS
+    // ---
 
     // The final resulting list of groups
     Set<Group> groups
@@ -79,7 +108,7 @@ Set<Group> form_groups(
     }
 
     // Form the groups
-    TODO: Check for repeats of old groups and remove them
+    TODO: Check for repeats of old groups and replace them
     for (user, interest) in matchings {
         Group g = unfinished_groups[interest]
         g.users.insert(user)
@@ -92,16 +121,20 @@ Set<Group> form_groups(
             unfinished_groups[interest] = g  // not needed if you were using a reference and not a clone of the original
         }
     }
+    
+    // ---
+    // STEP 5: INSERT SMALL GROUPS
+    // ---
 
     // Add the groups that were small
     // If they were too small, they're appended to an existing group
-    for (interest, small_group) in unfinished_groups {
+    for small_group in unfinished_groups.values() {
         if small_group.len() >= min_group_size {
             groups.insert(small_group)
         } else {
-            // append to an existing
+            // append to an existing good group
             for ok_group in groups {
-                if ok_group.interest = interest {
+                if ok_group.interest = small_group.interest {
                     ok_group.users.append(small_group.users)
                 }
             }
