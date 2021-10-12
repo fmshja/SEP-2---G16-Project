@@ -15,12 +15,13 @@ type Interest {
 
 // A group of users formed by the matching algorithm.
 type Group {
-    Set<UserID> users
-    ...  // other relevant data for other parts of the software, such as the specific interest
+    Set<UserID> users,
+    Interest interest,
+    ...  // other relevant data for other parts of the software
 }
 
 
-// The function implementing the matching algorithm.
+// The function implementing the group matching algorithm.
 //
 // Uses a modified Hopcroft-Karp algorithm.
 //
@@ -30,6 +31,8 @@ type Group {
 // * `users_to_interests`, a map from users to their interests
 // * `interests_to_users`, a map from interests to their users
 // *  `old_groups`, the previous list of formed groups
+//
+// The maximum group size will be `group_size + min_group_size - 1`.
 //
 // This returns the new list of formed groups, which doesn't contain repeats from the old list.
 
@@ -70,8 +73,10 @@ Set<Group> form_groups(
     Set<Group> groups
 
     // A helper map for WIP groups
-    // Should be populated with empty groups, or those should be created automatically when accessing an empty value
     Map<Interest, Group> unfinished_groups
+    for interest in interests_to_users.keys() {
+        unfinished_groups[interest] = new Group(users = [], interest = interest)
+    }
 
     // Form the groups
     TODO: Check for repeats of old groups and remove them
@@ -82,16 +87,25 @@ Set<Group> form_groups(
         if g.users.len() >= group_size {
             // Finish a group
             groups.insert(g)
-            unfinished_groups[interest] = new Group()
+            unfinished_groups[interest] = new Group(users = [], interest = interest)
         } else {
             unfinished_groups[interest] = g  // not needed if you were using a reference and not a clone of the original
         }
     }
 
-    // Add the groups that were too small
-    // They should not be smaller than `min_group_size`
-    for (_interest, group) in unfinished_groups {
-        groups.insert(group)
+    // Add the groups that were small
+    // If they were too small, they're appended to an existing group
+    for (interest, small_group) in unfinished_groups {
+        if small_group.len() >= min_group_size {
+            groups.insert(small_group)
+        } else {
+            // append to an existing
+            for ok_group in groups {
+                if ok_group.interest = interest {
+                    ok_group.users.append(small_group.users)
+                }
+            }
+        }
     }
 
     return groups
