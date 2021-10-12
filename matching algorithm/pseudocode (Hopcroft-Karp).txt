@@ -1,0 +1,140 @@
+
+// Contains uniquely identifying information about a user, e.g. an id-number.
+type UserID {
+    ...
+}
+
+
+// An interest or hobby of an user.
+//
+// Implementation details are not important here, other than that you can compare their equality and inequality.
+type Interest {
+    ...
+}
+
+
+// A group of users formed by the matching algorithm.
+type Group {
+    Set<UserID> users
+    ...  // other relevant data for other parts of the software, such as the specific interest
+}
+
+
+// The function implementing the matching algorithm.
+//
+// Uses a modified Hopcroft-Karp algorithm.
+//
+// As it's inputs it gets:
+// * `min_group_size`, the smallest allowed group size
+// * `group_size`, the desired group size
+// * `users_to_interests`, a map from users to their interests
+// * `interests_to_users`, a map from interests to their users
+// *  `old_groups`, the previous list of formed groups
+//
+// This returns the new list of formed groups, which doesn't contain repeats from the old list.
+
+Set<Group> form_matches
+    (
+        Int min_group_size,
+        Int group_size,
+        Map<UserID, Set<Interest>> users_to_interests,
+        Map<Interest, Set<UserID>> interests_to_users,
+        Set<Group> old_groups,
+    )
+{
+    // Allot group spots for each interest
+    Map<Interest, Int> free_spots = calculate_group_spots(
+        min_group_size,
+        group_size,
+        users_to_interests.len(),
+        interests_to_users
+    )
+
+    // The matchings between users and interests used in the algorithm
+    Map<UserID, Interest> matchings;
+
+    // Get the initial matchings
+    // The order that the users are iterated and the interests are picked should be random to avoid bias
+    for (user, interests) in users_to_interests {
+        for interest in interests {
+            if free_spots[interest] > 0 {
+                matchings[user] = interests
+                free_spots[interest] -= 1
+            }
+        }
+    }
+
+    TODO: The actual algorithm
+
+    // The final resulting list of groups
+    Set<Group> groups
+
+    // A helper map for WIP groups
+    // Should be populated with empty groups, or those should be created automatically when accessing an empty value
+    Map<Interest, Group> unfinished_groups
+
+    // Form the groups
+    for (user, interest) in matchings {
+        Group g = unfinished_groups[interest]
+        g.users.insert(user)
+
+        if g.users.len() >= group_size {
+            // Finish a group
+            groups.insert(g)
+            unfinished_groups[interest] = new Group()
+        } else {
+            unfinished_groups[interest] = g  // not needed if you were using a reference and not a clone of the original
+        }
+    }
+
+    // Add the groups that were too small
+    // They should not be smaller than `min_group_size`
+    for (_interest, group) in unfinished_groups {
+        groups.insert(group)
+    }
+
+    return groups
+}
+
+
+// Calculates how many group spots each interest should have.
+//
+// The total amount of spots will be exactly the same as `number_of_users`.
+//
+// Most of the spots allocated for each interest should be divisible by `group_size`,
+// but their remainder should never be smaller than `min_group_size`.
+// (This is to make sure that most groups will be of the desired size while no group will be too small)
+
+Map<Interest, Int> calculate_group_spots
+    (
+        Int min_group_size,
+        Int group_size,
+        Int number_of_users,
+        Map<Interest, Set<UserID>> interests_to_users,
+    )
+{
+    // Count how many users does each interest have and count the sum of those values
+    Map<Interest, Int> spots_per_interest
+    Int count_total = 0
+    for (interest, users) in interests_to_users {
+        spots_per_interest[interest] = users.len()
+        count_total += users.len()
+    }
+
+    Int free_spots = number_of_users
+
+    // Transform the amounts of people in each interest from raw counts into weight values and then to spot counts
+    for (interest, count) in spots_per_interest {
+        Int spots = floor(count / count_total * number_of_users)  // be sure to do the calculation in floating points
+        free_spots -= spots
+        spots_per_interest[interest] = spots
+    }
+
+    TODO: Spread any remaining free spots with the interests and try to make as many of the spots for each interests
+    to be divisible by the `group_size` while making sure that all of their remainders will be greater or equal to
+    `min_group_size`.
+
+    return spots_per_interest
+}
+
+
