@@ -86,13 +86,13 @@ Set<Group> form_groups(
             }
         }
     }
-    
+
     // ---
     // STEP 3: HOPCROFT-KARP
     // ---
 
     // Run the algorithm until the maximal matching has been found
-    while(hopcroft_karp(users_to_interests, interests_to_users, &matchings) > 0) {}
+    while(hopcroft_karp(users_to_interests, interests_to_users, free_spots, &matchings) > 0) {}
 
     // ---
     // STEP 4: FORM GROUPS
@@ -108,7 +108,7 @@ Set<Group> form_groups(
     }
 
     // Form the groups
-    TODO: Check for repeats of old groups and replace them
+    // TODO: Check for repeats of old groups and replace them
     for (user, interest) in matchings {
         Group g = unfinished_groups[interest]
         g.users.insert(user)
@@ -121,7 +121,7 @@ Set<Group> form_groups(
             unfinished_groups[interest] = g  // not needed if you were using a reference and not a clone of the original
         }
     }
-    
+
     // ---
     // STEP 5: INSERT SMALL GROUPS
     // ---
@@ -177,9 +177,9 @@ Map<Interest, Int> calculate_group_spots(
         spots_per_interest[interest] = spots
     }
 
-    TODO: Spread any remaining free spots with the interests and try to make as many of the spots for each interests
-    to be divisible by the `group_size` while making sure that all of their remainders will be greater or equal to
-    `min_group_size`.
+    // TODO: Spread any remaining free spots with the interests and try to make as many of the spots for each interests
+    // to be divisible by the `group_size` while making sure that all of their remainders will be greater or equal to
+    // `min_group_size`.
 
     return spots_per_interest
 }
@@ -195,8 +195,13 @@ Map<Interest, Int> calculate_group_spots(
 Int hopcroft_karp(
         Map<UserID, Set<Interest>> users_to_interests,
         Map<Interest, Set<UserID>> interests_to_users,
-        &Map<UserID, Interest> matchings,  
+        Map<Interest, Int> free_spots,
+        &Map<UserID, Interest> matchings,
     )
 {
-    TODO
+    Int new_matchings = 0
+
+    // TODO
+
+    return new_matchings
 }
