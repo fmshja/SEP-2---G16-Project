@@ -1,3 +1,25 @@
+// The pre-defined collection types used in this pseudocode:
+// * (T, U, ...) / Tuple
+//   * A sequence collection of varying types but with a constant length
+//   * Implemented as an array, struct, object, or map, if tuple-types are not available
+// * List<T>
+//   * A sequence collection with it's elements in order
+//   * Implemented as a dynamic array/vector or linked list
+// * Stack<T>
+//   * A sequence collection which can pop the last inserted item, LIFO
+//   * Can be implemented similarly to the `List` type
+// * Queue<T>
+//   * A sequence collection which can dequeue the first inserted item, FIFO
+//   * Can be implemented similarly to the `List` type
+// * Set<T> 
+//   * A collection of data where no two elements are the same
+//   * Can in some places be implemented with just a dynamic array/vector
+// * Map<K, V>
+//   * An associative collection made of pairs
+//   * The key values of type `K` can be used to fetch a value of type `V`
+//
+// All type names will start with a capital letter (ie. Int, Float, Bool)
+
 
 // Contains uniquely identifying information about a user, e.g. an id-number.
 type UserID {
@@ -75,6 +97,7 @@ Set<Group> form_groups(
 
     // The matchings between users and interests used in the algorithm
     Map<UserID, Interest> matchings;
+    Map<Interest, Set<UserID>> matchings_inverse;
 
     // Get the initial matchings
     // The order that the users are iterated and the interests are picked should be random to avoid bias
@@ -82,6 +105,7 @@ Set<Group> form_groups(
         for interest in interests {
             if free_spots[interest] > 0 {
                 matchings[user] = interests
+                matchings_inverse[interest].insert(user)
                 free_spots[interest] -= 1
             }
         }
@@ -92,11 +116,22 @@ Set<Group> form_groups(
     // ---
 
     // Run the algorithm until the maximal matching has been found
-    while(hopcroft_karp(users_to_interests, interests_to_users, free_spots, &matchings) > 0) {}
+    while(
+        hopcroft_karp(
+            users_to_interests,
+            interests_to_users,
+            &free_spots,
+            &matchings,
+            &matchings_inverse,
+        ) > 0
+    )
+    {}
 
     // ---
     // STEP 4: FORM GROUPS
     // ---
+
+    // TODO: Make a better group forming by using `matchings_inverse` in place of `matchings`
 
     // The final resulting list of groups
     Set<Group> groups
@@ -187,7 +222,7 @@ Map<Interest, Int> calculate_group_spots(
 
 // A modified Hopcroft-Karp algorithm.
 //
-// Gets a reference to the current matchings, which this function will mutate.
+// Gets references to the free spots, current matchings, and it's inverse, which this function will mutate.
 //
 // Returns the amount of matchings made.
 // 0 means that the maximal matching was reached and the algorithm has finished.
@@ -195,11 +230,79 @@ Map<Interest, Int> calculate_group_spots(
 Int hopcroft_karp(
         Map<UserID, Set<Interest>> users_to_interests,
         Map<Interest, Set<UserID>> interests_to_users,
-        Map<Interest, Int> free_spots,
+        &Map<Interest, Int> free_spots,
         &Map<UserID, Interest> matchings,
+        &Map<Interest, Set<UserID>> matchings_inverse,
     )
 {
+    // check if there's no spots left anymore
+    if all values in free_spots >= 0 {
+        return 0
+    }
+
     Int new_matchings = 0
+
+    // Find unmatched user vertices
+    // (unmatched interest vertices are in `free_spots`)
+    Set<UserID> unmatched_users
+    for (user, _interests) in users_to_interests {
+        if not matchings.has_key(user) {
+            unmatched_users.insert(user)
+        }
+    }
+
+    // Users to be searched by the BFS
+    Queue<UserID> bfs_queue = unmatched_users
+    // Users already found by the BFS
+    Set<UserID> users_found_bfs = unmatched_users
+    // Users removed due to them being in an augmenting path
+    Set<UserID> removed_users
+
+    // The resulting list of augmenting paths
+    Set<List<(User, Interest)>> augmenting_paths
+
+    // Create alternating level graph with a breadth-first-search
+    while bfs_queue is not empty {
+        UserID bfs_user = bfs_queue.dequeue()
+
+        // try to eagerly find any free spots
+        Bool found_spot = false
+        for interest in users_to_interests[bfs_user] {
+            if free_spots[interest] > 0 {
+                // found the end of an augmenting path
+                List<(User, Interest)> path
+                path.push((bfs_user, interest))
+                removed_users.insert(bfs_user)
+
+                // Try to find back to an unmatched user with a depth-first-search
+                Stack<UserID> dfs_stack
+                Set<UserID> users_found_dfs
+
+                dfs_stack.push(bfs_user)
+
+                while dfs_stack is not empty {
+                    UserID dfs_user = dfs_stack.pop()
+
+                    if dfs_user is not in users_found_dfs {
+                        users_found_dfs.insert(dfs_user)
+                        // TODO
+                    }
+                }
+
+                found_spot = true
+                break
+            }
+        }
+
+        if not found_spot {
+            // continue the search
+            for interest in users_to_interests[user] {
+                Set<UserID> to_search = interests_to_users[user].exclude(users_found_bfs)
+                bfs_queue.append(to_search)
+                users_found_bfs.append(to_search)
+            }
+        }
+    }
 
     // TODO
 
