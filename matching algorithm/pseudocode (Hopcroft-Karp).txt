@@ -104,7 +104,7 @@ Set<Group> form_groups(
     for (user, interests) in users_to_interests {
         for interest in interests {
             if free_spots[interest] > 0 {
-                matchings[user] = interests
+                matchings[user] = interest
                 matchings_inverse[interest].insert(user)
                 free_spots[interest] -= 1
             }
@@ -236,7 +236,7 @@ Int hopcroft_karp(
     )
 {
     // check if there's no spots left anymore
-    if all values in free_spots >= 0 {
+    if all values in free_spots = 0 {
         return 0
     }
 
@@ -259,7 +259,7 @@ Int hopcroft_karp(
     Set<UserID> removed_users
 
     // The resulting list of augmenting paths
-    Set<List<(User, Interest)>> augmenting_paths
+    Set<List<(Interest, User)>> augmenting_paths
 
     // Create alternating level graph with a breadth-first-search
     while bfs_queue is not empty {
@@ -269,7 +269,7 @@ Int hopcroft_karp(
         Bool found_spot = false
         for interest in users_to_interests[bfs_user] {
             if free_spots[interest] > 0 {
-                // Found a free spot, which is a possible endpoint of an augmenting path
+                // Found a free spot, which is a possible starting point of an augmenting path
 
                 // Users visited by the DFS
                 Set<UserID> users_visited_dfs
@@ -303,11 +303,30 @@ Int hopcroft_karp(
                 Set<UserID> to_search = interests_to_users[bfs_user].exclude(users_visited_bfs)
                 bfs_queue.append(to_search)
                 users_visited_bfs.append(to_search)
-            }
         }
     }
 
-    // TODO: augment the graph with the augmenting paths
+    // Use the augmenting paths to create new matchings
+    for path in augmenting_paths {
+        Bool failed = false
+        for (interest, user) in path {
+            // connect these two 
+            matchings[user] = interest
+            matchings_inverse[interest].insert(user)
+            free_spots[interest] -= 1
+
+            if path has next {
+                Interest next_interest = (peek the next interest)
+                // remove the existing matching
+                matchings_inverse[next_interest].remove(user)
+                free_spots[next_interest] += 1
+            }
+        }
+
+        if not failed {
+            new_matchings += 1
+        }
+    }
 
     return new_matchings
 }
