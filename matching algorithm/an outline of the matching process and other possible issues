@@ -1,0 +1,127 @@
+*An outline of the matching process for the Connecting Colleagues project*
+_Including some possible issues that came to mind regarding the website_
+
+
+*SECTION A* - AN OUTLINE OF THE MATCHING PROCESS
+
+
+[A.1] The whole process is to be done within a certain time frame, for example within one month, before the process starts back from the beginning.
+
+
+[A.2] The matching starts with grouping the users with a matching algorithm.
+    
+    - (This is well into the works by the algorithm team!)
+    
+    - The main issues regarding the matching algorithm are
+        - the efficiency of the algorithm (with a large user base), and
+        - the possibility of a user getting matched with the same user multiple times in a row.
+    
+    - The information on the users and their interests can be retrieved from the database (e.g. an ID of a user, a list of a user's selected interests, the user IDs of a user's last few matches.
+
+
+[A.3] After the users have been grouped up successfully, the system will send each matched user a chat invitation via email.
+    
+    - Should there be a link to the website on the email? 
+        - On the other hand, it might make it easier for the users to the website, but on the other, a link in the email might cause the email filter to sort the invitation to the trash bin. 
+    
+    - There is also a possibility of somebody trying to (bulk) phish user accounts via forged emails.
+    
+    - Could the chat invitation be something other than an email?
+    
+    - What if the user couldn't be matched with anyone?
+        - Send an email to the user and suggest them to select more interests for a better matching?
+        -> Is this user out of the matching process for an entire matching round then?
+
+
+[A.4] The users in the groups are able to arrange a group meeting via the website's build-in(?) calendar.
+    
+    - Would the calendar support an importation or a sync-up of external calendar (e.g. Google Calendar, Microsoft Outlook)?
+    
+    - If there is a build-in calendar on the website, how would it work for the non-desktop users? (From my experience, the calendars are somewhat clunky to use on mobile devices.)
+
+
+[A.5] After the matching time is over, the users are given a chance to change their selected interests.
+    
+    - Should there be an option for the users to send feedback on their experience on the matching (and with the website in general) for further development? 
+    
+    - Could a user block another user from getting matched with them again in the future?
+        - Maybe the users would be asked to whether or not they want to be matched with the user again?
+    
+    - Should there be a way for users to report a user for inappropriate behavior?
+        -> Then there needs to be clear, written-out rules set in place for what kind of behavior is not acceptable on the website.
+        -> That also means that there has to be someone reviewing the reports at regular intervals.
+
+
+[A.6] From here, the matching process will start from the begininng.
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+*SECTION B* - POSSIBLE ISSUES REGARDING THE WEBSITE'S FUNCTIONS
+
+
+[B.1.1] Although not part of the actual, on-going matching process, the creation of a new user account in the system is important to the matching process. There are three main parts for this process, which are
+    
+    - inputting the basic user information of the user account, e.g.
+        - name (which is different from the user ID),
+        - password,
+        - email, and
+        - profile picture,
+    
+    - giving the user account its interests using checkboxes, and
+    
+    - verifying the user account's email (by sending a verification email to the email address the user had provided).
+
+
+[B.1.2] The new user account will be added to the matching process after the process starts from the beginning.
+
+    - What if a user account is created right when the process starts from the beginning? Do they have to wait for almost the entire matching process time (e.g. a month) to be matched?
+        -> The user might get bored with or forget about the website, which might lead to the user not coming back to the site.
+
+    - Then again, if there are multiple matching processes being run asynchronously, there is a higher chance of the same users being matched again and again (maybe not in a row, but frequently enough to be noticeable to the users), which may impact the user experience.
+        - Then _again_, if the user base, or the amount of users interested in a particular interest, is small, there is always a good chance of this happening "naturally" since there aren't that many users for the matching algorithm to make constantly unique matches out of.
+        -> Either way, this issue is something that should be kept in mind when planning the matching process.
+
+
+[B.3] Then there is a few crucial issues regarding the cyber security of the website.
+
+    - The possibility of phishing attempts had already been touched upon on the part about sending the chat invitation via an email to the users. (Section A.3)
+
+    - How tight should the password security be?
+        - I.e. what kind of characters should the passwords include (a-z, A-Z, 0-9, special characters?) and at a minimum, how long should the passwords be?
+        - How frequently should the users change their user account passwords?
+    
+    - How long should the chat logs be available for the users that participated in the chat?
+        - The users might have discussed some sensitive issues or work related matters in the chats, therefore it would be irresponsible to leave that kind of information just laying around on the server, waiting for a data breach to happen.
+
+
+[B.4] There is also an issue of how the user requested interests are added to the database.
+
+    - Should the adding process be automatic?
+        - An algorithm goes through the requested interests, checking whether or not there is an interest of the same name in the database already.
+            - Generally a faster process than the manual process.
+        - What about similarly named interests?
+            - If the algorithm doesn't take similarly named interests into account, there might be multiple instances of an interest that mean the same thing but are worded differently.
+            - Does the algorithm take into account possible spelling mistakes (human errors) in the requests?
+        - Since there are general subcategories for all the interests (e.g. "sports", "arts"), how can the algorithm place the requested interests into their correct subcategories?
+
+    - Should the adding process be manual?
+        - The admin or moderator(s) reviews the requested interests and after the review process is complete, they add the request to the database.
+            - Possibly a more accurate and thorough process than the automatic process.
+        - What if the admin or moderator(s) forget to check the requested interests?
+            - There is also a possiblity of a human error and/or negligence in the process (e.g. the one reviewing the requests just accepts everything without consideration or turns down a request because of their limited knowledge on the interest).
+            - There could be hundereds, if not thousands, of requests to go through at the worst case scenario.
+                -> Time consuming and frustrating to the reviewer.
+
+    - Should the adding process be a mix of automatic and manual?
+        - An algorithm goes through the requested interests and weeds out the similarly named interests. It gives a list of unique(-ish) requests to the admin or moderator(s) to go through and the reviewer decides whether or not to add the requested interest to the database.
+            - Mixes strengths and diminishes weaknesses from both of the processing types.
+        - There is still a possiblity of a human error and/or negligence in the adding process (see the "should the adding process be manual?" part for further clarification).
+
+    - In general, should the user be notified of whether or not their requested interests was added to the interest list?
+
+    - There is an issue that was already touched upon in the "should the adding process be automatic?" part regarding the subcategories.
+        - Again, if the algorithm is supposed to add the requested interest to the database automatically, how can it determine to which subcategory the interest should be added to?
+            -> Probably requires a person to make this decision.
+            - In this case, should there be an option for the admin and/or moderator(s) to add more subcategories, if needed?
