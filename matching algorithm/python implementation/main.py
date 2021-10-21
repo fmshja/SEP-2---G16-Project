@@ -6,6 +6,13 @@ Interest = NewType("Interest", str)
 
 
 class Group:
+    """A group of users formed by the matching algorithm.
+
+    Attributes:
+        users (set[userId]): The list of users in this group
+        interest (Interest): The interest that this group was formed around
+    """
+
     def __init__(self, users: set[UserId], interest: Interest):
         self.users = users
         self.interest = interest
@@ -43,7 +50,7 @@ def calculate_group_spots(
     group_size: int,
     number_of_users: int,
     interests_to_users: dict[Interest, set[UserId]]
-) -> dict[Interest, UserId]:
+) -> dict[Interest, int]:
     """Calculates how many group spots each interest should have.
 
     The total amount of spots will be exactly the same as `number_of_users`.
@@ -59,11 +66,30 @@ def calculate_group_spots(
         interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
 
     Returns:
-        dict[Interest, UserId]: A mapping from the interests to the amount of group spots that it gets
+        dict[Interest, int]: A mapping from the interests to the amount of group spots that it gets
     """
 
-    # TODO
-    pass
+    spots_per_interest: dict[Interest, int] = dict()
+    count_total: int = 0
+
+    # Count how many users does each interest have and count the sum of those values
+    for interest, users in interests_to_users.items():
+        spots_per_interest[interest] = len(users)
+        count_total += len(users)
+
+    free_spots: int = number_of_users
+
+    # Transform the amounts of people in each interest from raw counts into weight values and then to spot counts
+    for interest, count in spots_per_interest.items():
+        spots: int = int(float(count) / float(count_total) * number_of_users)
+        free_spots -= spots
+        spots_per_interest[interest] = spots
+
+    # TODO: Spread any remaining free spots with the interests and try to make as many of the spots for each interests
+    # to be divisible by the `group_size` while making sure that all of their remainders will be greater or equal to
+    # `min_group_size`.
+
+    return spots_per_interest
 
 
 def hopcroft_karp(
