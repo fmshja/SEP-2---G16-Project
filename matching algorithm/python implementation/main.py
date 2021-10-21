@@ -1,4 +1,5 @@
 from typing import NewType
+import random
 
 # Create newtypes for clarity and for the ease of potential rewriting.
 UserId = NewType("UserId", int)
@@ -9,13 +10,18 @@ class Group:
     """A group of users formed by the matching algorithm.
 
     Attributes:
-        users (set[userId]): The list of users in this group
+        users (list[userId]): The list of users in this group
         interest (Interest): The interest that this group was formed around
     """
 
-    def __init__(self, users: set[UserId], interest: Interest):
+    def __init__(self, users: list[UserId], interest: Interest):
         self.users = users
         self.interest = interest
+
+
+def shuffle(collection) -> list:
+    """A helper function for shuffling collections."""
+    return random.sample(collection, len(collection))
 
 
 def form_groups(
@@ -41,8 +47,64 @@ def form_groups(
         set[Group]: The new list of formed groups, doesn't contain repeats from `old_groups`
     """
 
-    # TODO
-    pass
+    # The function works in these steps:
+    # 1. Allot Group Slots
+    #     * Allot each Interest their "group slots" (how many people will form groups based on that interest)
+    # 2. Create The Initial Matching
+    #     * Create the first crude matching
+    # 3. Hopcroft-Karp
+    #     * Use Hopcroft-Karp to iteratively get better matchings
+    # 4. Form Groups
+    #     * Create the groups from the matching
+
+    ###
+    # STEP 1:  ALLOT GROUP SLOTS
+    ###
+
+    free_spots: dict[Interest, int] = calculate_group_spots(
+        min_group_size,
+        group_size,
+        len(users_to_interests),
+        interests_to_users
+    )
+
+    ###
+    # STEP 2: CREATE THE INITIAL MATCHING
+    ###
+
+    # The matchings between users and interests
+    matchings: dict[UserId, Interest] = dict()
+    matchings_inverse: dict[Interest, set[UserId]] = dict()
+
+    # Get the initial matchings
+    # The order that the users are iterated and the interests are picked are randomized to avoid bias
+    for user, interests in shuffle(users_to_interests):
+        for interest in shuffle(interests):
+            if free_spots[interest] > 0:
+                matchings[user] = interest
+                matchings_inverse[interest].add(user)
+                free_spots[interest] -= 1
+
+    ###
+    # STEP 3: HOPCROFT-KARP
+    ###
+
+    # Run the algorithm until the maximal matching has been found
+    while hopcroft_karp(users_to_interests, interests_to_users, free_spots, matchings, matchings_inverse) > 0:
+        pass
+
+    ###
+    # STEP 4: FORM GROUPS
+    ###
+
+    # The final resulting list of groups
+    groups: list[Group] = list()
+
+    for interest, users in matchings_inverse:
+        for group_chunk in [users[i:i+group_size] for i in range(0, len(users), group_size)]:
+            groups.append(Group(group_chunk, interest))
+
+    return groups
 
 
 def calculate_group_spots(
@@ -117,6 +179,7 @@ def hopcroft_karp(
     pass
 
 
+# The main "function"
 if __name__ == "__main__":
     # TODO
     pass
