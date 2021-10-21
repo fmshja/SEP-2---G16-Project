@@ -1,5 +1,6 @@
-from typing import NewType
 import random
+import itertools
+from typing import NewType
 
 # Create newtypes for clarity and for the ease of potential rewriting.
 UserId = NewType("UserId", int)
@@ -100,15 +101,58 @@ def form_groups(
     # The final resulting list of groups
     groups: list[Group] = list()
 
-    for interest, users in matchings_inverse:
-        for group_chunk in [users[i:i+group_size] for i in range(0, len(users), group_size)]:
-            if len(group_chunk) < min_group_size:
-                # Found a too small group, append it to the previous one
-                groups[-1].users.append(group_chunk)
-            else:
-                groups.append(Group(group_chunk, interest))
+    # old_groups but with the interests stripped out
+    old_groups: set[list[UserId]] = map(
+        lambda group: group.users, iter(old_groups))
 
-    return groups
+    for interest, users in matchings_inverse:
+        # ok groups
+        group_canditates: list[list[UserId]]
+        # repeat groups
+        group_rejects: list[list[UserId]]
+
+        # Form groups until there's no repeat groups, or after 100 iterations
+        for _ in range(0, 100):
+            group_canditates = list()
+            group_rejects = list()
+
+            groups_to_check: list[list[UserId]] = [
+                users[i:i+group_size] for i in range(0, len(users), group_size)]
+
+            if len(groups_to_check[-1]) < min_group_size:
+                # merge the group with the previous one if it's too small
+                small = groups_to_check.pop()
+                groups_to_check[-1].append(small)
+
+            for g in groups_to_check:
+                if g in old_groups:
+                    # found a repeat group
+                    group_rejects.append[g]
+                else:
+                    # group is ok
+                    group_canditates.append[g]
+
+            # check if there were any rejects, and shuffle them into the rest to try again
+            if len(group_rejects) > 0:
+                for groups in group_rejects:
+                    # flatten the canditates into users
+                    users = list(
+                        itertools.chain.from_iterable(group_canditates))
+                    # shuffle the rejects back into the users
+                    for reject in itertools.chain.from_iterable(group_rejects):
+                        users.insert(random.randrange(len(users)), reject)
+            else:
+                # no repeats found
+                break
+
+        # Add the possible straggler groups if 100 iterations were reached
+        group_canditates.extend(group_rejects)
+
+        # Finally add the groups
+        for g in group_canditates:
+            groups.append(Group(g, interest))
+
+    return set(groups)
 
 
 def calculate_group_spots(
