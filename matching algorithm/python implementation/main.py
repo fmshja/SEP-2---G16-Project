@@ -102,7 +102,11 @@ def form_groups(
 
     for interest, users in matchings_inverse:
         for group_chunk in [users[i:i+group_size] for i in range(0, len(users), group_size)]:
-            groups.append(Group(group_chunk, interest))
+            if len(group_chunk) < min_group_size:
+                # Found a too small group, append it to the previous one
+                groups[-1].users.append(group_chunk)
+            else:
+                groups.append(Group(group_chunk, interest))
 
     return groups
 
