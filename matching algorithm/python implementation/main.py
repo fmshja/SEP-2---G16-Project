@@ -1,3 +1,5 @@
+# Use at least Python 3.9
+
 import random
 import itertools
 from typing import NewType
