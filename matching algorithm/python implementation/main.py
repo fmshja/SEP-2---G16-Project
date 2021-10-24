@@ -363,5 +363,31 @@ def dfs_augmenting_path(
 
 # The main "function"
 if __name__ == "__main__":
-    # TODO
-    pass
+    user_names: list[str] = ["Ali",
+                             "Barbara",
+                             "Charlie",
+                             "Dana",
+                             "Eero",
+                             "Fatima",
+                             "George",
+                             "Hilda",
+                             ]
+
+    test_users_to_interests: dict[UserId, set[Interest]] = {
+        0: {"football", "videogames", "gardening", "ice hockey"},
+        1: {"videogames", "gardening", "tabletop rpg", "swimming"},
+        2: {"tabletop rpg", "football", "minifigures", "drawing"},
+        3: {"football", "hiking", "drawing", "ice hockey"},
+        4: {"ice hockey", "skiing", "hiking", "football", "swimming"},
+        5: {"gardening", "skiing", "drawing", "football"},
+        6: {"minifigures", "videogames", "bowling", "ice hockey"},
+        7: {"bowling", "skiing", "hiking", "geocaching"},
+    }
+
+    test_interests_to_users: dict[Interest, set[UserId]] = dict()
+
+    for user, interests in test_users_to_interests.items():
+        for interest in interests:
+            test_interests_to_users.setdefault(interest, set()).add(user)
+
+    print(test_interests_to_users)
