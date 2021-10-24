@@ -408,8 +408,10 @@ if __name__ == "__main__":
         directory="demo",
         format="png",
         engine="neato",
-        node_attr={"style": "filled", "width": "1.4",
-                   "fontname": "Calibri", "fontsize": "20.0"}
+        graph_attr={"bgcolor": "transparent"},
+        node_attr={"style": "filled", "width": "1.4", "color": "#111111", "penwidth": "2.0",
+                   "fontname": "Calibri", "fontsize": "20.0"},
+        edge_attr={"color": "#333333", "penwidth": "2.0"},
     )
 
     height = 8.0
