@@ -1,5 +1,6 @@
 # Use at least Python 3.9
 
+from collections import deque
 import random
 import itertools
 from typing import NewType
@@ -207,7 +208,7 @@ def calculate_group_spots(
 def hopcroft_karp(
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
-    free_spots: dict[Interest, UserId],
+    free_spots: dict[Interest, int],
     matchings: dict[UserId, Interest],
     matchings_inverse: dict[Interest, set[UserId]]
 ) -> int:
@@ -216,7 +217,7 @@ def hopcroft_karp(
     Args:
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
         interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
-        free_spots (dict[Interest, UserId]): A mapping from the interests to the amount of free group spots that it
+        free_spots (dict[Interest, Int]): A mapping from the interests to the amount of free group spots that it
         currently has. Will be modified.
         matchings (dict[UserId, Interest]): The current set of matchings from users to interests. Will be modified.
         matchings_inverse (dict[Interest, set[UserId]]): The inverse dict of `matchings`. Will be modified.
@@ -225,8 +226,139 @@ def hopcroft_karp(
         int: The amount of matchings made. 0 means that the maximal matching was reached and the algorithm has finished.
     """
 
-    # TODO
-    pass
+    # check if there's no spots left anymore
+    if all(value == 0 for value in free_spots.values()):
+        return 0
+
+    new_matchings: int = 0
+
+    # Find unmatched user vertices
+    # (unmatched interest vertices are in `free_spots`)
+    unmatched_users: set[UserId] = set()
+    for user in users_to_interests.keys():
+        if user not in matchings:
+            unmatched_users.add(user)
+
+    # Users to be searched by the BFS
+    bfs_queue: deque[UserId] = deque(unmatched_users)
+    # Users already found by the BFS
+    users_visited_bfs: set[UserId] = unmatched_users
+    # Users removed due to them being in an augmenting path
+    removed_users: set[UserId] = set()
+
+    # The resulting list of augmenting paths
+    augmenting_paths: set[list[(Interest, UserId)]] = set()
+
+    # Create alternating level graph with a breadth-first-search
+    while len(bfs_queue) != 0:
+        bfs_user: UserId = bfs_queue.popleft()
+
+        # Try to eagerly find any free spots
+        spot_found: bool = False
+        for interest in users_to_interests[bfs_user]:
+            # Found a free spot, which is a possible starting point of an augmenting path
+
+            # Users visited by the DFS
+            users_visited_dfs: set[UserId]
+
+            # Try to find an augmenting path with a depth-first-search
+            path: list[(Interest, UserId)] = dfs_augmenting_path(
+                users_to_interests,
+                interests_to_users,
+                unmatched_users,
+                users_visited_bfs.exclude(removed_users),
+                interest,
+                users_visited_dfs,
+            )
+
+            if len(path) != 0:
+                augmenting_paths.add(path)
+
+                for user in path.values():
+                    # Remove the users in the path from the future dfs searches
+                    removed_users.insert(user)
+
+            spot_found = True
+
+    if not spot_found:
+        # Continue the search
+        for interest in users_to_interests[bfs_user]:
+            to_search: set[UserId] = interests_to_users[bfs_user] - \
+                users_visited_bfs
+            bfs_queue.append(to_search)
+            users_visited_bfs.append(to_search)
+
+    # Use the augmenting paths to create new matchings
+    for path in augmenting_paths:
+        failed: bool = False
+
+        it, peek = itertools.tee(path)
+        next(peek, None)  # ensure the peeking iterator is 1 ahead
+        for interest, user in it:
+
+            matchings[user] = interest
+            matchings_inverse[interest].add(user)
+            free_spots -= 1
+
+            peeked = next(peek, None)
+            if peeked != None:
+                next_interest: Interest = peeked[1]
+                # remove the existing matching
+                matchings_inverse[next_interest].remove(user)
+                free_spots[next_interest] += 1
+
+        if not failed:  # TODO check the failing conditions
+            new_matchings += 1
+
+    return new_matchings
+
+
+def dfs_augmenting_path(
+    users_to_interests: dict[UserId, set[Interest]],
+    interests_to_users: dict[Interest, set[UserId]],
+    unmatched_users: set[UserId],
+    domain: set[UserId],
+    search_start: Interest,
+    users_visited: set[UserId],
+):
+    """Uses a depth-first-search to find an augmenting path from the given interest.
+
+    Args:
+        users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
+        interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
+        unmatched_users (set[UserId]): Users without matched, the potential endpoints of the path
+        domain (set[UserId]): The sub-graph domain that the search will operate on
+        search_start (Interest): The start node of the DFS search
+        users_visited (set[UserId]): The set of all users visited by this search. Will be mutated
+    """
+
+    users_visited.add(search_start)
+
+    # Eagerly check if we found the other endpoint of the augmenting path
+    for user in interests_to_users[search_start]:
+        if user in unmatched_users:
+            return [(search_start, user)]
+
+    # Continue the search
+    for user in interests_to_users[search_start] & domain - users_visited:
+        for interest in users_to_interests[user]:
+            path: list[(Interest, UserId)] = dfs_augmenting_path(
+                users_to_interests,
+                interests_to_users,
+                unmatched_users,
+                domain,
+                interest,
+                users_visited
+            )
+
+            if len(path) != 0:
+                # Construct the output path
+                return [(search_start, user)].append(path)
+            else:
+                return []
+
+    # Reached a dead end, no path was found
+    return []
 
 
 # The main "function"
