@@ -1,9 +1,17 @@
 # Use at least Python 3.9
 
+# The demo visualization uses the `graphviz package` ( https://pypi.org/project/graphviz/ )
+# You can download it with:
+#   pip install graphviz
+#
+# You'll also need the graphviz
+
 from collections import deque
 import random
 import itertools
 from typing import NewType
+
+import graphviz
 
 # Create newtypes for clarity and for the ease of potential rewriting.
 UserId = NewType("UserId", int)
@@ -369,19 +377,23 @@ if __name__ == "__main__":
                              "Dana",
                              "Eero",
                              "Fatima",
-                             "George",
+                             "Ganesh",
                              "Hilda",
+                             "Ilmari",
+                             "Jun",
                              ]
 
     test_users_to_interests: dict[UserId, set[Interest]] = {
-        0: {"football", "videogames", "gardening", "ice hockey"},
-        1: {"videogames", "gardening", "tabletop rpg", "swimming"},
-        2: {"tabletop rpg", "football", "minifigures", "drawing"},
-        3: {"football", "hiking", "drawing", "ice hockey"},
-        4: {"ice hockey", "skiing", "hiking", "football", "swimming"},
-        5: {"gardening", "skiing", "drawing", "football"},
-        6: {"minifigures", "videogames", "bowling", "ice hockey"},
-        7: {"bowling", "skiing", "hiking", "geocaching"},
+        0: {"football", "videogames", "ice hockey", "cricket"},
+        1: {"videogames", "drawing", "skiing"},
+        2: {"football", "drawing", "skiing"},
+        3: {"football",  "drawing", "ice hockey"},
+        4: {"ice hockey", "skiing",  "football"},
+        5: {"skiing", "drawing", "football"},
+        6: {"skiing",  "football", "videogames", "cricket"},
+        7: {"cricket", "videogames",  "ice hockey"},
+        8: {"drawing", "tabletop rpg", "ice hockey"},
+        9: {"football", "skiing", "drawing", "ice hockey"},
     }
 
     test_interests_to_users: dict[Interest, set[UserId]] = dict()
@@ -390,4 +402,33 @@ if __name__ == "__main__":
         for interest in interests:
             test_interests_to_users.setdefault(interest, set()).add(user)
 
-    print(test_interests_to_users)
+    graph = graphviz.Graph(
+        name="Users to their interests",
+        filename="start.gv",
+        directory="demo",
+        format="png",
+        engine="neato",
+        node_attr={"style": "filled", "width": "1.4",
+                   "fontname": "Calibri", "fontsize": "20.0"}
+    )
+
+    height = 8.0
+    interest_y_factor = height / len(test_interests_to_users)
+    user_y_factor = height / len(test_users_to_interests)
+    interest_y = 0.0
+
+    i2u_list = list(test_interests_to_users.items())
+    i2u_list.sort()
+    for interest, users in i2u_list:
+        graph.node(interest,
+                   fillcolor="#ffa599",
+                   pos=f"5,{height - interest_y * interest_y_factor}!")
+        interest_y += 1.0
+
+        for user in users:
+            graph.node(str(user), user_names[user],
+                       fillcolor="#dcdfe0",
+                       pos=f"0,{height - user * user_y_factor}!")
+            graph.edge(f"{user}:e", f"{interest}:w")
+
+    graph.render()
