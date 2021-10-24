@@ -4,7 +4,7 @@
 # You can download it with:
 #   pip install graphviz
 #
-# You'll also need the graphviz
+# You'll also need the graphviz software ( https://www.graphviz.org/download/ )
 
 from collections import deque
 import random
