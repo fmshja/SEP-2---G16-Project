@@ -85,6 +85,10 @@ def form_groups(
     # STEP 2: CREATE THE INITIAL MATCHING
     ###
 
+    if gv_graph is not None:
+        init_graph = gv_graph.copy()
+        init_graph.filename = "1-init match.gv"
+
     # The matchings between users and interests
     matchings: dict[UserId, Interest] = dict()
     matchings_inverse: dict[Interest, set[UserId]] = dict()
@@ -97,6 +101,14 @@ def form_groups(
                 matchings[user] = interest
                 matchings_inverse.setdefault(interest, set()).add(user)
                 free_spots[interest] -= 1
+
+                if gv_graph is not None:
+                    init_graph.edge(f"{user}:e", f"{interest}:w")
+
+                break
+
+    if gv_graph is not None:
+        init_graph.render()
 
     ###
     # STEP 3: HOPCROFT-KARP
