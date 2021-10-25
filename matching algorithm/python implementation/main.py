@@ -88,6 +88,7 @@ def form_groups(
     if gv_graph is not None:
         init_graph = gv_graph.copy()
         init_graph.filename = "1-init match.gv"
+        init_graph.attr(label="The initial matching")
 
     # The matchings between users and interests
     matchings: dict[UserId, Interest] = dict()
@@ -114,8 +115,21 @@ def form_groups(
     # STEP 3: HOPCROFT-KARP
     ###
 
+    step: int = 0
+
     # Run the algorithm until the maximal matching has been found
     while hopcroft_karp(users_to_interests, interests_to_users, free_spots, matchings, matchings_inverse) > 0:
+        if gv_graph is not None:
+            step += 1
+            step_graph = gv_graph.copy()
+            step_graph.filename(f"{i+1}-HK match.gv")
+            step_graph.attr(label=f"Iteration {step} of the Hopcroft-Karp")
+
+            for user, interest in matchings.items():
+                step_graph.edge(f"{user}:e", f"{interest}:w")
+
+            step_graph.render()
+
         pass
 
     ###
@@ -427,11 +441,14 @@ if __name__ == "__main__":
         directory="demo",
         format="png",
         engine="neato",
-        graph_attr={"bgcolor": "transparent"},
+        graph_attr={"bgcolor": "transparent", "fillcolor": "white",
+                    "fontname": "Calibri Bold", "fontcolor": "#333333", "fontsize": "30.0"},
         node_attr={"style": "filled", "width": "1.4", "color": "#111111", "penwidth": "2.0",
                    "fontname": "Calibri", "fontsize": "20.0"},
-        edge_attr={"color": "#333333", "penwidth": "2.0"},
+        edge_attr={"color": "#333333", "penwidth": "2.0",
+                   "arrowsize": "1.5", "arrowhead": "empty"},
     )
+
     start_graph_edges = list()
 
     height = 8.0
@@ -461,6 +478,7 @@ if __name__ == "__main__":
     start_graph.edges(start_graph_edges)
     start_graph.edge_attr.update(arrowhead="none")
     start_graph.filename = "0-start.gv"
+    start_graph.attr(label="Graph of users and interests")
 
     # Save the render
     start_graph.render()
