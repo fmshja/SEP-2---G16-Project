@@ -1,6 +1,6 @@
 # Use at least Python 3.9
 
-# The demo visualization uses the `graphviz package` ( https://pypi.org/project/graphviz/ )
+# The demo visualization uses the graphviz package ( https://pypi.org/project/graphviz/ )
 # You can download it with:
 #   pip install graphviz
 #
@@ -404,7 +404,6 @@ if __name__ == "__main__":
 
     graph = graphviz.Graph(
         name="Users to their interests",
-        filename="start.gv",
         directory="demo",
         format="png",
         engine="neato",
@@ -413,6 +412,7 @@ if __name__ == "__main__":
                    "fontname": "Calibri", "fontsize": "20.0"},
         edge_attr={"color": "#333333", "penwidth": "2.0"},
     )
+    start_graph_edges = list()
 
     height = 8.0
     interest_y_factor = height / len(test_interests_to_users)
@@ -431,6 +431,10 @@ if __name__ == "__main__":
             graph.node(str(user), user_names[user],
                        fillcolor="#dcdfe0",
                        pos=f"0,{height - user * user_y_factor}!")
-            graph.edge(f"{user}:e", f"{interest}:w")
+            start_graph_edges.append((f"{user}:e", f"{interest}:w"))
 
-    graph.render()
+    start_graph = graph.copy()
+    start_graph.edges(start_graph_edges)
+    start_graph.filename = "0-start"
+
+    start_graph.render()
