@@ -86,8 +86,8 @@ def form_groups(
     ###
 
     if gv_graph is not None:
-        for interest, spots in free_spots.items():
-            gv_graph.node(interest, f"{interest} ({spots})")
+        # for interest, spots in free_spots.items():
+        #    gv_graph.node(interest, f"{interest} ({spots})")
 
         init_graph = gv_graph.copy()
         init_graph.filename = "1-init match.gv"
@@ -123,7 +123,13 @@ def form_groups(
         old_matchings = matchings.copy()
 
     # Run the algorithm until the maximal matching has been found
-    while hopcroft_karp(users_to_interests, interests_to_users, free_spots, matchings, matchings_inverse) > 0:
+    while hopcroft_karp(
+        users_to_interests,
+        interests_to_users,
+        free_spots,
+        matchings,
+        matchings_inverse,
+    ) > 0:
         if gv_graph is not None:
             step += 1
 
@@ -291,7 +297,7 @@ def hopcroft_karp(
     interests_to_users: dict[Interest, set[UserId]],
     free_spots: dict[Interest, int],
     matchings: dict[UserId, Interest],
-    matchings_inverse: dict[Interest, set[UserId]]
+    matchings_inverse: dict[Interest, set[UserId]],
 ) -> int:
     """A function implementing a Hopcroft-Karp algorithm for creating matchings.
 
@@ -371,8 +377,6 @@ def hopcroft_karp(
         failed: bool = False
         users_changed: set[UserId] = set()
 
-        #it, peek = itertools.tee(path)
-        # next(peek, None)  # ensure the peeking iterator is 1 ahead
         for interest, user in path:
             if user in users_changed:
                 # skip users we've altered already
@@ -388,13 +392,6 @@ def hopcroft_karp(
             if old_interest != None:
                 matchings_inverse[old_interest].remove(user)
                 free_spots[old_interest] += 1
-
-            #peeked = next(peek, None)
-            # if peeked != None:
-            #    next_interest: Interest = peeked[0]
-            # remove the existing matching
-            #    matchings_inverse[next_interest].remove(user)
-            #    free_spots[next_interest] += 1
 
         if not failed:  # TODO check the failing conditions
             new_matchings += 1
@@ -532,9 +529,18 @@ if __name__ == "__main__":
                    fillcolor="#dcdfe0",
                    pos=f"0,{height - i * user_y_factor}!")
 
+    # for labeling purposes
+    free_spots: dict[Interest, int] = calculate_group_spots(
+        2,
+        2,
+        len(test_users_to_interests),
+        test_interests_to_users
+    )
+
     # Add the interest nodes in alphabetical order
     for interest, users in sorted(test_interests_to_users.items()):
         graph.node(interest,
+                   label=f"{interest} ({free_spots[interest]})",
                    fillcolor="#ffa599",
                    width="2.5",
                    pos=f"5,{height - interest_y * interest_y_factor}!")
