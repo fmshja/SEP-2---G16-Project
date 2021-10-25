@@ -86,6 +86,9 @@ def form_groups(
     ###
 
     if gv_graph is not None:
+        for interest, spots in free_spots.items():
+            gv_graph.node(interest, f"{interest} ({spots})")
+
         init_graph = gv_graph.copy()
         init_graph.filename = "1-init match.gv"
         init_graph.attr(label="The initial matching")
@@ -434,7 +437,7 @@ def dfs_augmenting_path(
 if __name__ == "__main__":
     #seed = random.randrange(0, 1e10)
     # print(seed)
-    random.seed(3573274025)
+    random.seed(3573274025)  # empirically chosen seed value
 
     user_names: list[str] = ["Ali",
                              "Barbara",
