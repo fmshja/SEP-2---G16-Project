@@ -135,8 +135,16 @@ def form_groups(
                 if user in old_matchings and old_matchings[user] == interest:
                     step_graph.edge(f"{user}:e", f"{interest}:w")
                 else:
+                    # this changed
                     step_graph.edge(
                         f"{user}:e", f"{interest}:w", color="#ee2222")
+
+            # check for removed edges
+            for old_user, old_interest in old_matchings.items():
+                if old_user in matchings and matchings[old_user] != old_interest:
+                    step_graph.edge(
+                        f"{old_user}:e", f"{old_interest}:w", color="#3333cc", style="dashed"
+                    )
 
             old_matchings = matchings.copy()
             step_graph.render()
@@ -363,30 +371,36 @@ def hopcroft_karp(
         failed: bool = False
         users_changed: set[UserId] = set()
 
-        it, peek = itertools.tee(path)
-        next(peek, None)  # ensure the peeking iterator is 1 ahead
-        for interest, user in it:
+        #it, peek = itertools.tee(path)
+        # next(peek, None)  # ensure the peeking iterator is 1 ahead
+        for interest, user in path:
             if user in users_changed:
                 # skip users we've altered already
                 continue
 
             users_changed.add(user)
+
+            old_interest: Interest = matchings[user] if user in matchings else None
             matchings[user] = interest
             matchings_inverse.setdefault(interest, set()).add(user)
             free_spots[interest] -= 1
 
-            peeked = next(peek, None)
-            if peeked != None:
-                next_interest: Interest = peeked[0]
-                # remove the existing matching
-                matchings_inverse[next_interest].remove(user)
-                free_spots[next_interest] += 1
+            if old_interest != None:
+                matchings_inverse[old_interest].remove(user)
+                free_spots[old_interest] += 1
+
+            #peeked = next(peek, None)
+            # if peeked != None:
+            #    next_interest: Interest = peeked[0]
+            # remove the existing matching
+            #    matchings_inverse[next_interest].remove(user)
+            #    free_spots[next_interest] += 1
 
         if not failed:  # TODO check the failing conditions
             new_matchings += 1
-            # if new_matchings == len(unmatched_users):
-            # all found!
-            # break
+            if new_matchings == len(unmatched_users):
+                # all found!
+                break
 
     return new_matchings
 
@@ -424,7 +438,7 @@ def dfs_augmenting_path(
             return [(search_start, user)]
 
     # Continue the search
-    for user in matchings_inverse.setdefault(search_start, set()) & domain - _users_visited:
+    for user in interests_to_users[search_start] & domain - _users_visited:
         _users_visited.add(user)
         for interest in users_to_interests[user]:
             if interest not in _interests_visited:
