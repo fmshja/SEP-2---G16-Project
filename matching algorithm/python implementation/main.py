@@ -272,7 +272,7 @@ def hopcroft_karp(
     # (unmatched interest vertices are in `free_spots`)
     unmatched_users: set[UserId] = set()
     for user in users_to_interests.keys():
-        if user not in matchings:
+        if user not in matchings.keys():
             unmatched_users.add(user)
 
     # Users to be searched by the BFS
@@ -316,13 +316,13 @@ def hopcroft_karp(
 
             spot_found = True
 
-    if not spot_found:
-        # Continue the search
-        for interest in users_to_interests[bfs_user]:
-            to_search: set[UserId] = interests_to_users[bfs_user] - \
-                users_visited_bfs
-            bfs_queue.append(to_search)
-            users_visited_bfs.append(to_search)
+        if not spot_found:
+            # Continue the search
+            for interest in users_to_interests[bfs_user]:
+                to_search: set[UserId] = interests_to_users[bfs_user] - \
+                    users_visited_bfs
+                bfs_queue.append(to_search)
+                users_visited_bfs.append(to_search)
 
     # Use the augmenting paths to create new matchings
     for path in augmenting_paths:
