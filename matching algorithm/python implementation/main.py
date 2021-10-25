@@ -419,6 +419,13 @@ if __name__ == "__main__":
     user_y_factor = height / len(test_users_to_interests)
     interest_y = 0.0
 
+    # Add the user nodes
+    for i, user in zip(range(len(user_names)), user_names):
+        graph.node(str(i), user,
+                   fillcolor="#dcdfe0",
+                   pos=f"0,{height - i * user_y_factor}!")
+
+    # Add the interest nodes in alphabetical order
     i2u_list = list(test_interests_to_users.items())
     i2u_list.sort()
     for interest, users in i2u_list:
@@ -427,14 +434,14 @@ if __name__ == "__main__":
                    pos=f"5,{height - interest_y * interest_y_factor}!")
         interest_y += 1.0
 
+        # Record the interest edges
         for user in users:
-            graph.node(str(user), user_names[user],
-                       fillcolor="#dcdfe0",
-                       pos=f"0,{height - user * user_y_factor}!")
             start_graph_edges.append((f"{user}:e", f"{interest}:w"))
 
+    # Create a list with the starting interest edges
     start_graph = graph.copy()
     start_graph.edges(start_graph_edges)
-    start_graph.filename = "0-start"
+    start_graph.filename = "0-start.gv"
 
+    # Save the render
     start_graph.render()
