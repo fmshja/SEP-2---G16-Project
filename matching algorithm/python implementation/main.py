@@ -9,7 +9,7 @@
 from collections import deque
 import random
 import itertools
-from typing import NewType
+from typing import NewType, Optional
 
 import graphviz
 
@@ -33,7 +33,7 @@ class Group:
 
 def shuffle(collection) -> list:
     """A helper function for shuffling collections."""
-    return random.sample(collection, len(collection))
+    return random.sample(sorted(collection), len(collection))
 
 
 def form_groups(
@@ -41,7 +41,8 @@ def form_groups(
     group_size: int,
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
-    old_groups: set[Group]
+    old_groups: set[Group],
+    gv_graph: Optional[graphviz.Digraph] = None,
 ) -> set[Group]:
     """Forms the groups around their interests.
 
@@ -90,11 +91,11 @@ def form_groups(
 
     # Get the initial matchings
     # The order that the users are iterated and the interests are picked are randomized to avoid bias
-    for user, interests in shuffle(users_to_interests):
+    for user, interests in shuffle(users_to_interests.items()):
         for interest in shuffle(interests):
             if free_spots[interest] > 0:
                 matchings[user] = interest
-                matchings_inverse[interest].add(user)
+                matchings_inverse.setdefault(interest, set()).add(user)
                 free_spots[interest] -= 1
 
     ###
@@ -116,7 +117,7 @@ def form_groups(
     old_groups: set[list[UserId]] = map(
         lambda group: group.users, iter(old_groups))
 
-    for interest, users in matchings_inverse:
+    for interest, users in matchings_inverse.items():
         # ok groups
         group_canditates: list[list[UserId]]
         # repeat groups
@@ -128,20 +129,21 @@ def form_groups(
             group_rejects = list()
 
             groups_to_check: list[list[UserId]] = [
-                users[i:i+group_size] for i in range(0, len(users), group_size)]
+                list(users)[i:i+group_size] for i in range(0, len(users), group_size)]
 
-            if len(groups_to_check[-1]) < min_group_size:
+            last = groups_to_check[-1]
+            if len(last) < min_group_size:
                 # merge the group with the previous one if it's too small
                 small = groups_to_check.pop()
-                groups_to_check[-1].append(small)
+                last.append(small)
 
             for g in groups_to_check:
                 if g in old_groups:
                     # found a repeat group
-                    group_rejects.append[g]
+                    group_rejects.append(g)
                 else:
                     # group is ok
-                    group_canditates.append[g]
+                    group_canditates.append(g)
 
             # check if there were any rejects, and shuffle them into the rest to try again
             if len(group_rejects) > 0:
@@ -402,7 +404,7 @@ if __name__ == "__main__":
         for interest in interests:
             test_interests_to_users.setdefault(interest, set()).add(user)
 
-    graph = graphviz.Graph(
+    graph = graphviz.Digraph(
         name="Users to their interests",
         directory="demo",
         format="png",
@@ -426,9 +428,7 @@ if __name__ == "__main__":
                    pos=f"0,{height - i * user_y_factor}!")
 
     # Add the interest nodes in alphabetical order
-    i2u_list = list(test_interests_to_users.items())
-    i2u_list.sort()
-    for interest, users in i2u_list:
+    for interest, users in sorted(test_interests_to_users.items()):
         graph.node(interest,
                    fillcolor="#ffa599",
                    pos=f"5,{height - interest_y * interest_y_factor}!")
@@ -441,7 +441,15 @@ if __name__ == "__main__":
     # Create a list with the starting interest edges
     start_graph = graph.copy()
     start_graph.edges(start_graph_edges)
+    start_graph.edge_attr.update(arrowhead="none")
     start_graph.filename = "0-start.gv"
 
     # Save the render
     start_graph.render()
+
+    groups = form_groups(2, 2, test_users_to_interests,
+                         test_interests_to_users, set(), graph)
+
+    for group in iter(groups):
+        print(group.interest, end=": ")
+        print(group.users)
