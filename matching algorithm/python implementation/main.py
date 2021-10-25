@@ -395,19 +395,25 @@ if __name__ == "__main__":
                              "Hilda",
                              "Ilmari",
                              "Jun",
+                             "Kyung",
+                             "Leah",
+                             "Martin",
                              ]
 
     test_users_to_interests: dict[UserId, set[Interest]] = {
-        0: {"football", "videogames", "ice hockey", "cricket"},
-        1: {"videogames", "drawing", "skiing"},
-        2: {"football", "drawing", "skiing"},
-        3: {"football",  "drawing", "ice hockey"},
-        4: {"ice hockey", "skiing",  "football"},
-        5: {"skiing", "drawing", "football"},
-        6: {"skiing",  "football", "videogames", "cricket"},
-        7: {"cricket", "videogames",  "ice hockey"},
+        0: {"football", "videogames", "ice hockey"},
+        1: {"videogames", "drawing", "football"},
+        2: {"football", "drawing", "ice hockey"},
+        3: {"football",  "videogames", "ice hockey"},
+        4: {"ice hockey", "drawing",  "football", "videogames"},
+        5: {"ice hockey", "drawing", "football"},
+        6: {"drawing",  "football", "videogames"},
+        7: {"videogames",  "ice hockey", "drawing"},
         8: {"drawing", "tabletop rpg", "ice hockey"},
-        9: {"football", "skiing", "drawing", "ice hockey"},
+        9: {"football", "drawing", "ice hockey"},
+        10: {"football", "videogames", "drawing"},
+        11: {"videogames", "football", "ice hockey"},
+        12: {"drawing", "football", "ice hockey"},
     }
 
     test_interests_to_users: dict[Interest, set[UserId]] = dict()
@@ -431,7 +437,7 @@ if __name__ == "__main__":
     height = 8.0
     interest_y_factor = height / len(test_interests_to_users)
     user_y_factor = height / len(test_users_to_interests)
-    interest_y = 0.0
+    interest_y = 0.5/interest_y_factor
 
     # Add the user nodes
     for i, user in zip(range(len(user_names)), user_names):
