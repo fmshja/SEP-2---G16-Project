@@ -7,6 +7,12 @@
  * css stylesheet badly needed.
  */
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+
+$document = Factory::getDocument();
+$options = array("version" => "auto");
+$document->addStyleSheet("components/com_displayinterests/style.css");
+
 
 //establish the database connection
 $db = JFactory::getDbo();
@@ -29,12 +35,31 @@ $query2->from($db->quotename('app_interests_groups','c'));
 $db->setQuery($query2);
 $groups=$db->loadRowList();
 
+if(isset($_POST['submitGroup'])){ //check if form was submitted
+    $input = $_POST['gname']; //get group name
+}
+
 //TODO: make clicking submit actually do something
 ?>
 <!DOCTYPE html>
 <html>
+<head>
+<title>Interests</title>
+</head>
 <body>
 <h1>This page lists interests</h1>
+
+<button id="openform" onclick="openForm()">+ ADD GROUP</button>
+<div id="popup" style="display: none;">
+    <form action="" method="post">
+        <h1>Add new group</h1>
+        <label for="gname"><b>group name</b></label>
+        <input type="text" placeholder="Enter group name" name="gname" required>
+        <button type="submit" class="button" name="submitGroup">save</button>
+        <button type="button" class="button" onclick="closeForm()">Close</button>
+    </form>
+</div>
+
 <form action="" method="post">
     <?php
     //loop the second query for group names
@@ -57,7 +82,7 @@ $groups=$db->loadRowList();
     ?>
     <input type="submit" name="SubmitButton" value="Submit"/>
 </form>
-<p id="test"></p>
+<p id="test">this text should be red</p>
 
 <script type="text/javascript">
 //changes the visibility of interests based on if they are visible or not
@@ -66,9 +91,17 @@ function toggleInterest(id){
     if(x[0].style.display==="none") {
         x[0].style.display="block";
     } 
-    else{
+    else {
         x[0].style.display="none";
     }
+}
+function openForm(){
+    //add
+    document.getElementById("popup").style.display = "block";
+}
+function closeForm(){
+    //add
+    document.getElementById("popup").style.display = "none";
 }
 </script>
 </body>
