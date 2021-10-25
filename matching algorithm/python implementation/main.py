@@ -122,7 +122,7 @@ def form_groups(
         if gv_graph is not None:
             step += 1
             step_graph = gv_graph.copy()
-            step_graph.filename(f"{i+1}-HK match.gv")
+            step_graph.filename = f"{step+1}-HK match.gv"
             step_graph.attr(label=f"Iteration {step} of the Hopcroft-Karp")
 
             for user, interest in matchings.items():
@@ -218,25 +218,50 @@ def calculate_group_spots(
         dict[Interest, int]: A mapping from the interests to the amount of group spots that it gets
     """
 
-    spots_per_interest: dict[Interest, int] = dict()
+    popularity_of_interest: dict[Interest, int] = dict()
     count_total: int = 0
 
     # Count how many users does each interest have and count the sum of those values
     for interest, users in interests_to_users.items():
-        spots_per_interest[interest] = len(users)
+        popularity_of_interest[interest] = len(users)
         count_total += len(users)
 
+    spots_per_interest: dict[Interest, int] = dict()
     free_spots: int = number_of_users
 
     # Transform the amounts of people in each interest from raw counts into weight values and then to spot counts
-    for interest, count in spots_per_interest.items():
+    for interest, count in popularity_of_interest.items():
         spots: int = int(float(count) / float(count_total) * number_of_users)
         free_spots -= spots
         spots_per_interest[interest] = spots
 
-    # TODO: Spread any remaining free spots with the interests and try to make as many of the spots for each interests
-    # to be divisible by the `group_size` while making sure that all of their remainders will be greater or equal to
-    # `min_group_size`.
+    # Spread any remaining free spots with the interests and try to make as many of the spots for each interests
+    # to be divisible by the `group_size`
+
+    # sort by popularity
+    spots_sorted = sorted(
+        spots_per_interest.items(),
+        key=lambda interest_count: popularity_of_interest[interest_count[0]],
+        reverse=True,
+    )
+
+    for interest, count in spots_sorted:
+        rem = count % group_size
+        new_spots = 0
+
+        if rem < min_group_size:
+            # TODO
+            pass
+
+        if rem <= free_spots:
+            # fill the remainder
+            new_spots = group_size - rem
+
+        spots_per_interest[interest] += new_spots
+        free_spots -= new_spots
+
+        if free_spots == 0:
+            break
 
     return spots_per_interest
 
@@ -283,7 +308,7 @@ def hopcroft_karp(
     removed_users: set[UserId] = set()
 
     # The resulting list of augmenting paths
-    augmenting_paths: set[list[(Interest, UserId)]] = set()
+    augmenting_paths: list[list[(Interest, UserId)]] = list()
 
     # Create alternating level graph with a breadth-first-search
     while len(bfs_queue) != 0:
@@ -295,24 +320,24 @@ def hopcroft_karp(
             # Found a free spot, which is a possible starting point of an augmenting path
 
             # Users visited by the DFS
-            users_visited_dfs: set[UserId]
+            users_visited_dfs: set[UserId] = set()
 
             # Try to find an augmenting path with a depth-first-search
             path: list[(Interest, UserId)] = dfs_augmenting_path(
                 users_to_interests,
                 interests_to_users,
                 unmatched_users,
-                users_visited_bfs.exclude(removed_users),
+                users_visited_bfs - removed_users,
                 interest,
                 users_visited_dfs,
             )
 
             if len(path) != 0:
-                augmenting_paths.add(path)
+                augmenting_paths.append(path)
 
-                for user in path.values():
+                for user in path:
                     # Remove the users in the path from the future dfs searches
-                    removed_users.insert(user)
+                    removed_users.add(user)
 
             spot_found = True
 
@@ -333,8 +358,8 @@ def hopcroft_karp(
         for interest, user in it:
 
             matchings[user] = interest
-            matchings_inverse[interest].add(user)
-            free_spots -= 1
+            matchings_inverse.setdefault(interest, set()).add(user)
+            free_spots[interest] -= 1
 
             peeked = next(peek, None)
             if peeked != None:
@@ -399,6 +424,10 @@ def dfs_augmenting_path(
 
 # The main "function"
 if __name__ == "__main__":
+    #seed = random.randrange(0, 1e10)
+    # print(seed)
+    random.seed(3573274025)
+
     user_names: list[str] = ["Ali",
                              "Barbara",
                              "Charlie",
@@ -423,7 +452,7 @@ if __name__ == "__main__":
         5: {"ice hockey", "drawing", "football"},
         6: {"drawing",  "football", "videogames"},
         7: {"videogames",  "ice hockey", "drawing"},
-        8: {"drawing", "tabletop rpg", "ice hockey"},
+        8: {"drawing", "football", "ice hockey"},
         9: {"football", "drawing", "ice hockey"},
         10: {"football", "videogames", "drawing"},
         11: {"videogames", "football", "ice hockey"},
@@ -486,6 +515,6 @@ if __name__ == "__main__":
     groups = form_groups(2, 2, test_users_to_interests,
                          test_interests_to_users, set(), graph)
 
-    for group in iter(groups):
+    for group in sorted(groups, key=lambda g: (g.interest, g.users)):
         print(group.interest, end=": ")
         print(group.users)
