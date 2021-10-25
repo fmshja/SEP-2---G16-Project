@@ -115,19 +115,27 @@ def form_groups(
     # STEP 3: HOPCROFT-KARP
     ###
 
-    step: int = 0
+    if gv_graph is not None:
+        step: int = 0
+        old_matchings = matchings.copy()
 
     # Run the algorithm until the maximal matching has been found
     while hopcroft_karp(users_to_interests, interests_to_users, free_spots, matchings, matchings_inverse) > 0:
         if gv_graph is not None:
             step += 1
+
             step_graph = gv_graph.copy()
             step_graph.filename = f"{step+1}-HK match.gv"
             step_graph.attr(label=f"Iteration {step} of the Hopcroft-Karp")
 
             for user, interest in matchings.items():
-                step_graph.edge(f"{user}:e", f"{interest}:w")
+                if user in old_matchings and old_matchings[user] == interest:
+                    step_graph.edge(f"{user}:e", f"{interest}:w")
+                else:
+                    step_graph.edge(
+                        f"{user}:e", f"{interest}:w", color="#ee2222")
 
+            old_matchings = matchings.copy()
             step_graph.render()
 
         pass
