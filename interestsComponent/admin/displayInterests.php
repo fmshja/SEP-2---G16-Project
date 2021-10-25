@@ -4,7 +4,6 @@
  * displays them. Needs tables app_interests and app_interests_groups to
  * exists with content in order to work. 
  * TODO: add ability to insert new interests.
- * css stylesheet badly needed.
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -37,6 +36,17 @@ $groups=$db->loadRowList();
 
 if(isset($_POST['submitGroup'])){ //check if form was submitted
     $input = $_POST['gname']; //get group name
+    $query->clear();
+    //$query = $db->getQuery(true);
+    $columns = array('group_name');
+    $values = array($db->quote($input));
+    $query
+        ->insert($db->quoteName('app_interests_groups'))
+        ->columns($db->quoteName($columns))
+        ->values(implode(',', $values));
+    $db->setQuery($query);
+    $db->execute();
+    header("Refresh:0");
 }
 
 //TODO: make clicking submit actually do something
@@ -82,7 +92,7 @@ if(isset($_POST['submitGroup'])){ //check if form was submitted
     ?>
     <input type="submit" name="SubmitButton" value="Submit"/>
 </form>
-<p id="test">this text should be red</p>
+<p id="test"></p>
 
 <script type="text/javascript">
 //changes the visibility of interests based on if they are visible or not
