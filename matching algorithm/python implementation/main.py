@@ -513,7 +513,7 @@ if __name__ == "__main__":
         engine="neato",
         graph_attr={"bgcolor": "transparent", "fillcolor": "white",
                     "fontname": "Calibri Bold", "fontcolor": "#333333", "fontsize": "30.0"},
-        node_attr={"style": "filled", "width": "1.4", "color": "#111111", "penwidth": "2.0",
+        node_attr={"style": "filled,rounded", "shape": "box", "width": "1.4", "color": "#111111", "penwidth": "2.0",
                    "fontname": "Calibri", "fontsize": "20.0"},
         edge_attr={"color": "#333333", "penwidth": "2.0",
                    "arrowsize": "1.5", "arrowhead": "empty"},
@@ -536,12 +536,15 @@ if __name__ == "__main__":
     for interest, users in sorted(test_interests_to_users.items()):
         graph.node(interest,
                    fillcolor="#ffa599",
+                   width="2.5",
                    pos=f"5,{height - interest_y * interest_y_factor}!")
         interest_y += 1.0
 
         # Record the interest edges
         for user in users:
             start_graph_edges.append((f"{user}:e", f"{interest}:w"))
+            # graph.edge(f"{user}:e", f"{interest}:w",
+            #           style="solid", color="#00000011", arrowhead="none")
 
     # Create a list with the starting interest edges
     start_graph = graph.copy()
