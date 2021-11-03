@@ -5,6 +5,9 @@
 #   pip install graphviz
 #
 # You'll also need the graphviz software ( https://www.graphviz.org/download/ )
+#
+# Whether the demo visualization is created depends on the `draw_vizualisation` variable in `__main__`.
+
 
 from collections import deque
 import random
@@ -179,16 +182,21 @@ def form_groups(
             group_canditates = list()
             group_rejects = list()
 
-            groups_to_check: list[list[UserId]] = [
-                list(users)[i:i+group_size] for i in range(0, len(users), group_size)]
+            groups_to_check: list[list[UserId]] = list()
 
-            if len(groups_to_check) > 0:
-                last = groups_to_check[-1]
-                if len(last) < min_group_size:
-                    # merge the group with the previous one if it's too small
-                    small = groups_to_check.pop()
-                    last.append(small)
+            for user in users:
+                if len(groups_to_check) == 0 or len(groups_to_check[-1]) >= group_size:
+                    # there is no users or the last group is of max size
+                    groups_to_check.append([user])
+                else:
+                    groups_to_check[-1].append(user)
 
+            # merge too small groups
+            if len(groups_to_check[-1]) < min_group_size:
+                small = groups_to_check.pop()
+                groups_to_check[-1].extend(small)
+
+            # check for repeat groups
             for g in groups_to_check:
                 if g in old_groups:
                     # found a repeat group
@@ -462,6 +470,9 @@ def dfs_augmenting_path(
 
 # The main "function"
 if __name__ == "__main__":
+    # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
+    draw_vizualisation: bool = False
+
     #seed = random.randrange(0, 1e10)
     # print(seed)
     random.seed(3573274025)  # empirically chosen seed value
@@ -497,70 +508,72 @@ if __name__ == "__main__":
         12: {"drawing", "football", "ice hockey"},
     }
 
+    # create the inverse mapping
     test_interests_to_users: dict[Interest, set[UserId]] = dict()
-
     for user, interests in test_users_to_interests.items():
         for interest in interests:
             test_interests_to_users.setdefault(interest, set()).add(user)
 
-    graph = graphviz.Digraph(
-        name="Users to their interests",
-        directory="demo",
-        format="png",
-        engine="neato",
-        graph_attr={"bgcolor": "transparent", "fillcolor": "white",
-                    "fontname": "Calibri Bold", "fontcolor": "#333333", "fontsize": "30.0"},
-        node_attr={"style": "filled,rounded", "shape": "box", "width": "1.4", "color": "#111111", "penwidth": "2.0",
-                   "fontname": "Calibri", "fontsize": "20.0"},
-        edge_attr={"color": "#333333", "penwidth": "2.0",
-                   "arrowsize": "1.5", "arrowhead": "empty"},
-    )
+    graph = None
+    if draw_vizualisation:
+        graph = graphviz.Digraph(
+            name="Users to their interests",
+            directory="demo",
+            format="png",
+            engine="neato",
+            graph_attr={"bgcolor": "transparent", "fillcolor": "white",
+                        "fontname": "Calibri Bold", "fontcolor": "#333333", "fontsize": "30.0"},
+            node_attr={"style": "filled,rounded", "shape": "box", "width": "1.4", "color": "#111111", "penwidth": "2.0",
+                       "fontname": "Calibri", "fontsize": "20.0"},
+            edge_attr={"color": "#333333", "penwidth": "2.0",
+                       "arrowsize": "1.5", "arrowhead": "empty"},
+        )
 
-    start_graph_edges = list()
+        start_graph_edges = list()
 
-    height = 8.0
-    interest_y_factor = height / len(test_interests_to_users)
-    user_y_factor = height / len(test_users_to_interests)
-    interest_y = 0.5/interest_y_factor
+        height = 8.0
+        interest_y_factor = height / len(test_interests_to_users)
+        user_y_factor = height / len(test_users_to_interests)
+        interest_y = 0.5/interest_y_factor
 
-    # Add the user nodes
-    for i, user in zip(range(len(user_names)), user_names):
-        graph.node(str(i), user,
-                   fillcolor="#dcdfe0",
-                   pos=f"0,{height - i * user_y_factor}!")
+        # Add the user nodes
+        for i, user in zip(range(len(user_names)), user_names):
+            graph.node(str(i), user,
+                       fillcolor="#dcdfe0",
+                       pos=f"0,{height - i * user_y_factor}!")
 
-    # for labeling purposes
-    free_spots: dict[Interest, int] = calculate_group_spots(
-        2,
-        2,
-        len(test_users_to_interests),
-        test_interests_to_users
-    )
+        # for labeling purposes
+        free_spots: dict[Interest, int] = calculate_group_spots(
+            2,
+            2,
+            len(test_users_to_interests),
+            test_interests_to_users
+        )
 
-    # Add the interest nodes in alphabetical order
-    for interest, users in sorted(test_interests_to_users.items()):
-        graph.node(interest,
-                   label=f"{interest} ({free_spots[interest]})",
-                   fillcolor="#ffa599",
-                   width="2.5",
-                   pos=f"5,{height - interest_y * interest_y_factor}!")
-        interest_y += 1.0
+        # Add the interest nodes in alphabetical order
+        for interest, users in sorted(test_interests_to_users.items()):
+            graph.node(interest,
+                       label=f"{interest} ({free_spots[interest]})",
+                       fillcolor="#ffa599",
+                       width="2.5",
+                       pos=f"5,{height - interest_y * interest_y_factor}!")
+            interest_y += 1.0
 
-        # Record the interest edges
-        for user in users:
-            start_graph_edges.append((f"{user}:e", f"{interest}:w"))
-            # graph.edge(f"{user}:e", f"{interest}:w",
-            #           style="solid", color="#00000011", arrowhead="none")
+            # Record the interest edges
+            for user in users:
+                start_graph_edges.append((f"{user}:e", f"{interest}:w"))
+                # graph.edge(f"{user}:e", f"{interest}:w",
+                #           style="solid", color="#00000011", arrowhead="none")
 
-    # Create a list with the starting interest edges
-    start_graph = graph.copy()
-    start_graph.edges(start_graph_edges)
-    start_graph.edge_attr.update(arrowhead="none")
-    start_graph.filename = "0-start.gv"
-    start_graph.attr(label="Graph of users and interests")
+        # Create a list with the starting interest edges
+        start_graph = graph.copy()
+        start_graph.edges(start_graph_edges)
+        start_graph.edge_attr.update(arrowhead="none")
+        start_graph.filename = "0-start.gv"
+        start_graph.attr(label="Graph of users and interests")
 
-    # Save the render
-    start_graph.render()
+        # Save the render
+        start_graph.render()
 
     groups = form_groups(2, 2, test_users_to_interests,
                          test_interests_to_users, set(), graph)
