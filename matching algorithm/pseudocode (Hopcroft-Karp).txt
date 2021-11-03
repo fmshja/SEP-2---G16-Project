@@ -266,10 +266,11 @@ Int hopcroft_karp(
         UserID bfs_user = bfs_queue.dequeue()
 
         // Try to eagerly find any free spots
-        Bool found_spot = false
+        Bool spot_found = false
         for interest in users_to_interests[bfs_user] {
             if free_spots[interest] > 0 {
                 // Found a free spot, which is a possible starting point of an augmenting path
+                spot_found = true
 
                 // Users visited by the DFS
                 Set<UserID> users_visited_dfs
@@ -292,15 +293,13 @@ Int hopcroft_karp(
                         removed_users.insert(user)
                     }
                 }
-
-                found_spot = true
             }
         }
 
-        if not found_spot {
+        if not spot_found {
             // Continue the search
             for interest in users_to_interests[bfs_user] {
-                Set<UserID> to_search = interests_to_users[bfs_user].exclude(users_visited_bfs)
+                Set<UserID> to_search = interests_to_users[interest].exclude(users_visited_bfs)
                 bfs_queue.append(to_search)
                 users_visited_bfs.append(to_search)
         }
@@ -345,7 +344,11 @@ Int hopcroft_karp(
 //   * The endpoint of the graph in the Interest nodes
 // * users_visited
 //   * A reference to a set of all users visited by this search
-//   * For internal purposes
+//   * For recursion purposes
+//   * Will be mutated
+// * interests_visited
+//   * A reference to a set of all the interests visited by this search
+//   * For recursion purposes
 //   * Will be mutated
 
 List<(Interest, UserID)> dfs_augmenting_path(
@@ -355,9 +358,10 @@ List<(Interest, UserID)> dfs_augmenting_path(
         Set<UserID> domain,
         Interest search_start,
         &Set<UserID> users_visited,
+        &Set<Interest> interests_visited,
     )
 {
-    users_visited.insert(search_start)
+    interests_visited.insert(search_start)
 
     // Eagerly check if we found the other endpoint of the augmenting path
     for user in interests_to_users[search_start] {
@@ -368,6 +372,7 @@ List<(Interest, UserID)> dfs_augmenting_path(
 
     // Continue the search
     for user in interests_to_users[search_start].intersect(domain).exclude(users_visited) {
+        users_visited.insert(user)
         for interest in users_to_interests[user] {
             // Recursively search for the path
             List<(Interest, UserID)> path = dfs_augmenting_path(
@@ -376,7 +381,8 @@ List<(Interest, UserID)> dfs_augmenting_path(
                 unmatched_users,
                 domain,
                 interest,
-                &users_visited
+                &users_visited,
+                &interests_visited,
             )
 
             if path is not empty {
