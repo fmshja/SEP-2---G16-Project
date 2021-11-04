@@ -1,12 +1,12 @@
 # Use at least Python 3.9
-
-# The demo visualization uses the graphviz package ( https://pypi.org/project/graphviz/ )
-# You can download it with:
+#
+# The demo visualization uses the `graphviz` package ( https://pypi.org/project/graphviz/ )
+# You can download it with the console command:
 #   pip install graphviz
 #
-# You'll also need the graphviz software ( https://www.graphviz.org/download/ )
+# For the python package you'll also need the graphviz software, `dot` ( https://www.graphviz.org/download/ )
 #
-# Whether the demo visualization is created depends on the `draw_vizualisation` variable in `__main__`.
+# Whether the demo visualizations are created depends on the `draw_vizualisations` variable in `__main__`.
 
 
 from collections import deque
@@ -471,7 +471,7 @@ def dfs_augmenting_path(
 # The main "function"
 if __name__ == "__main__":
     # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
-    draw_vizualisation: bool = False
+    draw_vizualisations: bool = False
 
     #seed = random.randrange(0, 1e10)
     # print(seed)
@@ -515,7 +515,7 @@ if __name__ == "__main__":
             test_interests_to_users.setdefault(interest, set()).add(user)
 
     graph = None
-    if draw_vizualisation:
+    if draw_vizualisations:
         graph = graphviz.Digraph(
             name="Users to their interests",
             directory="demo",
