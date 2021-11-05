@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Connecting Colleagues</title>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <section class="nav-bar">
+        <div class="nav-container flex">
+            <div class="logo">
+                <h1><a href="user-profile.html">Connecting<br>Colleagues</a></h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="messages.html">Messages</a></li>
+                    <li><a href="calendar.html">Calendar</a></li>
+                    <div class="dropdown">
+                        <li>My Profile</li>
+                        <div class="dropdown-content">
+                            <li><a href="user_profile.html">My Profile</a></li>
+                            <li><a href="user_interests.html">My Interests</a></li>
+                            <li><a href="feedback.html">Give Feedback</a></li>
+                            <li><a href="settings.html">Settings</a></li>
+                            <li><a href="signout.html">Sign Out</a></li>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    
+    <!-- All the content on the page -->
+    <section class="feedback-area">
+        <div class="fb-container">
+            <div class="fb-instructions">
+                <h2>Feedback form</h2>
+                <p>This service is a work-in-process. Your feedback is greatly appreciated!</p>
+            </div>
+            
+            <hr>
+            <form>
+                <div class="form-control">
+                    <label for="fb-title">Feedback title</label>
+                    <input type="text" name="fb-title" class="fb-input" required>
+                </div>
+            
+                <div class="form-control">
+                    <label for="topic-area">Topic of the feedback</label>
+                    <select name="topic-area" class="fb-input" required>
+                        <option disabled selected value> --- Select an option --- </option>
+                        <option value="other-users">Other users</option>
+                        <option value="inbox-msg">Inbox and messages</option>
+                        <option value="interests">Interests</option>
+                        <option value="bugs-glitches">Bugs and glitches</option>
+                        <option value="general">The website in general</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-control">
+                    <label for="message">Message</label>
+                    <textarea name="message" class="fb-input" required></textarea>
+                </div>
+                
+                <input type="submit" value="Send" class="btn">
+            </form>
+        </div>
+    </section>
+</body>
+</html>
