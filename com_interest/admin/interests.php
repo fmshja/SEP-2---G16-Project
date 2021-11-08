@@ -2,7 +2,7 @@
 /**
  * this component queries the groups and interests from database and
  * displays them. Needs tables app_interests and app_interests_groups to
- * exists with content in order to work.
+ * exists with content in order to work. 
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -72,12 +72,12 @@ if(isset($_POST['submitInterest'])){
 <body>
 <h1>This page lists interests</h1>
 
-<button id="openform" onclick="openForm('group')">+ ADD GROUP</button>
+<button id="openform" onclick="openForm('group')">+ ADD CATEGORY</button>
 <div id="group" style="display: none;">
     <form action="" method="post">
-        <h1>Add new group</h1>
-        <label for="gname"><b>group name:</b></label>
-        <input type="text" placeholder="Enter group name" name="gname" required>
+        <h1>Add new category</h1>
+        <label for="gname"><b>category name:</b></label>
+        <input type="text" placeholder="Enter category name" name="gname" required>
         <button type="submit" class="button" name="submitGroup">save</button>
         <button type="button" class="button" onclick="closeForm('group')">Close</button>
     </form>
@@ -88,7 +88,7 @@ if(isset($_POST['submitInterest'])){
     <form action="" method="post">
         <h1>Add new interest</h1>
 
-        <label for="group-names"><b>Choose a group name:</b></label>
+        <label for="group-names"><b>Choose a category name:</b></label>
         <select name="group-names" id="group-names">
         <?php
         for($i=0;$i<count($groups);$i++){
