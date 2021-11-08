@@ -2,8 +2,7 @@
 /**
  * this component queries the groups and interests from database and
  * displays them. Needs tables app_interests and app_interests_groups to
- * exists with content in order to work. 
- * TODO: add ability to insert new interests.
+ * exists with content in order to work.
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -37,7 +36,6 @@ $groups=$db->loadRowList();
 if(isset($_POST['submitGroup'])){ //check if form was submitted
     $input = $_POST['gname']; //get group name
     $query->clear();
-    //$query = $db->getQuery(true);
     $columns = array('group_name');
     $values = array($db->quote($input));
     $query
@@ -49,7 +47,22 @@ if(isset($_POST['submitGroup'])){ //check if form was submitted
     header("Refresh:0");
 }
 
-//TODO: make clicking submit actually do something
+//check if form was submitted
+if(isset($_POST['submitInterest'])){ 
+    $groupid = $_POST['group-names'];
+    $iname = $_POST['iname'];
+    $query->clear();
+    $columns = array('id_group', 'interest_name');
+    $values = array($db->quote($groupid), $db->quote($iname));
+    $query
+        ->insert($db->quoteName('app_interests'))
+        ->columns($db->quoteName($columns))
+        ->values(implode(',', $values));
+    $db->setQuery($query);
+    $db->execute();
+    header("Refresh:0");
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,14 +72,35 @@ if(isset($_POST['submitGroup'])){ //check if form was submitted
 <body>
 <h1>This page lists interests</h1>
 
-<button id="openform" onclick="openForm()">+ ADD GROUP</button>
-<div id="popup" style="display: none;">
+<button id="openform" onclick="openForm('group')">+ ADD GROUP</button>
+<div id="group" style="display: none;">
     <form action="" method="post">
         <h1>Add new group</h1>
-        <label for="gname"><b>group name</b></label>
+        <label for="gname"><b>group name:</b></label>
         <input type="text" placeholder="Enter group name" name="gname" required>
         <button type="submit" class="button" name="submitGroup">save</button>
-        <button type="button" class="button" onclick="closeForm()">Close</button>
+        <button type="button" class="button" onclick="closeForm('group')">Close</button>
+    </form>
+</div>
+
+<button id="openform" onclick="openForm('interest')">+ ADD INTEREST</button>
+<div id="interest" style="display: none;">
+    <form action="" method="post">
+        <h1>Add new interest</h1>
+
+        <label for="group-names"><b>Choose a group name:</b></label>
+        <select name="group-names" id="group-names">
+        <?php
+        for($i=0;$i<count($groups);$i++){
+            $row=$groups[$i];
+            echo "<option value=". $row[0]. ">". $row[1]. "</option>";
+        }
+        ?>
+        </select>
+        <label for="iname"><b>interest name:</b></label>
+        <input type="text" placeholder="Enter interest name" name="iname" required>
+        <button type="submit" class="button" name="submitInterest">save</button>
+        <button type="button" class="button" onclick="closeForm('interest')">Close</button>
     </form>
 </div>
 
@@ -90,7 +124,7 @@ if(isset($_POST['submitGroup'])){ //check if form was submitted
         echo "</div>";
     }
     ?>
-    <input type="submit" name="SubmitButton" value="Submit"/>
+    <!--<input type="submit" name="SubmitButton" value="Submit"/>-->
 </form>
 <p id="test"></p>
 
@@ -105,13 +139,13 @@ function toggleInterest(id){
         x[0].style.display="none";
     }
 }
-function openForm(){
-    //add
-    document.getElementById("popup").style.display = "block";
+function openForm(type){
+    //set form visible
+    document.getElementById(type).style.display = "block";
 }
-function closeForm(){
-    //add
-    document.getElementById("popup").style.display = "none";
+function closeForm(type){
+    //hide the form
+    document.getElementById(type).style.display = "none";
 }
 </script>
 </body>
