@@ -1,4 +1,9 @@
-# Use at least Python 3.9
+"""A library which implements the group forming part of Connecting Colleagues
+
+Requires at least Python 3.9.
+
+The main function that you need to import and use is `form_groups`.
+"""
 
 from collections import deque
 import random

@@ -8,7 +8,7 @@
 
 import random
 import graphviz
-from connecting_colleagues import form_groups, calculate_group_spots, Interest, UserId
+from cc_groups import form_groups, calculate_group_spots, Interest, UserId
 
 # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
 draw_vizualisations: bool = True
