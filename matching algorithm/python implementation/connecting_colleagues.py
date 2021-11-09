@@ -1,20 +1,10 @@
 # Use at least Python 3.9
-#
-# The demo visualization uses the `graphviz` package ( https://pypi.org/project/graphviz/ )
-# You can download it with the console command:
-#   pip install graphviz
-#
-# For the python package you'll also need the graphviz software, `dot` ( https://www.graphviz.org/download/ )
-#
-# Whether the demo visualizations are created depends on the `draw_vizualisations` variable in `__main__`.
-
 
 from collections import deque
 import random
 import itertools
 from typing import NewType, Optional
 
-import graphviz
 
 # Create newtypes for clarity and for the ease of potential rewriting.
 UserId = NewType("UserId", int)
@@ -45,7 +35,7 @@ def form_groups(
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
     old_groups: set[Group],
-    gv_graph: Optional[graphviz.Digraph] = None,
+    _gv_graph=None,
 ) -> set[Group]:
     """Forms the groups around their interests.
 
@@ -58,6 +48,9 @@ def form_groups(
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
         interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
         old_groups (set[Group]): The previous list of formed groups
+
+    Args for the visualization feature:
+        _gv_graph (Optional[graphviz.Digraph]): A graphviz digraph that will be filled with data
 
     Returns:
         set[Group]: The new list of formed groups, doesn't contain repeats from `old_groups`
@@ -88,11 +81,8 @@ def form_groups(
     # STEP 2: CREATE THE INITIAL MATCHING
     ###
 
-    if gv_graph is not None:
-        # for interest, spots in free_spots.items():
-        #    gv_graph.node(interest, f"{interest} ({spots})")
-
-        init_graph = gv_graph.copy()
+    if _gv_graph is not None:
+        init_graph = _gv_graph.copy()
         init_graph.filename = "1-init match.gv"
         init_graph.attr(label="The initial matching")
 
@@ -109,19 +99,19 @@ def form_groups(
                 matchings_inverse.setdefault(interest, set()).add(user)
                 free_spots[interest] -= 1
 
-                if gv_graph is not None:
+                if _gv_graph is not None:
                     init_graph.edge(f"{user}:e", f"{interest}:w")
 
                 break
 
-    if gv_graph is not None:
+    if _gv_graph is not None:
         init_graph.render()
 
     ###
     # STEP 3: HOPCROFT-KARP
     ###
 
-    if gv_graph is not None:
+    if _gv_graph is not None:
         step: int = 0
         old_matchings = matchings.copy()
 
@@ -133,10 +123,10 @@ def form_groups(
         matchings,
         matchings_inverse,
     ) > 0:
-        if gv_graph is not None:
+        if _gv_graph is not None:
             step += 1
 
-            step_graph = gv_graph.copy()
+            step_graph = _gv_graph.copy()
             step_graph.filename = f"{step+1}-HK match.gv"
             step_graph.attr(label=f"Iteration {step} of the Hopcroft-Karp")
 
@@ -466,118 +456,3 @@ def dfs_augmenting_path(
 
     # Reached a dead end, no path was found
     return []
-
-
-# The main "function"
-if __name__ == "__main__":
-    # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
-    draw_vizualisations: bool = False
-
-    #seed = random.randrange(0, 1e10)
-    # print(seed)
-    random.seed(3573274025)  # empirically chosen seed value
-
-    user_names: list[str] = ["Ali",
-                             "Barbara",
-                             "Charlie",
-                             "Dana",
-                             "Eero",
-                             "Fatima",
-                             "Ganesh",
-                             "Hilda",
-                             "Ilmari",
-                             "Jun",
-                             "Kyung",
-                             "Leah",
-                             "Martin",
-                             ]
-
-    test_users_to_interests: dict[UserId, set[Interest]] = {
-        0: {"football", "videogames", "ice hockey"},
-        1: {"videogames", "drawing", "football"},
-        2: {"football", "drawing", "ice hockey"},
-        3: {"football",  "videogames", "ice hockey"},
-        4: {"ice hockey", "drawing",  "football", "videogames"},
-        5: {"ice hockey", "drawing", "football"},
-        6: {"drawing",  "football", "videogames"},
-        7: {"videogames",  "ice hockey", "drawing"},
-        8: {"drawing", "football", "ice hockey"},
-        9: {"football", "drawing", "ice hockey"},
-        10: {"football", "videogames", "drawing"},
-        11: {"videogames", "football", "ice hockey"},
-        12: {"drawing", "football", "ice hockey"},
-    }
-
-    # create the inverse mapping
-    test_interests_to_users: dict[Interest, set[UserId]] = dict()
-    for user, interests in test_users_to_interests.items():
-        for interest in interests:
-            test_interests_to_users.setdefault(interest, set()).add(user)
-
-    graph = None
-    if draw_vizualisations:
-        graph = graphviz.Digraph(
-            name="Users to their interests",
-            directory="demo",
-            format="png",
-            engine="neato",
-            graph_attr={"bgcolor": "transparent", "fillcolor": "white",
-                        "fontname": "Calibri Bold", "fontcolor": "#333333", "fontsize": "30.0"},
-            node_attr={"style": "filled,rounded", "shape": "box", "width": "1.4", "color": "#111111", "penwidth": "2.0",
-                       "fontname": "Calibri", "fontsize": "20.0"},
-            edge_attr={"color": "#333333", "penwidth": "2.0",
-                       "arrowsize": "1.5", "arrowhead": "empty"},
-        )
-
-        start_graph_edges = list()
-
-        height = 8.0
-        interest_y_factor = height / len(test_interests_to_users)
-        user_y_factor = height / len(test_users_to_interests)
-        interest_y = 0.5/interest_y_factor
-
-        # Add the user nodes
-        for i, user in zip(range(len(user_names)), user_names):
-            graph.node(str(i), user,
-                       fillcolor="#dcdfe0",
-                       pos=f"0,{height - i * user_y_factor}!")
-
-        # for labeling purposes
-        free_spots: dict[Interest, int] = calculate_group_spots(
-            2,
-            2,
-            len(test_users_to_interests),
-            test_interests_to_users
-        )
-
-        # Add the interest nodes in alphabetical order
-        for interest, users in sorted(test_interests_to_users.items()):
-            graph.node(interest,
-                       label=f"{interest} ({free_spots[interest]})",
-                       fillcolor="#ffa599",
-                       width="2.5",
-                       pos=f"5,{height - interest_y * interest_y_factor}!")
-            interest_y += 1.0
-
-            # Record the interest edges
-            for user in users:
-                start_graph_edges.append((f"{user}:e", f"{interest}:w"))
-                # graph.edge(f"{user}:e", f"{interest}:w",
-                #           style="solid", color="#00000011", arrowhead="none")
-
-        # Create a list with the starting interest edges
-        start_graph = graph.copy()
-        start_graph.edges(start_graph_edges)
-        start_graph.edge_attr.update(arrowhead="none")
-        start_graph.filename = "0-start.gv"
-        start_graph.attr(label="Graph of users and interests")
-
-        # Save the render
-        start_graph.render()
-
-    groups = form_groups(2, 2, test_users_to_interests,
-                         test_interests_to_users, set(), graph)
-
-    for group in sorted(groups, key=lambda g: (g.interest, g.users)):
-        print(group.interest, end=": ")
-        print(group.users)
