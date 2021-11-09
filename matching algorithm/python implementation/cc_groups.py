@@ -8,12 +8,12 @@ The main function that you need to import and use is `form_groups`.
 from collections import deque
 import random
 import itertools
-from typing import NewType, Optional
+from typing import NewType, Optional, TypeVar
 
 
 # Create newtypes for clarity and for the ease of potential rewriting.
 UserId = NewType("UserId", int)
-Interest = NewType("Interest", str)
+Interest = TypeVar("Interest", int, str)
 
 
 class Group:
