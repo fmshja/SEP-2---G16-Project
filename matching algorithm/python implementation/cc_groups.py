@@ -187,7 +187,7 @@ def form_groups(
                     groups_to_check[-1].append(user)
 
             # merge too small groups
-            if len(groups_to_check[-1]) < min_group_size:
+            if len(groups_to_check) > 2 and len(groups_to_check[-1]) < min_group_size:
                 small = groups_to_check.pop()
                 groups_to_check[-1].extend(small)
 
