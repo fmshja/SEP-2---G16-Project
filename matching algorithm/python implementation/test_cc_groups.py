@@ -70,6 +70,12 @@ def form_groups_with_less_popular_interests():
             print("Found")
 
 
+test_users_to_interests_integers = dict()
+for user, interests in test_users_to_interests_integers.items():
+    for interest in interests:
+        test_users_to_interests_integers.setdefault(interest, set()).add(user)
+
+
 def test_form_groups_with_integer_interests():
     try:
         form_groups(2, 4, test_users_to_interests_integers,
