@@ -20,6 +20,7 @@
                 <filename>index.html</filename>
                 <filename>style.css</filename>
                 <filename>cc_groups.py</filename>
+                <filename>run.py</filename>
             </files>
         </administration>
 </extension>
