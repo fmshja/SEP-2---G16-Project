@@ -38,7 +38,6 @@ def form_groups(
     min_group_size: int,
     group_size: int,
     users_to_interests: dict[UserId, set[Interest]],
-    interests_to_users: dict[Interest, set[UserId]],
     old_groups: set[Group],
     seed: int = None,
     _gv_graph=None,
@@ -52,7 +51,6 @@ def form_groups(
         min_group_size (int): The smallest allowed group size
         group_size (int): The desired group size
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
-        interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
         old_groups (set[Group]): The previous list of formed groups
         seed (int): The seed value that will be given to the random number generator
 
@@ -73,6 +71,13 @@ def form_groups(
     # 4. Form Groups
     #     * Create the groups from the matching
 
+    # form the inverse mapping
+    interests_to_users: dict[Interest, set[UserId]] = {}
+    for user, interests in users_to_interests.items():
+        for interest in interests:
+            interests_to_users.setdefault(interest, set()).add(user)
+
+    # initialise the random number generator
     rng = random.Random(seed)
 
     ###

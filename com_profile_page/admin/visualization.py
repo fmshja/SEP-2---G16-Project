@@ -115,8 +115,7 @@ if draw_vizualisations:
     # Save the render
     start_graph.render()
 
-groups = form_groups(2, 2, test_users_to_interests,
-                     test_interests_to_users, set(), graph)
+groups = form_groups(2, 2, test_users_to_interests, set(), graph)
 
 for group in sorted(groups, key=lambda g: (g.interest, g.users)):
     print(group.interest, end=": ")
