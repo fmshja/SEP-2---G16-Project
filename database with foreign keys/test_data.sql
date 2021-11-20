@@ -125,28 +125,16 @@ VALUES
   ("Claudia Mckay","Nash Mays","sed.consequat@icloud.net","QKA91BSJ6BS","Grant","FTH25EXK9TE",674,"pellentesque a, facilisis","Aenean massa. Integer"),
   ("Quinn Delacruz","Laura Herrera","a.dui@icloud.com","WXA32URR8TC","Gwendolyn","JWW68ERO6OE",870,"dui augue eu","purus, in");
   
-INSERT INTO `app_user_interests` (`id_user`,`id_interest`,`id_group`)
+INSERT INTO `app_user_interests` (`User_Id`,`Interest_Id`)
 VALUES
-  (104,4,12),
-  (104,16,13),
-  (25,4,12),
-  (25,9,1),
-  (27,17,8),
-  (27,21,7),
-  (27,13,8),
-  (26,17,16),
-  (26,3,16),
-  (66,17,1);
-INSERT INTO `app_user_interests` (`id_user`,`id_interest`,`id_group`)
-VALUES
-  (34,6,1),
-  (108,11,5),
-  (108,10,11),
-  (109,11,5),
-  (87,18,1),
-  (97,11,5),
-  (41,3,16),
-  (41,11,5),
-  (64,6,1),
-  (70,10,11);
+  (2,["1","3","5"]),
+  (3,["2","7","9"]),
+  (4,["4","5","6"]),
+  (5,["1","8","10"]),
+  (6,["12","13","14"]),
+  (7,["1","2","3"]),
+  (8,["5","7","11"]),
+  (9,["2","4","6"]),
+  (10,["15","16","17"]),
+  (11,["1","2","3"]);
   
