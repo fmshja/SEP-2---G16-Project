@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="component">
+        <name>connecting_home</name>
+        <author>Niki Väänänen</author>
+        <creationDate>18.11.2021</creationDate>
+        <license>GNU General Public License</license>
+        <authorEmail>niki.vaananen@tuni.fi</authorEmail>
+        <version>1.0</version>
+        <description>Connecting Colleagues homepage</description>
+        <files folder="front">
+                <filename>connecting_home.php</filename>
+                <filename>index.html</filename>
+                <filename>style.css</filename>
+		        <folder>views</folder>
+                <filename>connect-1.jpg</filename>
+        </files>
+        <administration>
+            <menu>Connecting homepage</menu>
+            <files folder="admin">
+                <filename>connecting_home.php</filename>
+                <filename>index.html</filename>
+                <filename>style.css</filename>
+            </files>
+        </administration>
+</extension>
