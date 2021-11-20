@@ -29,9 +29,9 @@ class Group:
         self.interest = interest
 
 
-def shuffle(collection) -> list:
+def shuffle(collection, rng: random.Random) -> list:
     """A helper function for shuffling collections."""
-    return random.sample(sorted(collection), len(collection))
+    return rng.sample(sorted(collection), len(collection))
 
 
 def form_groups(
@@ -40,6 +40,7 @@ def form_groups(
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
     old_groups: set[Group],
+    seed: int = None,
     _gv_graph=None,
 ) -> set[Group]:
     """Forms the groups around their interests.
@@ -53,6 +54,7 @@ def form_groups(
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
         interests_to_users (dict[Interest, set[UserId]]): A mapping from interests to their users
         old_groups (set[Group]): The previous list of formed groups
+        seed (int): The seed value that will be given to the random number generator
 
     Args for the visualization feature:
         _gv_graph (Optional[graphviz.Digraph]): A graphviz digraph that will be filled with data
@@ -70,6 +72,8 @@ def form_groups(
     #     * Use Hopcroft-Karp to iteratively get better matchings
     # 4. Form Groups
     #     * Create the groups from the matching
+
+    rng = random.Random(seed)
 
     ###
     # STEP 1:  ALLOT GROUP SLOTS
@@ -97,8 +101,8 @@ def form_groups(
 
     # Get the initial matchings
     # The order that the users are iterated and the interests are picked are randomized to avoid bias
-    for user, interests in shuffle(users_to_interests.items()):
-        for interest in shuffle(interests):
+    for user, interests in shuffle(users_to_interests.items(), rng):
+        for interest in shuffle(interests, rng):
             if free_spots[interest] > 0:
                 matchings[user] = interest
                 matchings_inverse.setdefault(interest, set()).add(user)

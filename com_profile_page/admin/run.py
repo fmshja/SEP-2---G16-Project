@@ -1,12 +1,9 @@
 import mariadb
 import sys
-from typing import NewType, Optional
 import json
+from cc_groups import form_groups, Interest, UserId
 
 # y = json.loads(x)
-
-UserId = NewType("UserId", int)
-Interest = NewType("Interest", str)
 
 # connecting to database
 
@@ -34,8 +31,9 @@ cur2.execute("SELECT User_Id, Interest_Id FROM app_user_interests;")
 
 # forming the interests_to_users and users_to_interests dicts
 interestlist = []
-#interests_to_users: dict[Interest, set[UserId]]
-interests_to_users = {}
+
+users_to_interests: dict[UserId, set[Interest]] = {}
+interests_to_users: dict[Interest, set[UserId]] = {}
 
 for (User_Id, Interest_Id) in cur2:
     print(f"user id: {User_Id}, Interest id's': {Interest_Id}")
@@ -48,7 +46,7 @@ for (User_Id, Interest_Id) in cur2:
     print(type(id), type(interests))
 
     cur.execute(
-        "INSERT INTO app_sort (id, interest) VALUES (?, ?)",
+        "INSERT INTO app_sort (User_Id, Interest_Id) VALUES (?, ?)",
         (id, interests))
 
 # for (id, interest_name) in cur:
