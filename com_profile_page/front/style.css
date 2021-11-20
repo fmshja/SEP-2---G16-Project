@@ -1,3 +1,14 @@
-#test {
-    color: red;
+.container {
+  float: left;
+} 
+.side {
+  width: 25%;
+} 
+.content_area {
+  width: 75%;
+}
+.container:after {
+  content: "";
+  display: table;
+  clear: both;
 }
