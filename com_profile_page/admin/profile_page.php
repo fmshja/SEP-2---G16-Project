@@ -10,10 +10,10 @@ $document = Factory::getDocument();
 $document->addStyleSheet("components/com_profile_page/style.css");
 
 if(isset($_POST['button'])){
-    echo "<p>it just works</p>";
     $command = escapeshellcmd('python .\components\com_profile_page\run.py');
     $output = shell_exec($command.' 2>&1');
-    echo "<p>Output:</p><p>$output</p>";
+    $output = nl2br($output); // change the linebreaks to <br> tags
+    echo "<p>Output:</p><p>$output</p>"; // debug print
 }
 
 

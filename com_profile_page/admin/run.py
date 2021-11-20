@@ -1,12 +1,9 @@
 import mariadb
 import sys
 import json
-from cc_groups import form_groups, Interest, UserId
-
-# y = json.loads(x)
+from cc_groups import form_groups, Interest, UserId, Group
 
 # connecting to database
-
 try:
     conn = mariadb.connect(
         user="root",
@@ -14,41 +11,34 @@ try:
         host="127.0.0.1",
         port=3306,
         database="joomla_ncc"
-
     )
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: [e]")
     sys.exit(1)
 
-cur = conn.cursor(buffered=True)
-cur2 = conn.cursor(buffered=True)
 
-# reading the interests from the database
-cur.execute("SELECT id, interest_name FROM app_interests;")
+# read and store the data for each interests name from the DB, for printing purposes
+interest_cursor = conn.cursor(buffered=True)
+interest_cursor.execute("SELECT id, interest_name FROM app_interests;")
+all_interests: dict[int, str] = dict(interest_cursor)
 
-# reading the interests from the database
-cur2.execute("SELECT User_Id, Interest_Id FROM app_user_interests;")
-
-# forming the interests_to_users and users_to_interests dicts
-interestlist = []
+# forming the users_to_interests dict
+user_to_interest_cursor = conn.cursor(buffered=True)
+user_to_interest_cursor.execute(
+    "SELECT User_Id, Interest_Id FROM app_user_interests;")
 
 users_to_interests: dict[UserId, set[Interest]] = {}
-interests_to_users: dict[Interest, set[UserId]] = {}
+for (user_id, interests_json) in user_to_interest_cursor:
+    interests: list[int] = json.loads(interests_json)
+    users_to_interests[user_id] = interests
 
-for (User_Id, Interest_Id) in cur2:
-    print(f"user id: {User_Id}, Interest id's': {Interest_Id}")
-    interests = {Interest_Id}
-    interests = interests.pop()
-    interests2 = json.loads(interests)
-    id = {User_Id}
-    id = id.pop()
-    id = int(id)
-    print(type(id), type(interests))
 
-    cur.execute(
-        "INSERT INTO app_sort (User_Id, Interest_Id) VALUES (?, ?)",
-        (id, interests))
+# call the function
+matched_groups = form_groups(2, 2, users_to_interests, set())
 
-# for (id, interest_name) in cur:
-#   if interest_name not in interestlist:
-#      interestlist.append(interest_name)
+# print each group
+for group in matched_groups:
+    print(
+        f"Group of {group.users} (interest: {all_interests[group.interest]})")
+
+# TODO: store the groups into the database
