@@ -1,5 +1,4 @@
-from cc_groups import form_groups
-from cc_groups import calculate_group_spots
+from cc_matching import calculate_group_spots, form_user_groups
 
 test_users_to_interests = {
     0: {"football", "videogames", "ice hockey"},
@@ -52,13 +51,14 @@ test_users_to_interests_integers = {
 
 def test_form_groups_with_minimum_persons_and_maximum_range():
     # Checking if groups are formed at least with 2 members and total size is never more than 4
-    groups = form_groups(2, 4, test_users_to_interests, set())
+    groups = form_user_groups(2, 4, test_users_to_interests, set())
     for group in sorted(groups, key=lambda g: (g.interest, g.users)):
         assert 2 <= len(group.users) <= 5
 
 
 def test_groups_with_less_popular_interests():
-    groups = form_groups(2, 4, test_users_to_less_popular_interests, set())
+    groups = form_user_groups(
+        2, 4, test_users_to_less_popular_interests, set())
     for group in sorted(groups, key=lambda g: (g.interest, g.users)):
         if "cricket" in group.interest:
             assert False, f"Less interest item was displayed"
@@ -66,6 +66,6 @@ def test_groups_with_less_popular_interests():
 
 def test_form_groups_with_integer_interests():
     try:
-        form_groups(2, 4, test_users_to_interests_integers, set())
+        form_user_groups(2, 4, test_users_to_interests_integers, set())
     except KeyError as exc:
         assert False, f"Interest as integers raised an exception {exc}"

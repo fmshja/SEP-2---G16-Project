@@ -8,7 +8,7 @@ The main function that you need to import and use is `form_groups`.
 from collections import deque
 import random
 import itertools
-from typing import NewType, Optional, TypeVar
+from typing import NewType, TypeVar
 
 
 # Create newtypes for clarity and for the ease of potential rewriting.
@@ -34,7 +34,7 @@ def shuffle(collection, rng: random.Random) -> list:
     return rng.sample(sorted(collection), len(collection))
 
 
-def form_groups(
+def form_user_groups(
     min_group_size: int,
     group_size: int,
     users_to_interests: dict[UserId, set[Interest]],

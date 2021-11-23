@@ -1,7 +1,7 @@
 import mariadb
 import sys
 import json
-from cc_groups import form_groups, Interest, UserId, Group
+from cc_matching import form_user_groups, Interest, UserId, Group
 
 # connecting to database
 try:
@@ -34,7 +34,7 @@ for (user_id, interests_json) in user_to_interest_cursor:
 
 
 # call the function
-matched_groups = form_groups(2, 2, users_to_interests, set())
+matched_groups = form_user_groups(2, 2, users_to_interests, set())
 
 # print each group
 for group in matched_groups:

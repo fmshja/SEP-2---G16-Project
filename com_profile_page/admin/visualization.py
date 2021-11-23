@@ -8,7 +8,7 @@
 
 import random
 import graphviz
-from cc_groups import form_groups, calculate_group_spots, Interest, UserId
+from cc_matching import form_user_groups, calculate_group_spots, Interest, UserId
 
 # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
 draw_vizualisations: bool = True
@@ -115,7 +115,7 @@ if draw_vizualisations:
     # Save the render
     start_graph.render()
 
-groups = form_groups(2, 2, test_users_to_interests, set(), graph)
+groups = form_user_groups(2, 2, test_users_to_interests, set(), graph)
 
 for group in sorted(groups, key=lambda g: (g.interest, g.users)):
     print(group.interest, end=": ")
