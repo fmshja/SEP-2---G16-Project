@@ -20,18 +20,6 @@ CREATE TABLE `app_interests_groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `app_user_interests_23_repeat_repeat_id_interest` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) DEFAULT NULL,
-  `id_interest` int(11) DEFAULT NULL,
-  `params` text DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fb_parent_fk_parent_id_INDEX` (`parent_id`),
-  KEY `fb_repeat_el_id_interest_INDEX` (`id_interest`),
-  CONSTRAINT `fk_app_interests_groups_id`
-	FOREIGN KEY (id_interest) REFERENCES app_interests_groups (id)
-) ENGINE=InnoDB AUTO_INCREMENT=230 DEFAULT CHARSET=utf8;
-
 CREATE TABLE `app_interests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_group` int(11) DEFAULT NULL,
@@ -57,20 +45,6 @@ CREATE TABLE `app_user_interests` (
   CONSTRAINT `fk_app_interests_user_interests_id`
 	FOREIGN KEY (id_interest) REFERENCES app_interests (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `app_user_interests_23_repeat` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) DEFAULT NULL,
-  `id_group` int(11) DEFAULT NULL,
-  `id_interest` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fb_parent_fk_parent_id_INDEX` (`parent_id`),
-  KEY `fb_groupby_id_group_INDEX` (`id_group`),
-  CONSTRAINT `fk_app_interests_groups_user_interests_23_repeat_id`
-	FOREIGN KEY (id_group) REFERENCES app_interests_groups (id),
-  CONSTRAINT `fk_app_interests_user_interests_23_repeat_id`
-	FOREIGN KEY (id_interest) REFERENCES app_interests (id)
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `app_feedback` (
   `id` int(11) NOT NULL,
