@@ -18,3 +18,9 @@ CREATE TABLE `app_interests_groups` (
 `group_name` varchar(255) DEFAULT NULL, 
 PRIMARY KEY (`id`) 
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `app_formed_user_groups` (
+  `id_group` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY(`id_group`, `id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
