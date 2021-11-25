@@ -42,3 +42,9 @@ for group in matched_groups:
         f"Group of {group.users} (interest: {all_interests[group.interest]})")
 
 # TODO: store the groups into the database
+
+for i, g in enumerate(matched_groups):
+    for u in g.users:
+        interest_cursor.execute("INSERT INTO app_formed_user_groups (id_group, id_user) VALUES (?, ?);",(i, u))
+
+conn.commit()
