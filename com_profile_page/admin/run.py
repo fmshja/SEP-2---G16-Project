@@ -22,6 +22,11 @@ interest_cursor = conn.cursor(buffered=True)
 interest_cursor.execute("SELECT id, interest_name FROM app_interests;")
 all_interests: dict[int, str] = dict(interest_cursor)
 
+# read and store the data for each user's name from the DB, for printing purposes
+user_cursor = conn.cursor(buffered=True)
+user_cursor.execute("SELECT id, username FROM app_users;")
+all_users: dict[int, str] = dict(user_cursor)
+
 # forming the users_to_interests dict
 user_to_interest_cursor = conn.cursor(buffered=True)
 user_to_interest_cursor.execute(
@@ -38,8 +43,13 @@ matched_groups = form_user_groups(2, 2, users_to_interests, set())
 
 # print each group
 for group in matched_groups:
-    print(
-        f"Group of {group.users} (interest: {all_interests[group.interest]})")
+    print(f"Group of {len(group.users)}: ", end="")
+    print(all_users[group.users[0]], end="")
+    for user in group.users[1:-1]:
+        print(f", {all_users[user]}", end="")
+    if len(group.users) > 1:
+        print(f" and {all_users[group.users[-1]]}", end="")
+    print(f" <i>(interest: {all_interests[group.interest]})</i>")
 
 # delete the old groups
 
