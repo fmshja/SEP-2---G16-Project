@@ -227,7 +227,13 @@ def form_user_groups(
 
         # Finally add the groups
         for g in group_canditates:
-            groups.append(Group(g, interest))
+            if len(g) < min_group_size and len(groups) > 1 and groups[-1].interest == interest:
+                # merge with previous
+                # TODO: this is a dirty hack. remove this when the group code above is fixed
+                groups[-1].users.extend(g)
+            else:
+                # add new
+                groups.append(Group(g, interest))
 
     return set(groups)
 
@@ -270,8 +276,11 @@ def calculate_group_spots(
     # Transform the amounts of people in each interest from raw counts into weight values and then to spot counts
     for interest, count in popularity_of_interest.items():
         spots: int = int(float(count) / float(count_total) * number_of_users)
-        free_spots -= spots
-        spots_per_interest[interest] = spots
+        if spots >= min_group_size:
+            free_spots -= spots
+            spots_per_interest[interest] = spots
+        else:
+            spots_per_interest[interest] = 0
 
     # Spread any remaining free spots with the interests and try to make as many of the spots for each interests
     # to be divisible by the `group_size`
@@ -289,9 +298,9 @@ def calculate_group_spots(
 
         if rem < min_group_size:
             # TODO
-            pass
+            new_spots = -rem
 
-        if rem <= free_spots:
+        elif rem <= free_spots:
             # fill the remainder
             new_spots = group_size - rem
 

@@ -44,11 +44,12 @@ for group in matched_groups:
 # delete the old groups
 
 interest_cursor.execute("DELETE FROM app_formed_user_groups;")
-    
+
 # store the groups into the database
 
 for i, g in enumerate(matched_groups):
     for u in g.users:
-        interest_cursor.execute("INSERT INTO app_formed_user_groups (id_group, id_user) VALUES (?, ?);",(i, u))
+        interest_cursor.execute(
+            "INSERT INTO app_formed_user_groups (id_group, id_user) VALUES (?, ?);", (i, u))
 
 conn.commit()
