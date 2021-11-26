@@ -109,10 +109,10 @@ def test_calculate_group_spots_with_minimum_maximum_group_size():
         len(test_users_to_interests),
         interests_to_users
     )
-    for i in groups:
-        if(groups[i] != 0):
-            print(groups[i])
-            size_of_last_group = groups[i] / 2
+    check_group_spots(groups, 2, 4)
 
-            if(size_of_last_group < 0.5):
-                assert False, f"Group was formed less than minimum size"
+
+def check_group_spots(groups, min_grp_size, max_grp_size):
+    for i in groups:
+        size_of_last_group = groups[i] % max_grp_size
+        assert size_of_last_group != 0 and size_of_last_group < min_grp_size, f"Group was formed less than minimum size"
