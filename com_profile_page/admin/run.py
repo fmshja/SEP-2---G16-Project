@@ -41,7 +41,11 @@ for group in matched_groups:
     print(
         f"Group of {group.users} (interest: {all_interests[group.interest]})")
 
-# TODO: store the groups into the database
+# delete the old groups
+
+interest_cursor.execute("DELETE FROM app_formed_user_groups;")
+    
+# store the groups into the database
 
 for i, g in enumerate(matched_groups):
     for u in g.users:
