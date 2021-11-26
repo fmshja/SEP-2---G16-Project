@@ -1,7 +1,7 @@
 import mariadb
 import sys
 import json
-from cc_matching import form_user_groups, Interest, UserId, Group
+from cc_matching import form_user_groups, Interest, UserId
 
 # connecting to database
 try:
@@ -38,25 +38,30 @@ for (user_id, interests_json) in user_to_interest_cursor:
     users_to_interests[user_id] = interests
 
 
-# call the function
+# call the main function which forms the groups
 matched_groups = form_user_groups(2, 2, users_to_interests, set())
+
+
+def print_user(u): return print(f"{all_users[u]} [{u}]", end="")
+
 
 # print each group
 for group in matched_groups:
     print(f"Group of {len(group.users)}: ", end="")
-    print(all_users[group.users[0]], end="")
+    print_user(group.users[0])
     for user in group.users[1:-1]:
-        print(f", {all_users[user]}", end="")
+        print(", ", end="")
+        print_user(user)
     if len(group.users) > 1:
-        print(f" and {all_users[group.users[-1]]}", end="")
-    print(f" <i>(interest: {all_interests[group.interest]})</i>")
+        print(" and ", end="")
+        print_user(group.users[-1])
+    print(
+        f" <i>(interest: {all_interests[group.interest]} [{group.interest}])</i>")
 
 # delete the old groups
-
 interest_cursor.execute("DELETE FROM app_formed_user_groups;")
 
 # store the groups into the database
-
 for i, g in enumerate(matched_groups):
     for u in g.users:
         interest_cursor.execute(
