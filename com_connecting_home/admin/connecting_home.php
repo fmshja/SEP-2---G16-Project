@@ -6,21 +6,25 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 
 $document = Factory::getDocument();
-
-$document->addStyleSheet("components/com_connecting_home/style.css");
-
-
+$options = array("version" => "auto");
+$document->addStyleSheet(JURI::root(true) . '/administrator/components/com_connecting_home/style.css');
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Connecting Colleagues</title>
 </head>
 <body>
-<p>Sorry, nothing here.</p>
+    <div class="guide-text bg">
+        <p>Sorry, there's nothing on the administrator side!</p>
+        <p>On the front side of this component, there is the main home page for the website.</p>
+    </div>
 
-<script type="text/javascript">
-//add javascript here
-</script>
+    <script type="text/javascript">
+    //add javascript here
+    </script>
 </body>
 </html>
