@@ -1,6 +1,49 @@
+/* The font for the body text. */
+/* Work Sans */ 
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
+
+
+/* The color palette of the website. */
+:root {
+  --primary-color: #2D3F89;
+  --secondary-color: #ffffff;
+  --accent-color: #456EAF;
+}
+
+
+/* General settings for the page. */
+*, *::before, *::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow: auto;
+  min-width: 100%;
+  min-height: 100%;
+  font-family: 'Work Sans', sans-serif;
+  line-height: 1.5;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+}
+
+
+
+/* Styles for the profile content
 .container {
-  float: left;
-} 
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
 .side {
   width: 25%;
 } 
@@ -11,4 +54,104 @@
   content: "";
   display: table;
   clear: both;
+}
+*/
+
+
+/* Styles for the form for the additional user info. */
+
+.additional-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg {
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  padding: 2.5em;
+  border-radius: 15px 50px;
+}
+
+.mbox {
+  margin: 1em;
+  padding: 1em 2.5em;
+}
+
+.mbox-instructions {
+  margin: 1em 0;
+}
+
+
+/* General styles for the buttons and the layout of the page.*/
+.form-control {
+  margin: 1em 0;
+}
+
+.text-input {
+  margin: 0 auto;
+  width: 200px;
+  border: solid 2px var(--accent-color);
+  border-radius: 5px;
+  height: 2.25em;
+}
+
+h1, h2, h3, p, label, input[type=text], input[type=file], textarea {
+  display: block;
+  text-align: center;
+}
+
+h1 {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 3rem;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 2.25rem;
+  margin-bottom: -0.25em;
+}
+
+h3 {
+  font-weight: 400;
+  font-size: 1.25rem;
+  margin-top: -0.25em;
+}
+
+label {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 0.25em;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: -0.3em
+}
+
+.btn {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 25px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--secondary-color);
+  color: var(--accent-color);
+  text-decoration: bold;
+}
+
+.btn:active {
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  text-decoration: bold;
 }
