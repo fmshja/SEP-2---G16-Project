@@ -24,3 +24,13 @@ CREATE TABLE IF NOT EXISTS `app_formed_user_groups` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY(`id_group`, `id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `app_users` ( 
+  `id` int(11) NOT NULL AUTO_INCREMENT, 
+  `first_name` varchar(255) DEFAULT NULL, 
+  `last_name` varchar(255) DEFAULT NULL, 
+  `id_email` varchar(255) DEFAULT NULL, 
+  `profile_pic` text DEFAULT NULL,  
+  `introduction` text DEFAULT NULL, 
+  PRIMARY KEY (`id`) 
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8; 
