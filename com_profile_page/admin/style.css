@@ -1,5 +1,5 @@
 /* A list of "minor" bugs that need to be fixed / other stuff that should be done:
-    - Styling the alert/output of the debug on how the matching went.
+    - Moving the console output below the matching algorithm box
 */
 
 /* ---------------------------------------------------------------------------------- */
@@ -95,4 +95,11 @@ p {
 .btn:active {
     background-color: var(--primary-color);
     color: var(--secondary-color);
+}
+
+.console_output {
+    background-color: white;
+    color: black;
+    font-family: monospace;
+    text-align: left;
 }
