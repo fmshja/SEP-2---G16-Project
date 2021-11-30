@@ -103,3 +103,7 @@ p {
     font-family: monospace;
     text-align: left;
 }
+
+#error {
+    color: darkred;
+}

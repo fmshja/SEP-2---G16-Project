@@ -47,10 +47,25 @@ for (user_id, interests_json) in db_cursor:
 matched_groups = form_user_groups(2, 2, users_to_interests, old_groups)
 
 
-def print_user(u): return print(f"{all_users[u]} [{u}]", end="")
+def print_user(u, end=""): return print(f"{all_users[u]} [{u}]", end=end)
+
+
+# check if every user is accounted for
+not_matched_users = set(all_users.keys())
+for group in matched_groups:
+    for user in group.users:
+        not_matched_users.remove(user)
+if len(not_matched_users) > 0:
+    print('<span id="error">Warning, these users were not matched:')
+    for user in list(not_matched_users)[0:10]:
+        print_user(user, ", ")
+    if len(not_matched_users) > 10:
+        print(f"\n...plus {len(not_matched_users) - 10} more")
+    print('</span>')
 
 
 # print each group
+print("Formed groups:")
 for group in matched_groups:
     users = list(group.users)
     print(f"Group of {len(users)}: ", end="")
