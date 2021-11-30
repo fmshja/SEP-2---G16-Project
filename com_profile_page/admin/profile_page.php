@@ -14,7 +14,7 @@ if(isset($_POST['button'])){
     $command = escapeshellcmd('python .\components\com_profile_page\run.py');
     $output = shell_exec($command.' 2>&1');
     $output = nl2br($output); // change the linebreaks to <br> tags
-    echo "<p>Formed groups:</p><p>$output</p>"; // debug print
+    echo "<p style=\"color:black\">Formed groups:</p><br><p style=\"color:black\">$output</p><br>"; // debug print
 }
 
 ?>

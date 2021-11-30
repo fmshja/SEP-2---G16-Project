@@ -38,7 +38,7 @@ def form_user_groups(
     min_group_size: int,
     group_size: int,
     users_to_interests: dict[UserId, set[Interest]],
-    old_groups: set[Group],
+    old_groups: list[set[UserId]],
     seed: int = None,
     _gv_graph=None,
 ) -> set[Group]:
@@ -51,7 +51,7 @@ def form_user_groups(
         min_group_size (int): The smallest allowed group size
         group_size (int): The desired group size
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
-        old_groups (set[Group]): The previous list of formed groups
+        old_groups (list[set[UserId]]): The previous list of formed groups, without interests
         seed (int): The seed value that will be given to the random number generator
 
     Args for the visualization feature:
@@ -171,29 +171,25 @@ def form_user_groups(
     # The final resulting list of groups
     groups: list[Group] = list()
 
-    # old_groups but with the interests stripped out
-    old_groups: set[list[UserId]] = map(
-        lambda group: group.users, iter(old_groups))
-
     for interest, users in matchings_inverse.items():
         # ok groups
-        group_canditates: list[list[UserId]]
+        group_canditates: set[frozenset[UserId]]
         # repeat groups
-        group_rejects: list[list[UserId]]
+        group_rejects: set[frozenset[UserId]]
 
         # Form groups until there's no repeat groups, or after 100 iterations
         for _ in range(0, 100):
-            group_canditates = list()
-            group_rejects = list()
+            group_canditates = set()
+            group_rejects = set()
 
-            groups_to_check: list[list[UserId]] = list()
+            groups_to_check: list[set[UserId]] = list()
 
-            for user in users:
+            for user in shuffle(users, rng):
                 if len(groups_to_check) == 0 or len(groups_to_check[-1]) >= group_size:
                     # there is no users or the last group is of max size
-                    groups_to_check.append([user])
+                    groups_to_check.append({user})
                 else:
-                    groups_to_check[-1].append(user)
+                    groups_to_check[-1].add(user)
 
             # merge too small groups
             if len(groups_to_check) > 2 and len(groups_to_check[-1]) < min_group_size:
@@ -204,26 +200,23 @@ def form_user_groups(
             for g in groups_to_check:
                 if g in old_groups:
                     # found a repeat group
-                    group_rejects.append(g)
+                    group_rejects.add(frozenset(g))
                 else:
                     # group is ok
-                    group_canditates.append(g)
+                    group_canditates.add(frozenset(g))
 
             # check if there were any rejects, and shuffle them into the rest to try again
             if len(group_rejects) > 0:
-                for groups in group_rejects:
-                    # flatten the canditates into users
-                    users = list(
-                        itertools.chain.from_iterable(group_canditates))
+                for group in group_rejects:
                     # shuffle the rejects back into the users
-                    for reject in itertools.chain.from_iterable(group_rejects):
-                        users.insert(random.randrange(len(users)), reject)
+                    for reject in group:
+                        users.add(reject)
             else:
                 # no repeats found
                 break
 
         # Add the possible straggler groups if 100 iterations were reached
-        group_canditates.extend(group_rejects)
+        group_canditates.union(group_rejects)
 
         # Finally add the groups
         for g in group_canditates:

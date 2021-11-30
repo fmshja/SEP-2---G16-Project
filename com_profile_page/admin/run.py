@@ -17,29 +17,34 @@ except mariadb.Error as e:
     sys.exit(1)
 
 
-# read and store the data for each interests name from the DB, for printing purposes
-interest_cursor = conn.cursor(buffered=True)
-interest_cursor.execute("SELECT id, interest_name FROM app_interests;")
-all_interests: dict[int, str] = dict(interest_cursor)
+db_cursor = conn.cursor(buffered=True)
 
-# read and store the data for each user's name from the DB, for printing purposes
-user_cursor = conn.cursor(buffered=True)
-user_cursor.execute("SELECT id, username FROM app_users;")
-all_users: dict[int, str] = dict(user_cursor)
+# read the data for each interests name from the DB, for printing purposes
+db_cursor.execute("SELECT id, interest_name FROM app_interests;")
+all_interests: dict[int, str] = dict(db_cursor)
+
+# read the data for each user's name from the DB, for printing purposes
+db_cursor.execute("SELECT id, username FROM app_users;")
+all_users: dict[int, str] = dict(db_cursor)
+
+# read the old groups
+db_cursor.execute("SELECT id_group, id_user FROM app_formed_user_groups")
+old_groups: dict[int, set[int]] = {}
+for (group_id, user_id) in db_cursor:
+    old_groups.setdefault(group_id, set()).add(user_id)
+# erase group ids and convert it into a list
+old_groups: list[set[int]] = list(old_groups.values())
 
 # forming the users_to_interests dict
-user_to_interest_cursor = conn.cursor(buffered=True)
-user_to_interest_cursor.execute(
-    "SELECT User_Id, Interest_Id FROM app_user_interests;")
-
+db_cursor.execute("SELECT User_Id, Interest_Id FROM app_user_interests;")
 users_to_interests: dict[UserId, set[Interest]] = {}
-for (user_id, interests_json) in user_to_interest_cursor:
+for (user_id, interests_json) in db_cursor:
     interests: list[int] = json.loads(interests_json)
     users_to_interests[user_id] = interests
 
 
 # call the main function which forms the groups
-matched_groups = form_user_groups(2, 2, users_to_interests, set())
+matched_groups = form_user_groups(2, 2, users_to_interests, old_groups)
 
 
 def print_user(u): return print(f"{all_users[u]} [{u}]", end="")
@@ -47,24 +52,25 @@ def print_user(u): return print(f"{all_users[u]} [{u}]", end="")
 
 # print each group
 for group in matched_groups:
-    print(f"Group of {len(group.users)}: ", end="")
-    print_user(group.users[0])
-    for user in group.users[1:-1]:
+    users = list(group.users)
+    print(f"Group of {len(users)}: ", end="")
+    print_user(users[0])
+    for user in users[1:-1]:
         print(", ", end="")
         print_user(user)
-    if len(group.users) > 1:
+    if len(users) > 1:
         print(" and ", end="")
-        print_user(group.users[-1])
+        print_user(users[-1])
     print(
         f" <i>(interest: {all_interests[group.interest]} [{group.interest}])</i>")
 
 # delete the old groups
-interest_cursor.execute("DELETE FROM app_formed_user_groups;")
+db_cursor.execute("DELETE FROM app_formed_user_groups;")
 
 # store the groups into the database
 for i, g in enumerate(matched_groups):
     for u in g.users:
-        interest_cursor.execute(
+        db_cursor.execute(
             "INSERT INTO app_formed_user_groups (id_group, id_user) VALUES (?, ?);", (i, u))
 
 conn.commit()
