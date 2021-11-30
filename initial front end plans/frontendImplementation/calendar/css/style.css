@@ -40,7 +40,7 @@ body {
 /* Styles for the navigation bar in general. */
 
 .nav-bar {
-    height: 75px;
+    height: 77px;
     padding: 10px;
     background-color: var(--secondary-color);
     overflow-y: hidden;
@@ -59,20 +59,61 @@ body {
     overflow: hidden;
 }
 
+/* Styles for the logo. */
+
+.logo {
+    font-family: "Comfortaa", cursive;
+    line-height: 1.2;
+    font-weight: 600;
+    font-size: 1em;
+}
+
 /* Grid container */
 
-.calendar {
-    background-color: lightblue;
+.container {
+    text-align: center;
+}
+
+.calendar-area {
+    display: flex;
+    justify-content: space-evenly;
+    background-image: url('../images/connect-1.jpg');
+    background-color: var(--secondary-color);
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.calendar-container {
+    order: 1;
+    border: solid;
+    background-color: rgba(69, 110, 175, 0.8);
+    width: 70%;
+}
+
+.calendar {
+    /*border-color: black;*/
+    /*background-position: center;*/
     display: grid;
-    grid-template-columns: 120px 120px 120px 120px 120px 120px 120px;
-    grid-template-rows: 120px 120px 120px 120px 120px 120px;
-    margin-left: 14.5%;
-    margin-right: 14.5%;
+    grid-template-columns: 110px 110px 110px 110px 110px 110px 110px;
+    grid-template-rows: 30px 110px 110px 110px 110px 110px;
+    /*margin-left: 23.5%;
+    margin-right: 23.5%;*/
     justify-content: center;
     align-content: center;
-    padding: 5px;
+    padding: 40px;
+    padding-top: 10px;
     gap: 5px 5px;
+}
+
+.side-bar {
+    order: 2;
+    border: solid;
+    /*border-color: black;*/
+    width: 30%;
+    background-color: var(--accent-color);
+    /*justify-content: center;*/
 }
 
 p {
@@ -85,38 +126,57 @@ p {
 .date-bar {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
     height: 50px;
     align-items: baseline;
 }
 
 .show-date {
+    white-space: nowrap;
+    margin: auto;
+    width: 30%;
+}
+
+.month-shown {
     order: 2;
-    margin: 0  35% 0 35%;
 }
 
 .previous-month {
+    white-space: nowrap;
     order: 1;
+    width: 30%;
+    border: solid;
 }
 
 .next-month {
+    white-space: nowrap;
     order: 3;
+    width: 30%;
+    border: solid;
 }
-/*
-#date {
+
+.weekdays {
+    grid-row: 1 / 2;
     text-align: center;
 }
 
-#prev {
-    text-align: left;
+#prev, #next, #calendar-item {
+    cursor: pointer;
 }
 
-#next {
-    text-align: right;
+#c1 {
+    background-color: black;
+    font-size: 30px;
 }
-*/
 
+h2 {
+    color: black;
+}
 
-
-
-
+.flex {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+}

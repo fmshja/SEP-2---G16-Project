@@ -19,26 +19,35 @@
     <div class="container">
 
         <!-- Upper date bar -->
-        <container class="date-bar">
-            <section class=previous-month>
-                <h1 id="prev" onclick="prevmonth()">Previous month</h1>
-            </section>
-            <section class=next-month>
-                <h1 id="next" onclick="nextmonth()">Next month</h1>
-            </section>
-            <section class="show-date">
-                <h1 id="date">now</h1>
-            </section>
-        </container>
+        
+        <section class="show-date">
+            <h1 id="date">now</h1>
+        </section>
 
         <!-- Calendar area -->
 
         <section class="calendar-area">
-            <section class="calendar" id="calendar"></section>
+            <section class="calendar-container">
+                <container class="date-bar">
+                    <section class=previous-month>
+                        <h2 id="prev" link="" onclick="prevmonth()">Previous month</h1>
+                    </section>
+                    <section class=next-month>
+                        <h2 id="next" link="" onclick="nextmonth()">Next month</h1>
+                    </section>
+                    <section class="month-shown">
+                        <h2 id="month-shown">month</h1>
+                    </section>
+                </container>
+                <section class="calendar" id="calendar">
+            </section>
+            </section>
+            <section class="side-bar">
+                <h1 id="side"></h1>
+            </section>
         </section>
     </div>
 
-    <!-- Side area -->
 
     <script src="js/script.js"></script>
 </body>
