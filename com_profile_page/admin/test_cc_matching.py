@@ -64,10 +64,28 @@ test_users_to_interests_with_no_match = {
     12: {"drawing", "C++", "Centralized DB"},
 }
 
+test_users_with_one_interest = {
+    0: {"football"},
+    1: {"videogames"},
+    2: {"drawing"},
+    3: {"ice hockey"},
+    4: {"programming"},
+    5: {"music"},
+    6: {"soccer"},
+    7: {"swimming"},
+    8: {"cricket"},
+    9: {"coffee"},
+    10: {"movies"},
+}
+
+form_user_groups_min_group_size = 2
+form_user_groups_maximum_group_size = 4
+
 
 def test_form_groups_with_minimum_persons_and_maximum_range():
     # Checking if groups are formed at least with 2 members and total size is never more than 4
-    groups = form_user_groups(2, 4, test_users_to_interests, set())
+    groups = form_user_groups(form_user_groups_min_group_size,
+                              form_user_groups_maximum_group_size, test_users_to_interests, set())
     for group in sorted(groups, key=lambda g: (g.interest, g.users)):
         assert 2 <= len(group.users) <= 5
 
@@ -75,7 +93,8 @@ def test_form_groups_with_minimum_persons_and_maximum_range():
 def test_groups_with_less_popular_interests():
     # Checking forming groups with less popular interests
     groups = form_user_groups(
-        2, 4, test_users_to_less_popular_interests, set())
+        form_user_groups_min_group_size,
+        form_user_groups_maximum_group_size, test_users_to_less_popular_interests, set())
     for group in sorted(groups, key=lambda g: (g.interest, g.users)):
         if "cricket" in group.interest:
             assert False, f"Less interest item was displayed"
@@ -84,7 +103,8 @@ def test_groups_with_less_popular_interests():
 def test_form_groups_with_integer_interests():
     # Checking forming groups with integer interests
     try:
-        form_user_groups(2, 4, test_users_to_interests_integers, set())
+        form_user_groups(form_user_groups_min_group_size,
+                         form_user_groups_maximum_group_size, test_users_to_interests_integers, set())
     except KeyError as exc:
         assert False, f"Interest as integers raised an exception {exc}"
 
@@ -92,10 +112,20 @@ def test_form_groups_with_integer_interests():
 def test_groups_with_no_matching_interests():
     # Checking forming groups when there is no common interest among users
     groups = form_user_groups(
-        2, 4, test_users_to_interests_with_no_match, set())
+        form_user_groups_min_group_size,
+        form_user_groups_maximum_group_size, test_users_with_one_interest, set())
     assert False == bool(groups)
 
 
+def test_groups_with_one_interest():
+    # Checking forming groups when user selected only one interest and no common
+    groups = form_user_groups(
+        form_user_groups_min_group_size,
+        form_user_groups_maximum_group_size, test_users_to_interests_with_no_match, set())
+    assert False == bool(groups)
+
+
+########## Starting unit test of calculate_group_spots() #########
 interests_to_users = {}
 for user, interests in test_users_to_interests.items():
     for interest in interests:
@@ -103,16 +133,45 @@ for user, interests in test_users_to_interests.items():
 
 
 def test_calculate_group_spots_with_minimum_maximum_group_size():
+    min_group_size = 2
+    max_group_size = 4
+
     groups = calculate_group_spots(
-        2,
-        4,
+        min_group_size,
+        max_group_size,
         len(test_users_to_interests),
         interests_to_users
     )
-    check_group_spots(groups, 2, 4)
+    check_group_spots(groups, min_group_size, max_group_size)
+
+
+def test_calculate_group_spots_with_different_group_size_value():
+    min_group_size = 1
+    max_group_size = 5
+
+    groups = calculate_group_spots(
+        min_group_size,
+        max_group_size,
+        len(test_users_to_interests),
+        interests_to_users
+    )
+    check_group_spots(groups, min_group_size, max_group_size)
+
+
+def test_calculate_group_spots_with_minimum_group_size_zero():
+    min_group_size = 0
+    max_group_size = 4
+
+    groups = calculate_group_spots(
+        min_group_size,
+        max_group_size,
+        len(test_users_to_interests),
+        interests_to_users
+    )
+    check_group_spots(groups, min_group_size, max_group_size)
 
 
 def check_group_spots(groups, min_grp_size, max_grp_size):
     for i in groups:
         size_of_last_group = groups[i] % max_grp_size
-        assert size_of_last_group != 0 and size_of_last_group < min_grp_size, f"Group was formed less than minimum size"
+        assert size_of_last_group == 0 and size_of_last_group >= min_grp_size, f"Group was formed less than minimum size"
