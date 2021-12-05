@@ -35,28 +35,13 @@ body {
 }
 
 
-/* Styles for the header of the account detail finalization. */
-
-.modal-box {
-  margin: 1em;
-  padding: 1em 2.5em;
-  z-index: 1;
-  display: none;
-  position: absolute;
-  overflow-y: auto;
-  width: fit-content;
-  background-color: var(--accent-color);
-  color: var(--secondary-color);
-  border-radius: 15px;
-}
+/* Styles for the alerts */
 
 .alert-message {
   margin: 1em;
   padding: 1em 2em;
-  z-index: 2;
   top: 0;
   left: 0;
-  display: none;
   position: absolute;
   width: fit-content;
   height: 55px;
@@ -64,6 +49,32 @@ body {
   color: var(--secondary-color);
   border-radius: 20px;
   font-weight: bold;
+}
+
+.modal-alert {
+  display: none;
+  z-index: 3;
+}
+
+.profile-alert {
+  display: none;
+  z-index: 1;
+}
+
+
+/* Styles for the header of the account detail finalization. */
+
+.modal-box {
+  margin: 1em;
+  padding: 1em 2.5em;
+  z-index: 2;
+  display: none;
+  position: absolute;
+  overflow-y: auto;
+  width: fit-content;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  border-radius: 15px;
 }
 
 .modal-content {
@@ -206,6 +217,7 @@ opacity: 0;
 
 .user-profile {
   padding: 1em 2.5em;
+  z-index: 0;
   background-color: var(--secondary-color);
   color: var(--primary-color);
 }

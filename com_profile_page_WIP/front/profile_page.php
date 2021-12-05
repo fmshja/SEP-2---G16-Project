@@ -32,28 +32,28 @@ catch(Exception $e){
 if(isset($_POST['submitUserData'])){ 
     if ($_POST['fname'] == '') {
         echo '<script>
-            var msg = document.getElementById("alert-message");
+            var msg = document.getElementById("modal-alert");
             msg.style.display = "block";
             msg.innerHTML = "The first name must be filled out!";
         </script>';
     }
     else if ($_POST['lname'] == '') {
         echo '<script>
-            var msg = document.getElementById("alert-message");
+            var msg = document.getElementById("modal-alert");
             msg.style.display = "block";
             msg.innerHTML = "The last name must be filled out!";
         </script>';
     }
     else if ($_POST['introduction'] == '') {
         echo '<script>
-            var msg = document.getElementById("alert-message");
+            var msg = document.getElementById("modal-alert");
             msg.style.display = "block";
             msg.innerHTML = "You must write yourself an introduction!";
         </script>';
     }
     else if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
         echo '<script>
-            var msg = document.getElementById("alert-message");
+            var msg = document.getElementById("modal-alert");
             msg.style.display = "block";
             msg.innerHTML = "Please choose at least three (3) interests!";
         </script>';
@@ -195,7 +195,7 @@ function readInterests(){
 </head>
 <body>
     <section id="myModal" class="modal-box">
-        <div class="alert-message" style="display: none;">
+        <div class="alert-message modal-alert" style="display: none;">
             <i class="fas fa-exclamation-circle"></i>
             This is an alert!
         </div>
@@ -294,11 +294,16 @@ function readInterests(){
     
     
     <section class="user-profile">
+        <div class="alert-message profile-alert" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            This is an alert!
+        </div>
+        <!--
         <div class="profile-container flex-row">
             <div class="side-bar-left flex-column">
                 <div class="profile-pic">
                     Profile picture rendered here
-                    <!-- <img src="default-pro-pic.jpg" alt="User profile picture"/> -->
+                    <img src="default-pro-pic.jpg" alt="User profile picture"/>
                 </div>
                 <div>Firstname Lastname</div>
             </div>
@@ -307,24 +312,34 @@ function readInterests(){
                 <div>Introduction</div>
             </div>
         </div>
+        -->
 
         <?php
             // USER PROFILE
-            // What does the variable $exist reference to?
-
-            //$userData = $exist;
-            //$userData = $userData[0];
-            //echo "<div class=\"profile-container\">";
-                //echo "<div class=\"side-bar-left\">";
-                    //echo "<img src=\"default-pro-pic.jpg\" alt=\"User profile picture\" height=\"200\" width=\"300\">";
-                    // echo "<img src=\"images/profile_pictures/". $userData[4]. "\" alt=\"User profile picture\" height=\"200\" width=\"300\" />";
-                    //echo "<p>". $userData[1]. " ". $userData[2]. "</p>";
-                //echo "</div>";
-                //echo "<div class=\"content-area\">";
-                    //echo "<p>showcase area</p>";
-                    //echo "<p>". $userData[5]."</p>";
-                //echo "</div>";
-            //echo "</div>";
+            if ($exist != null) {
+                $userData = $exist;
+                $userData = $userData[0];
+                echo "<div class=\"profile-container flex-row\">";
+                    echo "<div class=\"side-bar-left flex-column\">";
+                        echo "<div class=\"profile-pic\">";
+                            // echo "<img src=\"default-pro-pic.jpg\" alt=\"User profile picture\"/>";
+                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" alt=\"User profile picture\"/>";
+                        echo "</div>";
+                        echo "<div>". $userData[1]. " ". $userData[2]. "</div>";
+                    echo "</div>";
+                    echo "<div class=\"content-area\">";
+                        echo "<div>Showcase area</div>";
+                        echo "<div>". $userData[5]."</div>";
+                    echo "</div>";
+                echo "</div>";
+            }
+            else {
+                echo '<script>
+                    var msg = document.getElementById("profile-alert");
+                    msg.style.display = "block";
+                    msg.innerHTML = "There was an error in reading your information.<br>Please make sure you have logged in!";
+                </script>';
+            }
         ?>
     </section>
     
