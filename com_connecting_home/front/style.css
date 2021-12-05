@@ -1,6 +1,9 @@
-/* The font for the Connecting Colleagues logo. */
-/* Confortaa */ 
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+/* A list of "minor" bugs that need to be fixed / other stuff that should be done:
+    - Make the showcase-content div not overflow vertically at the bottom.
+    - Add the Joomla login plug-in(?) on the page / see how it looks on the stylized page.
+*/
+
+/* ---------------------------------------------------------------------------------- */
 
 /* The font for the body text. */
 /* Work Sans */ 
@@ -34,43 +37,6 @@ body {
     font-family: 'Work Sans', sans-serif;
     line-height: 1.5;
     color: var(--primary-color);
-}
-
-
-/* Styles for the navigation bar in general. */
-
-.nav-bar {
-    height: 75px;
-    padding: 10px;
-    background-color: var(--secondary-color);
-    overflow-y: hidden;
-}
-
-.nav-bar a {
-    padding: 10px;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-.nav-container {
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 0 1em;
-    overflow: hidden;
-}
-
-/* Styles for the logo. */
-
-.logo {
-    font-family: "Comfortaa", cursive;
-    line-height: 1.2;
-    font-weight: 600;
-    font-size: 1em;
-}
-
-/* A container for the front page content and the background picture. */
-
-.container {
     background-image: url('connect-1.jpg');
     background-color: var(--secondary-color);
     background-position: center;
@@ -79,124 +45,81 @@ body {
     position: relative;
 }
 
-/* The showcase. */
 
-.showcase-bg {
-    margin: 0 4em;
-    padding: 2.5em;
-    background-color: rgba(69, 110, 175, 0.8);
-    width: 70%;
+/* For extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .showcase {
+        width: 85%;
+    }
 }
 
-.showcase-content {
-    text-align: center;
-    color: var(--secondary-color);
+/* For small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .showcase {
+        width: 85%;
+    }
 }
-.showcase-content h2{
-    color: var(--secondary-color);
+  
+/* For medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .showcase {
+        width: 80%;
+    }
+} 
+  
+/* For large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .showcase {
+        width: 70%;
+    }
+} 
+  
+/* For extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .showcase {
+        width: 70%;
+    }
 }
 
-/* The sign in area. */
 
-.sign-in-area {
-    margin: 0 4em;
-    padding: 2em;
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-}
+/* General settings for the page. */
+.showcase {
+    margin: 0 3em;
+    min-height: 100vh;
 
-.form-control {
-    margin: 0.5em 0;
-}
-
-h2, h3, label, input {
     display: block;
     text-align: center;
-}
-
-h2 {
-    margin-bottom: 1em;
-    font-weight: 200;
-    font-size: 1.5em;
-}
-
-label {
-    margin-bottom: -0.5em;
-}
-
-input[type=submit], input[type=button] {
-    margin-top: 1em;
-}
-
-input[type=submit] {
-    margin-top: 2em;
-    width: 100%;
-}
-
-input[type=button] {
-    width: 80%;
-}
-
-.signin-text-input {
-    margin: 0.5em 0;
-    border: solid 2px var(--accent-color);
-    border-radius: 5px;
-    height: 2.25em;
-}
-
-/* The line break between the sign in area and the registration. */
-
-.line-break {
-    margin-top: 2em;
-    margin-bottom: 1em;
-}
-
-hr {
-    display: block;
-    overflow: visible;
-    padding: 0 8em;
-    padding-top: 0.4em;
-    height: 2px;
-    border: none;
-    border-top: 1px solid var(--secondary-color);
-    text-align: center;
-}
-
-h3 {
-    margin-bottom: 6px;
-    font-weight: 200;
-    font-size: 1.5em;
-}
-
-/* General styles for the buttons and the layout of the page.*/
-
-.btn {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 25px;
-    background-color: var(--accent-color);
     color: var(--secondary-color);
-    text-transform: uppercase;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-}
-
-.btn:active {
-    background-color: var(--secondary-color);
-    color: var(--accent-color);
 }
 
 .flex {
     display: flex;
-    height: 100vh;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
+    flex-direction: column;
+}
+
+.showcase-title {
+    margin-bottom: 1em;
+    overflow: auto;
+}
+
+.showcase-content {
+    margin: 1em 0;
+    flex: 1;
+}
+
+.bg {
+    background-color: rgba(69, 110, 175, 0.8);
+    padding: 2.5em;
+    border-radius: 15px;
+}
+
+h2 {
+    font-weight: 200;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1rem;
+    margin-bottom: -0.3em
 }
