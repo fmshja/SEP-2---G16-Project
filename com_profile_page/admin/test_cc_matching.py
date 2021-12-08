@@ -134,44 +134,45 @@ for user, interests in test_users_to_interests.items():
 
 def test_calculate_group_spots_with_minimum_maximum_group_size():
     min_group_size = 2
-    max_group_size = 4
+    group_size = 4
 
     groups = calculate_group_spots(
         min_group_size,
-        max_group_size,
+        group_size,
         len(test_users_to_interests),
         interests_to_users
     )
-    check_group_spots(groups, min_group_size, max_group_size)
+    check_group_spots(groups, min_group_size)
 
 
 def test_calculate_group_spots_with_different_group_size_value():
     min_group_size = 1
-    max_group_size = 5
+    group_size = 5
 
     groups = calculate_group_spots(
         min_group_size,
-        max_group_size,
+        group_size,
         len(test_users_to_interests),
         interests_to_users
     )
-    check_group_spots(groups, min_group_size, max_group_size)
+    check_group_spots(groups, min_group_size)
 
 
 def test_calculate_group_spots_with_minimum_group_size_zero():
     min_group_size = 0
-    max_group_size = 4
+    group_size = 4
 
     groups = calculate_group_spots(
         min_group_size,
-        max_group_size,
+        group_size,
         len(test_users_to_interests),
         interests_to_users
     )
-    check_group_spots(groups, min_group_size, max_group_size)
+    check_group_spots(groups, min_group_size)
 
 
-def check_group_spots(groups, min_grp_size, max_grp_size):
-    for i in groups:
-        size_of_last_group = groups[i] % max_grp_size
-        assert size_of_last_group == 0 and size_of_last_group >= min_grp_size, f"Group was formed less than minimum size"
+def check_group_spots(group_spots, min_grp_size):
+    for (interest, spots) in group_spots.items():
+        assert spots > min_grp_size,\
+            (f"A group for interest {interest} was formed with {spots} available spots, "
+             f"which is less than the minimum of {min_grp_size}.")
