@@ -30,33 +30,9 @@ catch(Exception $e){
 
 // Check if form was submitted.
 if(isset($_POST['submitUserData'])){ 
-    if ($_POST['fname'] == '') {
-        echo '<script>
-            var msg = document.getElementById("modal-alert");
-            msg.style.display = "block";
-            msg.innerHTML = "The first name must be filled out!";
-        </script>';
-    }
-    else if ($_POST['lname'] == '') {
-        echo '<script>
-            var msg = document.getElementById("modal-alert");
-            msg.style.display = "block";
-            msg.innerHTML = "The last name must be filled out!";
-        </script>';
-    }
-    else if ($_POST['introduction'] == '') {
-        echo '<script>
-            var msg = document.getElementById("modal-alert");
-            msg.style.display = "block";
-            msg.innerHTML = "You must write yourself an introduction!";
-        </script>';
-    }
-    else if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
-        echo '<script>
-            var msg = document.getElementById("modal-alert");
-            msg.style.display = "block";
-            msg.innerHTML = "Please choose at least three (3) interests!";
-        </script>';
+    if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
+        $message = "Please choose at least three (3) interests!";
+        echo "<script>alert('$message');</script>";
     }
     else {
         $fname = $_POST['fname'];
@@ -194,60 +170,108 @@ function readInterests(){
     <title>My Profile | Connecting Colleagues</title>
 </head>
 <body>
-    <section id="myModal" class="modal-box">
-        <div class="alert-message modal-alert" style="display: none;">
-            <i class="fas fa-exclamation-circle"></i>
-            This is an alert!
-        </div>
-        <div class="modal-content">
-        <form name="acc-details" action="" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
-            <div class="modal-instructions">
-                <h2>Welcome to Connecting Colleagues!</h2>
-                <h3>Let's finalize your account details.</h3>
-                <h3 id="tab-number">Part 1 of 2</h3>
-                <hr>
-            </div>
+    <?php
+        if ($exist == null) {
+            echo "<section class=\"user-profile\">";
 
-            <!-- The start of the first page of the form. -->
-            <div class="tab1">
-                <div class="form-control">
-                    <label for="fname">Your first name</label>
-                    <input type="text" name="fname" class="text-input medium-input" required>
-                </div>
+                // User profile  with no php/database stuff
+                echo "<div class=\"profile-container flex-row\">";
+                    echo "<div class=\"side-bar-left flex-column\">";
+                        echo "<div class=\"profile-pic\">";
+                            echo "<img src=\"default-pro-pic.jpg\" alt=\"User profile picture\"/>";
+                        echo "</div>";
+                        echo "<div><h3>Firstname Lastname</h3></div>";
+                    echo "</div>";
+                    echo "<div class=\"content-area\">";
+                        echo "<h3>Your introduction</h3>";
+                        echo "<hr>";
+                        echo "<p>Lorem ipsum dolor sit amet, 
+                        consectetur adipiscing elit. 
+                        Sed justo arcu, pretium cursus est quis, 
+                        laoreet hendrerit libero. Suspendisse sollicitudin ex mattis, 
+                        posuere dui porta, efficitur justo. 
+                        Curabitur eu arcu vehicula felis rhoncus fringilla sit amet vel quam. 
+                        Nulla ac maximus lorem, non lobortis felis. 
+                        Duis quis tincidunt urna, in laoreet eros. 
+                        Praesent sodales velit risus, sit amet maximus urna pellentesque eu. 
+                        Suspendisse congue elit arcu, quis euismod massa venenatis sit amet. 
+                        Nullam laoreet non ante eget placerat.</p>";
+                    echo "</div>";
+                echo "</div>";
+        
+                // $userData = $exist;
+                // $userData = $userData[0];
+                // echo "<div class=\"profile-container flex-row\">";
+                    // echo "<div class=\"side-bar-left flex-column\">";
+                        // echo "<div class=\"profile-pic\">";
+                            // echo "<img src=\"images/profile_pictures/". $userData[4]. "\" alt=\"User profile picture\"/>";
+                        // echo "</div>";
+                        // echo "<div><h3>". $userData[1]. " ". $userData[2]. "</h3></div>";
+                    // echo "</div>";
+                    // echo "<div class=\"content-area\">";
+                        // echo "<h3>Your introduction</h3>";
+                        // echo "<hr>";
+                        // echo "<p>". $userData[5]."</p>";
+                    // echo "</div>";
+                //echo "</div>";
+            echo "</section>";
+        }
+        else {
+            echo "<section class=\"modal-box\">";
+            echo "<div class=\"modal-content\">";
+            echo "<form name=\"acc-details\" action=\"\" method=\"post\" enctype=\"multipart/form-data\">";
+                echo "<div class=\"modal-instructions\">";
+                    echo "<h2>Welcome to Connecting Colleagues!</h2>";
+                    echo "<h3>Let's finalize your account details.</h3>";
+                    echo "<h3 id=\"tab-number \">Part 1 of 2</h3>";
+                    echo "<hr>";
+                echo "</div>";
 
-                <div class="form-control">
-                    <label for="lname">Your last name</label>
-                    <input type="text" name="lname" class="text-input medium-input" required>
-                </div>
+                // The start of the first page of the form.
+                echo "<div class=\"tab1\">";
+                    echo "<div class=\"form-control\">";
+                        echo "<label for=\"fname\">Your first name</label>";
+                        echo "<input type=\"text\" name=\"fname\" class=\"text-input medium-input\" required>";
+                    echo "</div>";
 
-                <div class="form-control">
-                    <label for="introduction">Write a short introduction of yourself</label>
-                    <textarea name="introduction" class="text-input" required></textarea>
-                </div>
+                    echo "<div class=\"form-control\">";
+                        echo "<label for=\"lname\">Your last name</label>";
+                        echo "<input type=\"text\" name=\"lname\" class=\"text-input medium-input\" required>";
+                    echo "</div>";
 
-                <div class="form-control">
-                    <label for="pro-pic" class="custom-upload btn">
-                        <input type="file" name="pro-pic" class="file-input">
-                        <i class="fas fa-upload"></i> Upload a profile picture
-                    </label>
-                </div>
-                        
-                <hr>
-                <div class="action-buttons flex">
-                    <input type="button" id="tab1-save" class="btn" onclick="changePage()" value="Next">
-                </div>
-            </div>
+                    echo "<div class=\"form-control\">";
+                        echo "<label for=\"introduction\">Write a short introduction of yourself</label>";
+                            echo "<textarea name=\"introduction\" class=\"text-input\" onkeyup=\"countChar(this);\" required></textarea>";
+                            echo "<p id=\"charNum\">Minimum 75 characters needed</p>";
+                    echo "</div>";
 
-            <!-- The start of the second page of the form. -->
-            <div class="tab2" style="display: none;">
+                    echo "<div class=\"form-control\">";
+                        echo "<h2>Upload a profile pic</h2>";
+                        echo "<input type=\"file\" name=\"propic\">";
+                        // echo "<label for=\"propic\" class=\"custom-upload\">";
+                            // echo "<i class=\"fas fa-upload\"></i> Upload a profile picture";
+                        // echo "</label>";
+                        // echo "<input type=\"file\" name=\"propic\" id=\"photo-input\">";
+                        // echo "<label id=\"propic-name\"></label>";
+                    echo "</div>";
+                    
+                    echo "<div class=\"actions-buttons\">";
+                        echo "<hr>";
+                        echo "<div class=\"flex-row\">";
+                            echo "<input type=\"button\" id=\"tab1-save\" class=\"btn\" onclick=\"changePage()\" value=\"Next\">";
+                        echo "</div>";
+                    echo "</div>";
+                echo "</div>";
 
-                <div class="form-control">
-                    <div class="interests-instructions">
-                        <p>Select at least three (3) interests.</p>
-                    </div>
+                // The start of the second page of the form.
+                echo "<div class=\"tab2\" style=\"display: none;\">";
 
-                    <?php
-                    // Get some intrests from the database for the user to choose from.
+                    echo "<div class=\"form-control\">";
+                        echo "<div class=\"interests-instructions\">";
+                            echo "<p>Select at least three (3) interests.</p>";
+                        echo "</div>";
+                    
+                        // Get some intrests from the database for the user to choose from.
                         $dbinterest=readInterests();
                         $categories=readCategories();
                     
@@ -278,126 +302,61 @@ function readInterests(){
                                 echo "</div>";
                             echo "</div>";
                         }
-                    ?>
-                </div>
+                    echo "</div>";
 
-                <hr>
-                <div class="action-buttons flex">
-                    <input type="button" class="btn" onclick="changePage()" value="Back">
-                    <input type="submit" name="submitUserData" id="save" class="btn" value="Save">
-                </div>
-
-            </div>
-        </form>
-        </div>
-    </section>
-    
-    
-    <section class="user-profile">
-        <div class="alert-message profile-alert" style="display: none;">
-            <i class="fas fa-exclamation-circle"></i>
-            This is an alert!
-        </div>
-        <!--
-        <div class="profile-container flex-row">
-            <div class="side-bar-left flex-column">
-                <div class="profile-pic">
-                    Profile picture rendered here
-                    <img src="default-pro-pic.jpg" alt="User profile picture"/>
-                </div>
-                <div>Firstname Lastname</div>
-            </div>
-            <div class="content-area">
-                <div>Showcase area</div>
-                <div>Introduction</div>
-            </div>
-        </div>
-        -->
-
-        <?php
-            // USER PROFILE
-            if ($exist != null) {
-                $userData = $exist;
-                $userData = $userData[0];
-                echo "<div class=\"profile-container flex-row\">";
-                    echo "<div class=\"side-bar-left flex-column\">";
-                        echo "<div class=\"profile-pic\">";
-                            // echo "<img src=\"default-pro-pic.jpg\" alt=\"User profile picture\"/>";
-                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" alt=\"User profile picture\"/>";
+                    echo "<div class=\"action-buttons\">";
+                        echo "<hr>";
+                        echo "<div class=\"flex-row\">";
+                            echo "<input type=\"button\" class=\"btn\" onclick=\"changePage()\" value=\"Back\">";
+                            echo "<input type=\"submit\" name=\"submitUserData\" id=\"save\" class=\"btn\" onclick=\"toggle()\" value=\"Save\">";
                         echo "</div>";
-                        echo "<div>". $userData[1]. " ". $userData[2]. "</div>";
                     echo "</div>";
-                    echo "<div class=\"content-area\">";
-                        echo "<div>Showcase area</div>";
-                        echo "<div>". $userData[5]."</div>";
-                    echo "</div>";
+
                 echo "</div>";
-            }
-            else {
-                echo '<script>
-                    var msg = document.getElementById("profile-alert");
-                    msg.style.display = "block";
-                    msg.innerHTML = "There was an error in reading your information.<br>Please make sure you have logged in!";
-                </script>';
-            }
-        ?>
-    </section>
-    
-
-
-    <?php
-        // Ask the user for more data if the account is new.
-        if ($exist != null) {
-            echo '<script>
-                // Get the modal box.
-                var modalObject = document.getElementById("myModal");
-
-                // Get the button that closes the modal box.
-                var buttonObject = document.getElementById("save");
-
-                // Open the modal box.
-                modalObject.style.display = "block";
-
-                // When the user clicks on the submit button, close the modal box if 
-                // the required fields are not empty.
-                buttonObject.onclick = function() {
-                    var firstName = document.forms["acc-details"]["fname"].value;
-                    var lastName = document.forms["acc-details"]["lname"].value;
-                    var introText = document.forms["acc-details"]["introduction"].value;
-
-                    if (firstName != "" && lastName != "" && introText != "") {
-                        modalObject.style.display = "none";
-                    }
-                }
-            </script>';
+            echo "</form>";
+            echo "</div>";
+            echo "</section>";
         }
     ?>
-
+    
     <script>
-        function validateForm() {
-            var f = document.forms["acc-details"]["fname"].value;
-            var l = document.forms["acc-details"]["lname"].value;
-            var i = document.forms["acc-details"]["introduction"].value;
-
-            if (f == null || f == "" || l == null || l == "" || i == null || i == "") {
-                alert("Please fill all required fields.");
-                return false;
-            }
-        }
-
         var currentTab = 1;
 
+        // Deals with the page change in the account finalization and the input field checks.
         function changePage() {
-            if(currentTab == 1){
-                var tab = document.getElementsByClassName("tab2");
-                tab[0].style.display = "block";
-                var tab = document.getElementsByClassName("tab1");
-                tab[0].style.display = "none";
-                currentTab = 2;
-                var tabPart = document.getElementById("tab-number");
-                tabPart.innerHTML = "Part 2 of 2";
+            if (currentTab == 1) {
+                var f = document.forms["acc-details"]["fname"].value;
+                var l = document.forms["acc-details"]["lname"].value;
+                var i = document.forms["acc-details"]["introduction"].value;
+                var iLen = i.toString().length;
+
+                // Check that the input field for the first name isn't empty.
+                if (f == null || f == "") {
+                    alert("The first name must be filled out!");
+                }
+                // Check that the input field for the last name isn't empty.
+                else if (l == null || l == "") {
+                    alert("The last name must be filled out!");
+                }
+                // Check that the input field for the introduction isn't empty
+                else if (i == null || i == "") {
+                    alert("You must write yourself an introduction!");
+                }
+                else if (iLen < 75) {
+                    alert("Your introduction must be at least 75 characters long!");
+                }
+                // Change the tab 1 to tab 2.
+                else {
+                    var tab = document.getElementsByClassName("tab2");
+                    tab[0].style.display = "block";
+                    var tab = document.getElementsByClassName("tab1");
+                    tab[0].style.display = "none";
+                    currentTab = 2;
+                    var tabPart = document.getElementById("tab-number");
+                    tabPart.innerHTML = "Part 2 of 2";
+                }
             }
-            else if(currentTab == 2){
+            else if (currentTab == 2) {
                 var tab = document.getElementsByClassName("tab1");
                 tab[0].style.display = "block";
                 var tab = document.getElementsByClassName("tab2");
@@ -408,6 +367,24 @@ function readInterests(){
             }
         }
 
+        // Prints out how many characters are needed in the introduction.
+        function countChar(val) {
+            var len = val.value.length;
+            var numChar = document.getElementById("charNum");
+            if (len >= 75) {
+                numChar.innerHTML = "✓ The character count has been reached!";
+            }
+            else {
+                numChar.innerHTML = "Minimum " + (75 - len).toString() + " characters needed";
+            }
+        }
+
+        // Displays the name of the profile picture the user had uploaded to the form.
+        document.querySelector("#photo-input").onchange = function(){
+            document.querySelector("#propic-name").textContent = this.files[0].name;
+        }
+
+        // Toggles visibility of the interests in each interest catagory.
         function toggleInterest(id) {
             var x = document.getElementsByClassName(id);
             if(x[0].style.display === "none") {

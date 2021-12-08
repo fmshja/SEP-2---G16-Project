@@ -35,40 +35,13 @@ body {
 }
 
 
-/* Styles for the alerts */
-
-.alert-message {
-  margin: 1em;
-  padding: 1em 2em;
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: fit-content;
-  height: 55px;
-  background-color: var(--alert-color);
-  color: var(--secondary-color);
-  border-radius: 20px;
-  font-weight: bold;
-}
-
-.modal-alert {
-  display: none;
-  z-index: 3;
-}
-
-.profile-alert {
-  display: none;
-  z-index: 1;
-}
-
-
 /* Styles for the header of the account detail finalization. */
 
 .modal-box {
-  margin: 1em;
+  margin: 0 auto;
   padding: 1em 2.5em;
   z-index: 2;
-  display: none;
+  display: block;
   position: absolute;
   overflow-y: auto;
   width: fit-content;
@@ -78,6 +51,7 @@ body {
 }
 
 .modal-content {
+  margin: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,6 +90,11 @@ body {
   width: 250px;
 }
 
+#charNum {
+  text-align: center;
+  font-size: 0.7rem;
+}
+
 input[type=file] {
   display: none;
 }
@@ -132,7 +111,7 @@ input[type=file] {
   cursor: pointer;
 }
 
-.file-input {
+#photo-input {
   margin: auto;
   text-align-last: center;
 }
@@ -150,15 +129,12 @@ input[type=file] {
 }
 
 .cbox-custom {
-  /* display: flex; */
-  /* display: block; */
   list-style: none;
   padding: 0;
 }
 
 .cbox-custom li {
   display: inline;
-  /* background-color: red; */
 }
 
 .cbox-custom label {
@@ -239,13 +215,6 @@ opacity: 0;
   flex-direction: column;
 }
 
-/*
-.profile-container:after {
-  content: "";
-  display: table;
-  clear: both;
-}*/
-
 .side-bar-left {
   margin: 0.5em 2em 0.5em 3em;
   width: 30%;
@@ -255,8 +224,8 @@ opacity: 0;
   margin: 0.5em 0;
   padding: 2em;
   width: 100%;
-  background-color: red;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
   border-radius: 15px;
 }
 
@@ -276,15 +245,13 @@ opacity: 0;
 .content-area {
   margin: 1em 2em 1em 3em;
   padding: 2em;
+  padding-bottom: 5em;
   width: 70%;
-  background-color: green;
-  color: white;
+  height: fit-content;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
   border-radius: 15px;
 }
-
-
-
-
 
 
 /* General styles for the buttons and the layout of the page. */
