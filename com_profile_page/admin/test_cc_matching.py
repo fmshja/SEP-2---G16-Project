@@ -173,6 +173,6 @@ def test_calculate_group_spots_with_minimum_group_size_zero():
 
 def check_group_spots(group_spots, min_grp_size):
     for (interest, spots) in group_spots.items():
-        assert spots > min_grp_size,\
+        assert spots >= min_grp_size,\
             (f"A group for interest {interest} was formed with {spots} available spots, "
              f"which is less than the minimum of {min_grp_size}.")
