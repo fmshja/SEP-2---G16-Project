@@ -7,8 +7,7 @@ The main function that you need to import and use is `form_groups`.
 
 from collections import deque
 import random
-import itertools
-from typing import NewType, TypeVar
+from typing import Any, NewType, TypeVar
 
 
 # Create newtypes for clarity and for the ease of potential rewriting.
@@ -39,10 +38,10 @@ def form_user_groups(
     group_size: int,
     users_to_interests: dict[UserId, set[Interest]],
     old_groups: list[set[UserId]],
-    seed: int = None,
+    seed: Any = None,
     _gv_graph=None,
 ) -> set[Group]:
-    """Forms the groups around their interests.
+    """Matches the users into groups based on their interests.
 
     Uses a version of the Hopcroft-Karp algorithm.
     The maximum group size will be `group_size + min_group_size - 1`.
@@ -52,7 +51,7 @@ def form_user_groups(
         group_size (int): The desired group size
         users_to_interests (dict[UserId, set[Interest]]): A mapping from users to their interests
         old_groups (list[set[UserId]]): The previous list of formed groups, without interests
-        seed (int): The seed value that will be given to the random number generator
+        seed (Any): The seed value that will be given to the random number generator
 
     Args for the visualization feature:
         _gv_graph (Optional[graphviz.Digraph]): A graphviz digraph that will be filled with data
@@ -138,6 +137,7 @@ def form_user_groups(
         matchings_inverse,
     ) > 0:
         if _gv_graph is not None:
+            # the vizualization is enabled
             step += 1
 
             step_graph = _gv_graph.copy()
@@ -162,8 +162,6 @@ def form_user_groups(
             old_matchings = matchings.copy()
             step_graph.render()
 
-        pass
-
     ###
     # STEP 4: FORM GROUPS
     ###
@@ -172,29 +170,33 @@ def form_user_groups(
     groups: list[Group] = list()
 
     for interest, users in matchings_inverse.items():
+        users = shuffle(list(users), rng)
+
         # ok groups
         group_canditates: set[frozenset[UserId]]
-        # repeat groups
+        # rejected repeat groups
         group_rejects: set[frozenset[UserId]]
 
-        # Form groups until there's no repeat groups, or after 100 iterations
+        # Form groups until there's no repeat groups, or give up after 100 iterations
         for _ in range(0, 100):
             group_canditates = set()
             group_rejects = set()
 
             groups_to_check: list[set[UserId]] = list()
 
-            for user in shuffle(users, rng):
+            for user in users:
                 if len(groups_to_check) == 0 or len(groups_to_check[-1]) >= group_size:
                     # there is no users or the last group is of max size
+                    # create new group
                     groups_to_check.append({user})
                 else:
+                    # add to the previous group
                     groups_to_check[-1].add(user)
 
             # merge too small groups
-            if len(groups_to_check) > 2 and len(groups_to_check[-1]) < min_group_size:
+            if len(groups_to_check) >= 2 and len(groups_to_check[-1]) < min_group_size:
                 small = groups_to_check.pop()
-                groups_to_check[-1].extend(small)
+                groups_to_check[-1].union(small)
 
             # check for repeat groups
             for g in groups_to_check:
@@ -205,28 +207,30 @@ def form_user_groups(
                     # group is ok
                     group_canditates.add(frozenset(g))
 
-            # check if there were any rejects, and shuffle them into the rest to try again
-            if len(group_rejects) > 0:
-                for group in group_rejects:
-                    # shuffle the rejects back into the users
-                    for reject in group:
-                        users.add(reject)
-            else:
+            # check if there were any rejects
+            if len(group_rejects) == 0:
                 # no repeats found
                 break
+            else:
+                # reconstruct the users by shuffling rejects back
+                users.clear()
+
+                # put the candidates which were fine in order
+                for g in group_canditates:
+                    for user in g:
+                        users.append(user)
+
+                # randomly shuffle the rejects into the users
+                for g in group_rejects:
+                    for user in g:
+                        users.insert(rng.randint(0, len(users)), user)
 
         # Add the possible straggler groups if 100 iterations were reached
         group_canditates.union(group_rejects)
 
         # Finally add the groups
         for g in group_canditates:
-            if len(g) < min_group_size and len(groups) > 1 and groups[-1].interest == interest:
-                # merge with previous
-                # TODO: this is a dirty hack. remove this when the group code above is fixed
-                groups[-1].users.extend(g)
-            else:
-                # add new
-                groups.append(Group(g, interest))
+            groups.append(Group(g, interest))
 
     return set(groups)
 
@@ -241,9 +245,7 @@ def calculate_group_spots(
 
     The total amount of spots will be exactly the same as `number_of_users`.
 
-    Most of the spots allocated for each interest should be divisible by `group_size`,
-    but their remainder should never be smaller than `min_group_size`.
-    (This is to make sure that most groups will be of the desired size while no group will be too small)
+    Most of the spots allocated for each interest are divisible by `group_size`.
 
     Args:
         min_group_size (int): The smallest allowed group size
@@ -275,9 +277,6 @@ def calculate_group_spots(
         else:
             spots_per_interest[interest] = 0
 
-    # Spread any remaining free spots with the interests and try to make as many of the spots for each interests
-    # to be divisible by the `group_size`
-
     # sort by popularity
     spots_sorted = sorted(
         spots_per_interest.items(),
@@ -285,22 +284,22 @@ def calculate_group_spots(
         reverse=True,
     )
 
+    # Spread any remaining free spots with the interests and try to make as many of the spots for each interests
+    # to be divisible by the `group_size`
     for interest, count in spots_sorted:
         rem = count % group_size
-        new_spots = 0
+        if rem == 0:
+            continue  # the size is good already
 
-        if rem < min_group_size:
-            # TODO
-            new_spots = -rem
-
-        elif rem <= free_spots:
-            # fill the remainder
-            new_spots = group_size - rem
+        new_spots = group_size - rem
+        if new_spots > free_spots:
+            # just add the rest
+            new_spots = free_spots
 
         spots_per_interest[interest] += new_spots
         free_spots -= new_spots
 
-        if free_spots == 0:
+        if free_spots <= 0:
             break
 
     return spots_per_interest

@@ -56,7 +56,7 @@ for group in matched_groups:
     for user in group.users:
         not_matched_users.remove(user)
 if len(not_matched_users) > 0:
-    print('<span id="error">Warning, these users were not matched:')
+    print('<span id="error">Warning, these users could not be matched:')
     for user in list(not_matched_users)[0:10]:
         print_user(user, ", ")
     if len(not_matched_users) > 10:
