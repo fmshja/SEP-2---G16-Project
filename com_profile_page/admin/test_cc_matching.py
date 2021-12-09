@@ -1,4 +1,28 @@
+import random
+from typing import Any
 from cc_matching import calculate_group_spots, form_user_groups
+
+
+def generate_test_data(users: int, seed: Any) -> dict[int, set[str]]:
+    rng = random.Random(seed)
+    interest_list = ["football", "videogames", "ice hockey", "drawing",
+                     "cricket", "movies", "programming", "swimming",
+                     "dancing", "acrobatics", "acting", "airsofting"]
+    interest_weights = [6, 5, 5, 4,
+                        4, 4, 3, 3,
+                        3, 2, 2, 1]
+
+    users_to_interests: dict[int, set[str]] = dict()
+    for user in range(users):
+        interests = set()
+        interest_count = rng.randint(3, 5)
+        while len(interests) < interest_count:
+            interests |= set(rng.choices(
+                interest_list, interest_weights, k=interest_count - len(interests)))
+        users_to_interests[user] = interests
+
+    return users_to_interests
+
 
 test_users_to_interests = {
     0: {"football", "videogames", "ice hockey"},
@@ -14,6 +38,8 @@ test_users_to_interests = {
     10: {"football", "videogames", "drawing"},
     11: {"videogames", "football", "ice hockey"},
     12: {"drawing", "football", "ice hockey", "cricket"},
+
+
 }
 
 test_users_to_less_popular_interests = {
