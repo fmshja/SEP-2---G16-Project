@@ -12,20 +12,57 @@ There is also a pair of Python scripts which form the user matches.
 * Python 3.9 or higher
     * The [mariadb](https://pypi.org/project/mariadb/) python library
 
+## The Database
+TODO
+
 ## The components
 Here are short descriptions of each Joomla component in this repository.
 
 ### Connecting home, `com_connecting_home`
-TODO
+This component serves as the front page for the Connecting Colleagues website. This page greets the user and they can log in or create a new account here. Logging in or finishing user registration should redirect user to the profile page. Content can also be showcased on this page. 
+
+Dependencies:
+* None
+
+Installation:
+1. Unzip com_connecting_home-folder.
+2. Move contents of the zip-folder to the Joomla install-folder.
+3. Navigate to System Extensions:install in Joomla.
+4. Select "Install from Folder".
+5. Click "check & install".
 
 ### Interest, `com_interest`
-TODO
+This component handles user-interest changing. User selects three interests when they create an account. This pages functionality is to change them and store the changes to the database. When this component is accessed from the administration side, the admin can add new interest and interest categories for users to select. This component should only be visible to the logged in users.
+
+Dependencies:
+* Table 'app_user_interests'
+* Table 'app_interests'
+* Table 'app_interests_groups'
+
+Installation:
+1. Unzip com_interests.
+2. Move contents of the zip-folder to the Joomla install-folder.
+3. Navigate to System Extensions:install in Joomla.
+4. Select "Install from Folder".
+5. Click "check & install".
 
 ### Message, `com_message`
-TODO
+This component houses the insite-messaging functionality. Once the matching algorithm is run the app_formed_user_groups-table is populated with matched user groups. User can send messages to other users who are matched in the same group as them here. This component should only be visible to the logged in users.
+
+Dependencies:
+* Table 'app_users'
+* Table 'app_messages'
+* Table 'app_formed_user_groups'
+
+Installation:
+1. Unzip com_message.
+2. Move contents of the zip-folder to the Joomla install-folder.
+3. Navigate to System Extensions:install in Joomla.
+4. Select "Install from Folder".
+5. Click "check & install".
 
 ### Profile page, `com_profile_page`
-TODO
+This component houses the profile page functionality. After user registration and log in, the user is redirected here. If user is redirected here fresh out of registration, they are then required to submit some additional information here. This information is used to initialize some other site functionalities. 
 
 This component also has the Python script which performs the matching of users into groups of any size.
 This is because currently this script, `run.py`, is currently invoked by the admin view of the profile page component.
@@ -37,4 +74,20 @@ It just needs connecting colleagues python library `cc_matching.py` to be import
 
 There is also an optional file `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their rendered png images.
 This file requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
+
+Dependencies:
+* Table 'app_users'
+* Table 'app_user_interests'
+* Table 'app_interests_groups'
+* Table Table 'app_interests_groups'
+* path images/profile_pictures/ in Joomla.
+
+Installation:
+1. Unzip com_profile_page.
+2. Move contents of the zip-folder to the Joomla install-folder.
+3. Navigate to System Extensions:install in Joomla.
+4. Select "Install from Folder".
+5. Click "check & install".
+
+## Navigation
 
