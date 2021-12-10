@@ -1,23 +1,26 @@
 <?php
 /**
- * this is admin side of the message-component.
+ * This is admin side of the message-component.
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
+
 $document = Factory::getDocument();
-$document->addStyleSheet(JURI::root(true) . '/components/com_message/style.css');
-
-
+$options = array("version" => "auto");
+$document->addStyleSheet(JURI::root(true) . '/administrator/components/com_message/style.css');
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging | Connecting Colleagues</title>
 </head>
 <body>
-
-<script type="text/javascript">
-//add javascript here
-</script>
+    <div class="guide-text bg">
+        <p>Sorry, there's nothing on the administrator side!</p>
+        <p>On the front side of this component, there is the user messaging for the matched groups.</p>
+    </div>
 </body>
 </html>

@@ -37,26 +37,40 @@ if(isset($_POST['sendMessage'])){
 }
 
 //Render form for event planning
-function renderForm($i,$recipientId,$fname,$email){
-    //Form start
-    echo "<div class=". $i. " style=\"display: none;\">";
+function renderForm($i,$recipientId,$fname,$email) {
+    // Form start
+    echo "<div class=". $i. " class=\"event-form\" style=\"display: none;\">";
     echo "<form action=\"\" method=\"post\">";
-    //Hidden id-field
-    echo "<input type=\"hidden\" name=\"recipient_id\" id=\"recipient_id\" value=\"". $recipientId. "\"/>";
-    //Sender name
-    echo "<input type=\"hidden\" id=\"sender\" name=\"sender\" value=\"". $fname.  "\" required><br><br>";
-    //Hidden email-field
-    echo "<input type=\"hidden\" name=\"sender_email\" id=\"sender_email\" value=\"". $email. "\"/>";
-    //Meeting date
-    echo "<label for=\"meeting\">Date:</label>";
-    echo "<input type=\"date\" id=\"meeting\" name=\"meeting\" required>";
-    //Meeting time
-    echo "<label for=\"mtime\">Select a time:</label>";
-    echo "<input type=\"time\" id=\"mtime\" name=\"mtime\" required>";
-    //Message
-    echo "<textarea rows=\"5\" cols=\"100\" maxlength=\"255\" name=\"message\" required></textarea>";
+            
+        // Hidden input fields for the id, name and email of the sender.
+        echo "<div class=\"hidden-form-control\" style=\"display: none;\">";
+            echo "<input type=\"hidden\" name=\"recipient_id\" id=\"recipient_id\" value=\"". $recipientId. "\" required>";
+            echo "<input type=\"hidden\" id=\"sender\" name=\"sender\" value=\"". $fname.  "\" required>";
+            echo "<input type=\"hidden\" name=\"sender_email\" id=\"sender_email\" value=\"". $email. "\" required>";
+        echo "</div>";
 
-    echo "<input type=\"submit\" name=\"sendMessage\" value=\"Send\">";
+        // A date for the meeting
+        echo "<div class=\"form-control\">";
+            echo "<label for=\"meeting\">A date for the meeting</label>";
+            echo "<input type=\"date\" id=\"meeting\" name=\"meeting\" class=\"text-input medium-input\" required>";
+        echo "</div>";
+
+        // A time of the day for the meeting
+        echo "<div class=\"form-control\">";
+            echo "<label for=\"mtime\">A time for the meeting</label>";
+            echo "<input type=\"time\" id=\"mtime\" name=\"mtime\" class=\"text-input medium-input\" required>";
+        echo "</div>";
+
+        // Additional message for the one receiving the meeting invitation.
+        echo "<div class=\"form-control\">";
+            echo "<label for=\"message\">A message to the receiver</label>";
+            echo "<textarea name=\"message\" class=\"text-input\" maxlength=\"255\" required></textarea>";
+        echo "</div>";
+
+        echo "<div class=\"action-buttons flex\">";
+            echo "<input type=\"submit\" class=\"btn\" name=\"sendMessage\" value=\"Send\">";
+        echo "</div>";
+
     echo "</form>";
     echo "</div>";
 }
@@ -133,64 +147,114 @@ function getMessages(){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact colleague</title>
+    <title>Messaging | Contact Colleagues</title>
 </head>
 <body>
     <?php
-    //Check if user is logged in
-    if($user->id!=0){
-        echo "<h1>You were matched with following users:</h1>";
-        echo "<h2>Click a name to propose a meeting with them.</h2>";
-        $id=getGroup();
-        $matches=getMatches($id);
-        for($i=0;$i<count($matches);$i++){
-            $userid=$matches[$i];
-            if($userid[0]!=$user->id){
-                $mdata=getMatchData($userid[0]);
-                //$mdata now contains a matched user data
-                $mdata=$mdata[0];
-                //Fullname of the match
-                $mname=$mdata[1]. " ". $mdata[2];
+        // Check if user is logged in.
+        if ($user->id != 0) {
+            echo "<section class=\"mtach-info bg-light\">";
 
-                $recipientId=$mdata[0];
-                $fname=getFullName();
-                $email=$user->email;
+                echo "<div class=\"guide-text\">";
+                    echo "<h2>You were matched with following users:</h2>";
+                    echo "<h3>Click a name to propose a meeting with them.</h3>";
+                    echo "<hr>";
+                echo "</div>";
+        
+                echo "<div class=\"flex fxdir-default\">";
+                    $id=getGroup();
+                    $matches=getMatches($id);
+                    for ($i=0;$i<count($matches);$i++) {
+                        $userid=$matches[$i];
+                        if ($userid[0]!=$user->id) {
+                            $mdata=getMatchData($userid[0]);
+                            // $mdata now contains a matched user data
+                            $mdata=$mdata[0];
+                            // Fullname of the match
+                            $mname=$mdata[1]. " ". $mdata[2];
 
-                echo "<button id=". $i. " type=\"button\" class=\"btn\" onclick=\"toggleForm(this.id)\">". $mname. "</button>";
-                renderForm($i,$recipientId,$fname,$email);
-            }
+                            $recipientId=$mdata[0];
+                            $fname=getFullName();
+                            $email=$user->email;
+
+                            echo "<div class=\"flex-item\">";
+                                echo "<input id=". $i. " type=\"button\" class=\"matches mbtn btn\" onclick=\"toggleForm(this.id)\" value=". $mname .">";
+                                renderForm($i,$recipientId,$fname,$email);
+                            echo "</div>";
+                        }
+                    }
+                echo "</div>";
+            echo "</section>";
+
+            // Messages addressed to the user.
+            echo "<section class=\"received-msg\">";
+                echo "<div class=\"guide-text\">";
+                    echo "<h2>Received messages</h2>";
+                    echo "<hr>";
+                echo "</div>";
+
+                echo "<div class=\"flex fxdir-default\">";
+                    $messages=getMessages();
+                    for ($i=0;$i<count($messages);$i++) {
+                        $message=$messages[$i];
+
+                        echo "<div class=\"msg-box flex-item\">";
+
+                            echo "<div class=\"sender-info\">";
+                                echo "<div>";
+                                    echo "<div class=\"msg-label\">Sender's name:</div>";
+                                    echo "<div class=\"msg-content\">". $message[1] ."</div>";
+                                echo "</div>";
+
+                                echo "<div>";
+                                    echo "<div class=\"msg-label\">Sender's email:</div>";
+                                    echo "<div class=\"msg-content\">". $message[2] ."</div>";
+                                echo "</div>";
+
+                                echo "<div>";
+                                    echo "<div class=\"msg-label\">Proposed meeting date:</div>";
+                                    echo "<div class=\"msg-content\">". $message[4] ."</div>";
+                                echo "</div>";
+
+                                echo "<div>";
+                                    echo "<div class=\"msg-label\">Proposed meeting time:</div>";
+                                    echo "<div class=\"msg-content\">". $message[5] ."</div>";
+                                echo "</div>";
+                            echo "</div>";
+
+                            echo "<div class=\"sender-msg\">";
+                                echo "<div class=\"msg-label\">A message from the sender:</div>";
+                                echo "<div class=\"msg-content\">" . $message[3] . "</div>";
+                            echo "</div>";
+
+                        echo "</div>";
+                    }
+                echo "</div>";
+            echo "</section>";
         }
-        //Messages adressed to the user.
-        echo "<h2>Your messages:</h2>";
-        $messages=getMessages();
-        for($i=0;$i<count($messages);$i++){
-            $message=$messages[$i];
-            echo "<div class=\"message-box\" style=\"border-style: solid;\">";
-            echo "<p><b>Sender:</b> ".$message[1]. "</p>";
-            echo "<p><b>Sender email: </b>".$message[2]. "</p>";
-            echo "<p><b>Proposed meeting date </b>: ".$message[4]. "<b> meeting time: </b>".$message[5]. "</p>";
-            echo $message[3];
-            echo "</div>";
+        // Send an alert to the user.
+        else {
+            $message = "Please log in with your Connecting Colleagues account!";
+            echo "<script>alert($message);</script>";
         }
-    }
-    //Print an error message
-    else{
-        echo "You are not supposed to be here.";
-    }
     ?>
 
-
-<script type="text/javascript">
-//add javascript here
-function toggleForm(id) {
+    <script type="text/javascript">
+        // Toggles the form and the color of the button when a button is clicked.
+        function toggleForm(id) {
             var x = document.getElementsByClassName(id);
-            if(x[0].style.display === "none") {
+            var y = document.getElementById(id);
+            if (x[0].style.display === "none") {
                 x[0].style.display = "block";
+                y.style.backgroundColor = "var(--primary-color)";
+                y.style.color = "var(--secondary-color)";
             } 
             else {
                 x[0].style.display = "none";
+                y.style.backgroundColor = "var(--secondary-color)";
+                y.style.color = "var(--primary-color)";
             }
         }
-</script>
+    </script>
 </body>
 </html>
