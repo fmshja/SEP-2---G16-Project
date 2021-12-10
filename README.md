@@ -13,8 +13,19 @@ There is also a pair of Python scripts which form the user matches.
     * The [mariadb](https://pypi.org/project/mariadb/) python library
 
 ## The Database
-TODO
 
+The database runs on MariaDB and is provided by the server environment, such as Wampserver. While installing Wampserver (or other such server), make sure to select MariaDB as the database. You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`. During the installation of Joomla, you should choose _ncc as the database prefix. The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
+
+Dependencies:
+
+* MariaDB selected as the servers database
+
+Setting up the database goes as such:
+1. Navigate to http://localhost/phpmyadmin/
+2. Log in, the default username is `root` and the password is empty, if nothing else was selected during the install.
+3. Open the SQL tab on the top navigation bar.
+4. From the folder `database with foreign keys`, paste the contents of the `nokia_db_creation.sql` to the servers SQL prompt and run. The server should return an empty result set.
+5. The database should now be operable. If you wish to use the test data we created, run the contents of the `test_data.sql` from the folder on the SQL prompt.
 ## The components
 Here are short descriptions of each Joomla component in this repository.
 
