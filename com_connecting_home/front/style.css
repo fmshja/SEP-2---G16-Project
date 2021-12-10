@@ -1,23 +1,18 @@
-/* A list of "minor" bugs that need to be fixed / other stuff that should be done:
-    - Make the showcase-content div not overflow vertically at the bottom.
-    - Add the Joomla login plug-in(?) on the page / see how it looks on the stylized page.
-*/
-
-/* ---------------------------------------------------------------------------------- */
-
 /* The font for the body text. */
 /* Work Sans */ 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 
 
 /* The color palette of the website. */
+
 :root {
     --primary-color: #2D3F89;
     --secondary-color: #ffffff;
     --accent-color: #456EAF;
 }
 
-/* Genral settings for the page. */
+
+/* General settings for the page. */
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -46,55 +41,31 @@ body {
 }
 
 
-/* For extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .showcase {
-        width: 85%;
-    }
-}
+/* Responsive page layout that matches Joomla's log in module's position on the page */
 
-/* For small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
+/* For small and medium devices */
+@media only screen and (max-width: 991px) {
     .showcase {
-        width: 85%;
+        width: 90%;
+        height: fit-content;
     }
 }
-  
-/* For medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-    .showcase {
-        width: 80%;
-    }
-} 
-  
-/* For large devices (laptops/desktops, 992px and up) */
+/* For large devices */
 @media only screen and (min-width: 992px) {
     .showcase {
         width: 70%;
-    }
-} 
-  
-/* For extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-    .showcase {
-        width: 70%;
+        height: 100vh;
     }
 }
 
 
-/* General settings for the page. */
-.showcase {
-    margin: 0 3em;
-    min-height: 100vh;
+/* Showcase page stylings */
 
+.showcase {
     display: block;
+    margin: 0 3em;
     text-align: center;
     color: var(--secondary-color);
-}
-
-.flex {
-    display: flex;
-    flex-direction: column;
 }
 
 .showcase-title {
@@ -106,6 +77,9 @@ body {
     margin: 1em 0;
     flex: 1;
 }
+
+
+/* General styles for the page */
 
 .bg {
     background-color: rgba(69, 110, 175, 0.8);
@@ -122,4 +96,12 @@ h2 {
 p {
     font-size: 1rem;
     margin-bottom: -0.3em
+}
+
+
+/* Flexbox styles */
+
+.flex {
+    display: flex;
+    flex-direction: column;
 }

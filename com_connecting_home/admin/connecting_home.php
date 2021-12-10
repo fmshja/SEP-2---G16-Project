@@ -1,6 +1,6 @@
 <?php
 /**
- * this is admin side of component
+ * This is admin side of component
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -22,9 +22,5 @@ $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_conne
         <p>Sorry, there's nothing on the administrator side!</p>
         <p>On the front side of this component, there is the main home page for the website.</p>
     </div>
-
-    <script type="text/javascript">
-    //add javascript here
-    </script>
 </body>
 </html>

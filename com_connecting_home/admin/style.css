@@ -4,6 +4,7 @@
 
 
 /* The color palette of the website. */
+
 :root {
     --primary-color: #2D3F89;
     --secondary-color: #ffffff;
@@ -31,17 +32,18 @@ body {
     font-family: 'Work Sans', sans-serif;
     line-height: 1.5;
     color: var(--secondary-color);
-    background-color: var(--secondary-color);
+    background-color: var(--accent-color);
 }
 
 
 /* General styles the layout of the page.*/
+
 .guide-text {
     margin-bottom: 2em;
 }
 
 .bg {
-    background-color: rgba(69, 110, 175, 0.8);
+    background-color: var(--accent-color);
     padding: 2.5em;
     border-radius: 15px 50px;
 }
