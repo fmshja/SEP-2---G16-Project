@@ -14,7 +14,7 @@ There is also a pair of Python scripts which form the user matches.
 
 ## The Database
 
-The database runs on MariaDB and is provided by the server environment, such as Wampserver. While installing Wampserver (or other such server), make sure to select MariaDB as the database. You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`. During the installation of Joomla, you should choose _ncc as the database prefix. The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
+The database runs on MariaDB and is provided by the server environment, such as Wampserver. While installing Wampserver (or other such server), make sure to select MariaDB as the database. You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`. During the installation of Joomla, you should choose `_ncc` as the database prefix. The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
 
 Dependencies:
 
