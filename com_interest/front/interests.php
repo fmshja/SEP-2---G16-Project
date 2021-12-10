@@ -35,8 +35,12 @@ $groups=$db->loadRowList();
 
 // Save the formdata to database
 if (isset($_POST['SubmitButton'])) {
-    // Make sure some interests are chosen 
-    if (!empty($_POST['interest']) && count($_POST['interest']) >= 3) {
+    // The user has chosen less than three interests
+    if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
+        $message = "Please choose at least three (3) interests!";
+        echo "<script>alert('$message');</script>";
+    }
+    else {
         // Create empty array
         // $interests="";
         $interests = array();
@@ -83,14 +87,6 @@ if (isset($_POST['SubmitButton'])) {
             $db->execute();
         }
     }
-    // The user has chosen less than three interests
-    else {
-        // echo "<script language=\"javascript\">";
-        // echo "showSubmitAlert(true);";
-        // echo "alert(\"Please choose at least three (3) interests!\")";
-        // echo "</script>";
-        echo "Please choose at least three (3) interests!";
-    }
 }
 
 $user = JFactory::getUser();
@@ -105,65 +101,56 @@ $user = JFactory::getUser();
     <title>Interests | Connecting Colleagues</title>
 </head>
 <body>
-    <section class="submit-alert" style="display: none;">
-        Please choose at least three (3) interests!
-    </section>
-
     <section class="guide-text">
         <h2>Select your interests</h2>
         <h3>Click a category to see more interests</h3>
+        <hr>
     </section>
-
-    <hr>
 
     <?php
         //echo "<p>This user's id is {$user->id}</p>";
     ?>
 
     <section class="select-interests">
-        <form action="" method="post">
-            <?php
-                // Loop the second query for group names
-                for ($i = 0; $i < count($groups); $i++) {
-                    $row = $groups[$i];
+    <form action="" method="post">
+        <?php
+            // Loop the second query for group names
+            for ($i = 0; $i < count($groups); $i++) {
+                $row = $groups[$i];
 
-                    echo "<div class=\"interest-group\">";
-                    // Create a button with group name as text
-                    echo "<button id=". $i. " type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
-                
-                    // Interests are inside div that is not displayed until group name is clicked
-                    echo "<div class=". $i. " style=\"display: none;\">";
+                echo "<div class=\"interest-group\">";
+                // Create a button with group name as text
+                echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
+            
+                // Interests are inside div that is not displayed until group name is clicked
+                echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
                     
-                    // Loop the first guery for interest names and echo them where id's match
-                    for ($j = 0; $j < count($results); $j++) {
-                        $row2 = $results[$j];
+                // Loop the first guery for interest names and echo them where id's match
+                for ($j = 0; $j < count($results); $j++) {
+                    $row2 = $results[$j];
                     
-                        echo "<ul class=\"cbox-custom\">";
-                        if ($row[0] == $row2[0]) {
-                            // Render the interest in a checkbox element.
-                            echo "<li>";
-                            echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
-                            echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
-                            echo "</li>";
-                        }
-                        echo "</ul>";
+                    if ($row[0] == $row2[0]) {
+                        // Render the interest in a checkbox element.
+                        echo "<div class=\"cbox-custom\">";
+                        echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
+                        echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
+                        echo "</div>";
                     }
-                    echo "</div>";
-                    echo "</div>";
                 }
-            ?>
+                echo "</div>";
+                echo "</div>";
+            }
+        ?>
+        <div class="action-buttons">
             <hr>
-            <input type="submit" name="SubmitButton" value="Submit" class="btn"/>
-        </form>
+            <div class="flex-row">
+                <input type="submit" name="SubmitButton" value="Submit" class="btn"/>
+            </div>
+        </div>
+    </form>
     </section>
 
     <script type="text/javascript">
-        function showSubmitAlert(x) {
-            if (x) {
-                document.getElementsByClassName("submit-alert").style.display = "block";
-            }
-        }
-
         // Changes the visibility of interests based on if they are visible or not
         function toggleInterest(id) {
             var x = document.getElementsByClassName(id);

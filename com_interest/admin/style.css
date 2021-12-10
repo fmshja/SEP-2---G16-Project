@@ -1,16 +1,10 @@
-/* A list of "minor" bugs that need to be fixed / other stuff that should be done:
-    - Create a button that can delete interests/categories.
-    - Make the interests under each interest category to wrap horizontally within a certain width.
-*/
-
-/* ---------------------------------------------------------------------------------- */
-
 /* The font for the body text. */
 /* Work Sans */ 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 
 
 /* The color palette of the website. */
+
 :root {
     --primary-color: #2D3F89;
     --secondary-color: #ffffff;
@@ -43,9 +37,11 @@ body {
 
 
 /* Styles for the guide text at the top of the component */
+
 .guide-text {
     margin-bottom: 2em;
 }
+
 
 /* Styles for the "add a new category" and "add a new interest" functions. */
 
@@ -66,6 +62,7 @@ body {
     border: none;
     border-radius: 5px;
     background-color: rgba(69, 110, 175, 0.4);
+    color: var(--secondary-color);
 }
 
 #group, #interest {
@@ -98,16 +95,19 @@ body {
     margin: 1em 0;
 }
 
-.cbox-custom {
-    /* display: flex; */
-    /* display: block; */
-    list-style: none;
-    padding: 0;
+.interest-group > div {
+    display: block;
+    margin: 0 auto;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    max-width: 85%;
 }
 
-.cbox-custom li {
-    display: inline;
-    /* background-color: red; */
+.cbox-custom {
+    display: inline-block;
+    margin: 4px 7px;
+    list-style: none;
+    padding: 0;
 }
 
 .cbox-custom label {
@@ -118,6 +118,7 @@ body {
     border: 2px solid rgba(139, 139, 139, .3);
     color: rgba(139, 139, 139, 1);
     border-radius: 10px;
+    white-space: nowrap;
     cursor: pointer;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -203,12 +204,15 @@ p {
 hr {
     display: block;
     overflow: visible;
-    margin-top: 0.75em;
+    margin: 0.75em 0;
+    padding: 0 8em;
     height: 2px;
-    border: none;
-    border-top: 1px solid rgba(139, 139, 139, 1);
-    text-align: center;
+    border: 0;
+    background-image: linear-gradient(to right, var(--secondary-color), var(--primary-color), var(--secondary-color));
 }
+
+
+/* Custom button styles */
 
 .btn {
     display: block;
@@ -226,15 +230,25 @@ hr {
 .btn:hover {
     background-color: var(--primary-color);
     color: var(--secondary-color);
+    font-weight: bold;
 }
 
 .btn:active {
     background-color: var(--secondary-color);
     color: var(--accent-color);
+    font-weight: bold;
 }
+
+
+/* Flexbox styles */
 
 .flex {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+}
+
+.fxdir-default {
+    flex-direction: row;
+    flex-wrap: wrap;
 }

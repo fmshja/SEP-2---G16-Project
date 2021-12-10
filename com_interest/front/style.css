@@ -1,16 +1,10 @@
-/* A list of "minor" bugs that need to be fixed / other stuff that should be done:
-    - Styling for the alert for when the user has not picked at least 3 interests.
-    - Make the interests under each interest category to wrap horizontally within a certain width.
-*/
-
-/* ---------------------------------------------------------------------------------- */
-
 /* The font for the body text. */
 /* Work Sans */ 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 
 
 /* The color palette of the website. */
+
 :root {
     --primary-color: #2D3F89;
     --secondary-color: #ffffff;
@@ -41,16 +35,9 @@ body {
     background-color: var(--secondary-color);
 }
 
-/* Styles for the possible alert if the user has not chosen at least three interests.
-.submit-alert {
-    margin: 0 auto;
-    width: 100vw;
-    height: 150px;
-    background-color: red;
-    color: white;
-}*/
 
 /* Styles for the guide text at the top of the component. */
+
 .guide-text {
     margin-bottom: 2em;
 }
@@ -70,16 +57,19 @@ body {
     margin-bottom: 2em;
 }
 
-.cbox-custom {
-    /* display: flex; */
-    /* display: block; */
-    list-style: none;
-    padding: 0;
+.interest-group > div {
+    display: block;
+    margin: 0 auto;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    max-width: 85%;
 }
 
-.cbox-custom li {
-    display: inline;
-    /* background-color: red; */
+.cbox-custom {
+    display: inline-block;
+    margin: 4px 7px;
+    list-style: none;
+    padding: 0;
 }
 
 .cbox-custom label {
@@ -137,6 +127,11 @@ body {
     margin-top: 2em;
 }
 
+.action-buttons {
+    margin-bottom: 3em;
+}
+
+
 /* General styles for the buttons and the layout of the page.*/
 
 h1, h2, h3, p, label, input, select {
@@ -174,16 +169,18 @@ p {
     margin-bottom: -0.3em
 }
 
-
 hr {
     display: block;
     overflow: visible;
-    margin-top: 0.75em;
+    margin: 0.75em 0;
+    padding: 0 8em;
     height: 2px;
-    border: none;
-    border-top: 1px solid rgba(139, 139, 139, 1);
-    text-align: center;
+    border: 0;
+    background-image: linear-gradient(to right, var(--secondary-color), var(--primary-color), var(--secondary-color));
 }
+
+
+/* Custom button styles */
 
 .btn {
     display: block;
@@ -201,15 +198,30 @@ hr {
 .btn:hover {
     background-color: var(--primary-color);
     color: var(--secondary-color);
+    font-weight: bold;
 }
 
 .btn:active {
     background-color: var(--secondary-color);
     color: var(--accent-color);
+    font-weight: bold;
 }
+
+
+/* Flexbox styles */
 
 .flex {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.fxdir-default {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
 }

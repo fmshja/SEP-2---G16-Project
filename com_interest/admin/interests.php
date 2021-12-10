@@ -78,11 +78,11 @@ if(isset($_POST['submitInterest'])){
         <h1>Manage interests</h1>
         <p>On this page, you can view the interest categories and their interests.</p>
         <p>You can also add new categories and interests to the categories.</p>
+        <hr>
     </section>
     
-    <hr>
-
     <section class="add-new-element">
+        <!-- Add a new interest category -->
         <div class="new-category">
             <button id="open-group" class="btn" onclick="toggleForm('group', 'open-group')"> + ADD A NEW CATEGORY </button>
 
@@ -103,6 +103,7 @@ if(isset($_POST['submitInterest'])){
             </div>
         </div>
 
+        <!-- Add a new interest -->
         <div class="new-interest">
             <button id="open-interest" class="btn" onclick="toggleForm('interest', 'open-interest')"> + ADD A NEW INTEREST </button>
 
@@ -139,6 +140,7 @@ if(isset($_POST['submitInterest'])){
 
     <hr>
 
+    <!-- View and select interests -->
     <section class="select-interests">
         <form action="" method="post">
             <?php
@@ -148,32 +150,27 @@ if(isset($_POST['submitInterest'])){
 
                     echo "<div class=\"interest-group\">";
                     // Create a button with group name as text
-                    echo "<button id=". $i. " type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
+                    echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
                 
                     // Interests are inside div that is not displayed until group name is clicked
-                    echo "<div class=". $i. " style=\"display: none;\">";
-                    
+                    echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
                     // Loop the first guery for interest names and echo them where id's match
                     for($j = 0; $j < count($results); $j++){
                         $row2 = $results[$j];
-                    
-                        echo "<ul class=\"cbox-custom\">";
+                        
                         if($row[0] == $row2[0]){
                             // Render the interest in a checkbox element.
-                            echo "<li>";
-                            echo "<input type=\"checkbox\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
-                            echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
-                            echo "</li>";
+                            echo "<div class=\"cbox-custom\">";
+                                echo "<input type=\"checkbox\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
+                                echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
+                            echo "</div>";
                         }
-                        echo "</ul>";
+                        
                     }
                     echo "</div>";
                     echo "</div>";
                 }
             ?>
-
-            <!--<hr>-->
-            <!--<input type="submit" name="SubmitButton" value="Submit" class="btn"/>-->
         </form>
     </section>
     
