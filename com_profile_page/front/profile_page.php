@@ -178,7 +178,7 @@ function readInterests(){
                 echo "<div class=\"profile-container flex-row\">";
                     echo "<div class=\"side-bar-left flex-column\">";
                         echo "<div class=\"profile-pic\">";
-                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" height=\"250\" width=\"250\" alt=\"User profile picture\"/>";
+                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" width=\"250\" height=\"250\" alt=\"User profile picture\"/>";
                         echo "</div>";
                         echo "<div><h3>". $userData[1]. " ". $userData[2]. "</h3></div>";
                     echo "</div>";
@@ -197,7 +197,7 @@ function readInterests(){
                 echo "<div class=\"modal-instructions\">";
                     echo "<h2>Welcome to Connecting Colleagues!</h2>";
                     echo "<h3>Let's finalize your account details.</h3>";
-                    echo "<h3 id=\"tab-number \">Part 1 of 2</h3>";
+                    echo "<h3 id=\"tab-number\">Part 1 of 2</h3>";
                     echo "<hr>";
                 echo "</div>";
 
