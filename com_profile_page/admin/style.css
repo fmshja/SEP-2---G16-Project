@@ -60,6 +60,8 @@ body {
     background-color: var(--primary-color);
     padding: 2.5em;
     border-radius: 15px 50px;
+    width: 100%;
+    height: fit-content;
 }
 
 .guide-text {
