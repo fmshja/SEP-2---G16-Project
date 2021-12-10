@@ -210,11 +210,6 @@ opacity: 0;
   border-radius: 15px;
 }
 
-.profile-pic img {
-  width: 250px;
-  height: 250px;
-}
-
 .content-area {
   margin: 1em 2em 1em 3em;
   padding: 2em;
