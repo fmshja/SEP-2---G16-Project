@@ -1,16 +1,10 @@
-/* A list of "minor" bugs that need to be fixed / other stuff that should be done:
-    - Moving the console output below the matching algorithm box
-*/
-
-/* ---------------------------------------------------------------------------------- */
-
-
 /* The font for the body text. */
 /* Work Sans */ 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 
 
 /* The color palette of the website. */
+
 :root {
     --primary-color: #2D3F89;
     --secondary-color: #ffffff;
@@ -42,8 +36,27 @@ body {
 }
 
 
+/* Styling for the debugging */
+
+.console_output {
+    margin: 1.5em 6em;
+    padding: 1.5em;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-family: monospace;
+    text-align: left;
+}
+
+#error {
+    color: darkred;
+}
+
+
 /* Styling for the info area for the algorithm button. */
-.bg {
+
+.big-button {
     background-color: var(--primary-color);
     padding: 2.5em;
     border-radius: 15px 50px;
@@ -52,6 +65,9 @@ body {
 .guide-text {
     margin-bottom: 2em;
 }
+
+
+/* General styling for the page. */
 
 h2, p, form {
     display: block;
@@ -70,9 +86,12 @@ p {
     margin-bottom: -0.3em
 }
 
-.Big_Button form {
+form {
     margin: 1em;
 }
+
+
+/* Custom button styles */
 
 .btn {
     display: block;
@@ -90,20 +109,11 @@ p {
 .btn:hover {
     background-color: var(--secondary-color);
     color: var(--accent-color);
+    font-weight: bold;
 }
 
 .btn:active {
     background-color: var(--primary-color);
     color: var(--secondary-color);
-}
-
-.console_output {
-    background-color: white;
-    color: black;
-    font-family: monospace;
-    text-align: left;
-}
-
-#error {
-    color: darkred;
+    font-weight: bold;
 }
