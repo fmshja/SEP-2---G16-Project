@@ -4,6 +4,7 @@
 
 
 /* The color palette of the website. */
+
 :root {
   --primary-color: #2D3F89;
   --secondary-color: #ffffff;
@@ -12,6 +13,7 @@
 
 
 /* General settings for the page. */
+
 *, *::before, *::after {
   box-sizing: border-box;
   padding: 0;
@@ -34,67 +36,198 @@ body {
 }
 
 
+/* Styles for the header of the account detail finalization. */
 
-/* Styles for the profile content
-.container {
-  display: flex;
-  height: 100vh;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
+.modal-box {
+  margin: 0 auto;
+  padding: 1em 2.5em;
+  z-index: 2;
+  display: block;
+  position: absolute;
+  overflow-y: auto;
+  width: fit-content;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  border-radius: 15px;
 }
 
-.side {
-  width: 25%;
-} 
-.content_area {
-  width: 75%;
-}
-.container:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-*/
-
-
-/* Styles for the form for the additional user info. */
-
-.additional-info {
+.modal-content {
+  margin: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.bg {
   background-color: var(--accent-color);
   color: var(--secondary-color);
-  padding: 2.5em;
-  border-radius: 15px 50px;
+  border: none;
 }
 
-.mbox {
-  margin: 1em;
-  padding: 1em 2.5em;
-}
-
-.mbox-instructions {
+.modal-instructions {
   margin: 1em 0;
 }
 
+#tab-number {
+  margin-top: -0.5em;
+}
 
-/* General styles for the buttons and the layout of the page.*/
 .form-control {
   margin: 1em 0;
+  border: none;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
 }
+
+
+/* Styling for the part 1 of the account detail finalization. (tab1) */
 
 .text-input {
   margin: 0 auto;
-  width: 200px;
   border: solid 2px var(--accent-color);
   border-radius: 5px;
-  height: 2.25em;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
 }
+
+.medium-input {
+  height: 2.25em;
+  width: 250px;
+}
+
+#charNum {
+  text-align: center;
+  font-size: 0.7rem;
+}
+
+.photo-input {
+  margin: auto;
+  text-align-last: center;
+}
+
+
+/* Styles for the part 2 of the account detail finalization. (tab2) */
+
+.interests-instructions {
+  margin-bottom: 2em;
+  text-transform: uppercase;
+}
+
+.interest-group {
+  margin: 1em 0;
+}
+
+.interest-group > div {
+  display: block;
+  margin: 0 auto;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  max-width: 85%;
+}
+
+.cbox-custom {
+  display: inline-block;
+  margin: 4px 7px;
+  list-style: none;
+  padding: 0;
+}
+
+.cbox-custom label {
+  display: inline-block;
+  margin: 3px 0px;
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, .9);
+  border: 2px solid rgba(139, 139, 139, .3);
+  color: rgba(139, 139, 139, 1);
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .2s;
+}
+
+.cbox-custom label::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 12px;
+  padding: 2px 6px 2px 2px;
+  content: "\f067";
+  transition: transform .3s ease-in-out;
+}
+
+.cbox-custom input[type="checkbox"]:checked + label::before {
+  content: "\f00c";
+  transform: rotate(-360deg);
+  transition: transform .3s ease-in-out;
+}
+
+.cbox-custom input[type="checkbox"]:checked + label {
+  border: 2px solid var(--primary-color);
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transition: all .2s;
+}
+
+.cbox-custom input[type="checkbox"] {
+display: absolute;
+position: absolute;
+opacity: 0;
+}
+
+
+/* Styles for the user profile content */
+
+.user-profile {
+  padding: 1em 2.5em;
+  z-index: 0;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.profile-container {
+  margin: 0 3em;
+  height: 100vh;
+  display: block;
+  text-align: center;
+}
+
+.side-bar-left {
+  margin: 0.5em 2em 0.5em 3em;
+  width: 30%;
+}
+
+.side-bar-left > div {
+  margin: 0.5em 0;
+  padding: 2em;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 15px;
+}
+
+.profile-pic {
+  width: 250px;
+  height: 250px;
+}
+
+.content-area {
+  margin: 1em 2em 1em 3em;
+  padding: 2em;
+  padding-bottom: 5em;
+  width: 70%;
+  height: fit-content;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  border-radius: 15px;
+}
+
+
+/* General styles for the buttons and the layout of the page. */
 
 h1, h2, h3, p, label, input[type=text], input[type=file], textarea {
   display: block;
@@ -111,13 +244,11 @@ h2 {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 2.25rem;
-  margin-bottom: -0.25em;
 }
 
 h3 {
   font-weight: 400;
   font-size: 1.25rem;
-  margin-top: -0.25em;
 }
 
 label {
@@ -130,6 +261,27 @@ p {
   font-size: 1rem;
   margin-bottom: -0.3em
 }
+
+textarea {
+  box-sizing: border-box;
+  padding: 5px;
+  min-height: 150px;
+  min-width: 250px;
+  max-width: 600px;
+  text-align: center;
+}
+
+hr {
+  display: block;
+  overflow: visible;
+  padding: 0 8em;
+  height: 2px;
+  border: 0;
+  background-image: linear-gradient(to right, var(--accent-color), var(--secondary-color), var(--accent-color));
+}
+
+
+/* Custom button styles */
 
 .btn {
   display: block;
@@ -147,11 +299,35 @@ p {
 .btn:hover {
   background-color: var(--secondary-color);
   color: var(--accent-color);
-  text-decoration: bold;
+  font-weight: bold;
 }
 
 .btn:active {
   background-color: var(--accent-color);
   color: var(--secondary-color);
-  text-decoration: bold;
+  font-weight: bold;
+}
+
+
+/* Flexbox styles */
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fxdir-default {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }

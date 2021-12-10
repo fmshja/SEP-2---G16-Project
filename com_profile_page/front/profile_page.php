@@ -28,9 +28,13 @@ catch(Exception $e){
 
 }
 
-// Check if form was submitted
+// Check if form was submitted.
 if(isset($_POST['submitUserData'])){ 
-    if (!empty($_POST['interest']) && count($_POST['interest']) >= 3) {
+    if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
+        $message = "Please choose at least three (3) interests!";
+        echo "<script>alert('$message');</script>";
+    }
+    else {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
         $introduction = $_POST['introduction'];
@@ -104,14 +108,6 @@ if(isset($_POST['submitUserData'])){
         $exist = $db->loadRowList();
         
     }
-    // The user has chosen less than three interests
-    else {
-        // echo "<script language=\"javascript\">";
-        // echo "showSubmitAlert(true);";
-        // echo "alert(\"Please choose at least three (3) interests!\")";
-        // echo "</script>";
-        echo "Please choose at least three (3) interests!";
-    }
 }
 
 // Check the file for various things
@@ -174,117 +170,184 @@ function readInterests(){
     <title>My Profile | Connecting Colleagues</title>
 </head>
 <body>
-    <?php  
-        // If user has finished account creation
+    <?php
         if ($exist != null) {
-            $userData=$exist;
-            $userData=$userData[0];
-            echo "<div class=\"container\"><div class=\"side\">";
-            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" height=200 width=300 />";
-            echo "<p>". $userData[1]. " ". $userData[2]. "</p>";
-            echo "</div><div class=\"content_area\">";
-            echo "<p>showcase area</p>";
-            echo "<p>". $userData[5]."</p>";
-            echo "</div></div>";
-        }
-        // Ask the user for more data.
-        else {
-            echo "<section class=\"additional-info bg\"";
-            echo "<div class=\"mbox\">";
-                echo "<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">";
-
-                    echo "<div class=\"mbox-instructions\">";
-                        echo "<h2>Welcome to the connecting colleagues!</h2>";
-                        echo "<h3>Let us finalize your account.</h3>";
+            echo "<section class=\"user-profile\">";
+                $userData = $exist;
+                $userData = $userData[0];
+                echo "<div class=\"profile-container flex-row\">";
+                    echo "<div class=\"side-bar-left flex-column\">";
+                        echo "<div class=\"profile-pic\">";
+                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" alt=\"User profile picture\"/>";
+                        echo "</div>";
+                        echo "<div><h3>". $userData[1]. " ". $userData[2]. "</h3></div>";
                     echo "</div>";
-                    //Start of first page of form
-                    echo "<div class=\"tab1\">";
+                    echo "<div class=\"content-area\">";
+                        echo "<h3>Your introduction</h3>";
+                        echo "<hr>";
+                        echo "<p>". $userData[5]."</p>";
+                    echo "</div>";
+                echo "</div>";
+            echo "</section>";
+        }
+        else {
+            echo "<section class=\"modal-box\">";
+            echo "<div class=\"modal-content\">";
+            echo "<form name=\"acc-details\" action=\"\" method=\"post\" enctype=\"multipart/form-data\">";
+                echo "<div class=\"modal-instructions\">";
+                    echo "<h2>Welcome to Connecting Colleagues!</h2>";
+                    echo "<h3>Let's finalize your account details.</h3>";
+                    echo "<h3 id=\"tab-number \">Part 1 of 2</h3>";
+                    echo "<hr>";
+                echo "</div>";
 
+                // The start of the first page of the form.
+                echo "<div class=\"tab1\">";
                     echo "<div class=\"form-control\">";
                         echo "<label for=\"fname\">Your first name</label>";
-                        echo "<input type=\"text\" name=\"fname\" class=\"text-input\" required>";
+                        echo "<input type=\"text\" name=\"fname\" class=\"text-input medium-input\" required>";
                     echo "</div>";
 
                     echo "<div class=\"form-control\">";
                         echo "<label for=\"lname\">Your last name</label>";
-                        echo "<input type=\"text\" name=\"lname\" class=\"text-input\" required>";
+                        echo "<input type=\"text\" name=\"lname\" class=\"text-input medium-input\" required>";
                     echo "</div>";
 
                     echo "<div class=\"form-control\">";
-                        echo "<h3>Write a short introduction of yourself</h3>";
-                        echo "<textarea rows=\"4\" cols=\"50\" maxlength=\"255\" name=\"introduction\" required></textarea>";
+                        echo "<label for=\"introduction\">Write a short introduction of yourself</label>";
+                        echo "<textarea name=\"introduction\" class=\"text-input\" onkeyup=\"countChar(this);\" required></textarea>";
+                        echo "<p id=\"charNum\">Minimum 75 characters needed</p>";
                     echo "</div>";
 
                     echo "<div class=\"form-control\">";
-                        echo "<h2>Upload a profile pic</h2>";
-                        echo "<input type=\"file\" name=\"propic\">";
+                        echo "<label for=\"propic\">Upload a profile picture</label>";
+                        echo "<input type=\"file\" name=\"propic\" class=\"photo-input\">";
                     echo "</div>";
-                    echo "<div class=\"action-buttons\">";
-                        echo "<button type=\"button\" class=\"btn\" onclick=\"changePage()\">Next</button>";
-                    echo "</div>";
-                    echo "</div>";
-
-                    //Start of second part of form
-                    echo "<div class=\"tab2\" style=\"display: none;\">";
-                    echo "<div class=\"form-control\">";
-                    echo "<h3>Select some initial interests</h3>";
-                    // Get some intrests from the database for the user to choose from.
-                    $dbinterest=readInterests();
-                    $categories=readCategories();
                     
-                    for ($i = 0; $i < count($categories); $i++) {
-                        $row = $categories[$i];
+                    echo "<div class=\"actions-buttons\">";
+                        echo "<hr>";
+                        echo "<div class=\"flex-row\">";
+                            echo "<input type=\"button\" id=\"tab1-save\" class=\"btn\" onclick=\"changePage()\" value=\"Next\">";
+                        echo "</div>";
+                    echo "</div>";
+                echo "</div>";
+
+                // The start of the second page of the form.
+                echo "<div class=\"tab2\" style=\"display: none;\">";
+
+                    echo "<div class=\"form-control\">";
+                        echo "<div class=\"interests-instructions\">";
+                            echo "<p>Select at least three (3) interests.</p>";
+                        echo "</div>";
+                    
+                        // Get some intrests from the database for the user to choose from.
+                        $dbinterest=readInterests();
+                        $categories=readCategories();
+                    
+                        for ($i = 0; $i < count($categories); $i++) {
+                            $row = $categories[$i];
     
-                        echo "<div class=\"interest-group\">";
-                        // Create a button with group name as text
-                        echo "<button id=". $i. " type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
-                        // Interests are inside div that is not displayed until group name is clicked
-                        echo "<div class=". $i. " style=\"display: none;\">";
-                        echo "<ul class=\"cbox-custom\">";
-                        // Loop the interest guery for interest names and echo them where id's match
-                        for ($j = 0; $j < count($dbinterest); $j++) {
-                            $row2 = $dbinterest[$j];
-                            if ($row[0] == $row2[2]) {
-                                // Render the interest in a checkbox element.
-                                echo "<li>";
-                                echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[0]. "\" value=\"". $row2[0]. "\">";
-                                echo "<label for=\"". $row2[0]. "\">". $row2[1]. "</label>";
-                                echo "</li>";
-                            }
+                            echo "<div class=\"interest-group\">";
+                            // Create a button with group name as text
+                            echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
+                            
+                            // Interests are inside div that is not displayed until group name is clicked
+                            echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
+
+                            // Loop the interest guery for interest names and echo them where id's match
+                            for ($j = 0; $j < count($dbinterest); $j++) {
+                                $row2 = $dbinterest[$j];
+
+                                if ($row[0] == $row2[2]) {
+                                    // Render the interest in a checkbox element.
+                                    echo "<div class=\"cbox-custom\">";
+                                    echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[0]. "\" value=\"". $row2[0]. "\">";
+                                    echo "<label for=\"". $row2[0]. "\">". $row2[1]. "</label>";
+                                    echo "</div>";
+                                }
+                            }   
+                            echo "</div>";
+                            echo "</div>";
                         }
-                        echo "</ul>";
-                        echo "</div>";
-                        echo "</div>";
-                    }
                     echo "</div>";
+
                     echo "<div class=\"action-buttons\">";
-                        echo "<button type=\"button\" class=\"btn\" onclick=\"changePage()\">Back</button>";
-                        echo "<button type=\"submit\" name=\"submitUserData\" class=\"btn\"> Save </button>";
+                        echo "<hr>";
+                        echo "<div class=\"flex-row\">";
+                            echo "<input type=\"button\" class=\"btn\" onclick=\"changePage()\" value=\"Back\">";
+                            echo "<input type=\"submit\" name=\"submitUserData\" id=\"save\" class=\"btn\" onclick=\"toggle()\" value=\"Save\">";
+                        echo "</div>";
                     echo "</div>";
-                    echo "</div>";
-                echo "</form>";
+
+                echo "</div>";
+            echo "</form>";
             echo "</div>";
+            echo "</section>";
         }
     ?>
-    <script type="text/javascript">
-        var currentTab=1;
+    
+    <script>
+        var currentTab = 1;
 
+        // Deals with the page change in the account finalization and the input field checks.
         function changePage() {
-            if(currentTab==1){
-                var tab=document.getElementsByClassName("tab2");
-                tab[0].style.display = "block";
-                var tab=document.getElementsByClassName("tab1");
-                tab[0].style.display = "none";
-                currentTab=2;
+            if (currentTab == 1) {
+                var f = document.forms["acc-details"]["fname"].value;
+                var l = document.forms["acc-details"]["lname"].value;
+                var i = document.forms["acc-details"]["introduction"].value;
+                var iLen = i.length;
+
+                // Check that the input field for the first name isn't empty.
+                if (f == null || f == "") {
+                    alert("The first name must be filled out!");
+                }
+                // Check that the input field for the last name isn't empty.
+                else if (l == null || l == "") {
+                    alert("The last name must be filled out!");
+                }
+                // Check that the input field for the introduction isn't empty.
+                else if (i == null || i == "") {
+                    alert("You must write yourself an introduction!");
+                }
+                else if (iLen < 75) {
+                    alert("Your introduction must be at least 75 characters long!");
+                }
+                // Change the tab 1 to tab 2.
+                else {
+                    var tab = document.getElementsByClassName("tab2");
+                    tab[0].style.display = "block";
+                    var tab = document.getElementsByClassName("tab1");
+                    tab[0].style.display = "none";
+                    currentTab = 2;
+                    var tabPart = document.getElementById("tab-number");
+                    tabPart.innerHTML = "Part 2 of 2";
+                }
             }
-            else if(currentTab==2){
-                var tab=document.getElementsByClassName("tab1");
+            // Change the tab 2 to tab 1.
+            else if (currentTab == 2) {
+                var tab = document.getElementsByClassName("tab1");
                 tab[0].style.display = "block";
-                var tab=document.getElementsByClassName("tab2");
+                var tab = document.getElementsByClassName("tab2");
                 tab[0].style.display = "none";
-                currentTab=1;
+                currentTab = 1;
+                var tabPart = document.getElementById("tab-number");
+                tabPart.innerHTML = "Part 1 of 2";
             }
         }
+
+        // Prints out how many characters are needed in the introduction.
+        function countChar(val) {
+            var len = val.value.length;
+            var numChar = document.getElementById("charNum");
+            if (len >= 75) {
+                numChar.innerHTML = "✓ The character count has been reached!";
+            }
+            else {
+                numChar.innerHTML = "Minimum " + (75 - len).toString() + " characters needed";
+            }
+        }
+
+        // Toggles visibility of the interests in each interest catagory.
         function toggleInterest(id) {
             var x = document.getElementsByClassName(id);
             if(x[0].style.display === "none") {
