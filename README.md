@@ -4,17 +4,20 @@ This project focuses on the improvement of the matching algorithm and user inter
 It is a group project for the course 'Software Engineering Project 2' of Tampere University. 
 
 This project consists of a several Joomla components which in combination form a Connecting Colleagues website.
-There is also a pair of Python scripts which form the user matches.
+There is also a pair of Python scripts which form the user matches by interacting with the database.
 
 ## Requirements
-* Joomla 
-* PHP 
+* Joomla
 * Python 3.9 or higher
     * The [mariadb](https://pypi.org/project/mariadb/) python library
 
 ## The Database
 
-The database runs on MariaDB and is provided by the server environment, such as Wampserver. While installing Wampserver (or other such server), make sure to select MariaDB as the database. You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`. During the installation of Joomla, you should choose `_ncc` as the database prefix. The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
+The database runs on MariaDB and is provided by the server environment, such as Wampserver.
+While installing Wampserver (or other such server), make sure to select MariaDB as the database.
+You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`.
+During the installation of Joomla, you should choose `_ncc` as the database prefix.
+The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
 
 Dependencies:
 
@@ -30,7 +33,10 @@ Setting up the database goes as such:
 Here are short descriptions of each Joomla component in this repository.
 
 ### Connecting home, `com_connecting_home`
-This component serves as the front page for the Connecting Colleagues website. This page greets the user and they can log in or create a new account here. Logging in or finishing user registration should redirect user to the profile page. Content can also be showcased on this page. 
+This component serves as the front page for the Connecting Colleagues website.
+This page greets the user and they can log in or create a new account here.
+Logging in or finishing user registration should redirect user to the profile page.
+Content can also be showcased on this page. 
 
 Dependencies:
 * None
@@ -43,7 +49,11 @@ Installation:
 5. Click "check & install".
 
 ### Interest, `com_interest`
-This component handles user-interest changing. User selects three interests when they create an account. This pages functionality is to change them and store the changes to the database. When this component is accessed from the administration side, the admin can add new interest and interest categories for users to select. This component should only be visible to the logged in users.
+This component handles user-interest changing.
+User selects three interests when they create an account.
+This pages functionality is to change them and store the changes to the database.
+When this component is accessed from the administration side, the admin can add new interest and interest categories for users to select.
+This component should only be visible to the logged in users.
 
 Dependencies:
 * Table 'app_user_interests'
@@ -58,7 +68,10 @@ Installation:
 5. Click "check & install".
 
 ### Message, `com_message`
-This component houses the insite-messaging functionality. Once the matching algorithm is run the app_formed_user_groups-table is populated with matched user groups. User can send messages to other users who are matched in the same group as them here. This component should only be visible to the logged in users.
+This component houses the insite-messaging functionality.
+Once the matching algorithm is run the app_formed_user_groups-table is populated with matched user groups.
+User can send messages to other users who are matched in the same group as them here.
+This component should only be visible to the logged in users.
 
 Dependencies:
 * Table 'app_users'
@@ -73,18 +86,10 @@ Installation:
 5. Click "check & install".
 
 ### Profile page, `com_profile_page`
-This component houses the profile page functionality. After user registration and log in, the user is redirected here. If user is redirected here fresh out of registration, they are then required to submit some additional information here. This information is used to initialize some other site functionalities. 
-
-This component also has the Python script which performs the matching of users into groups of any size.
-This is because currently this script, `run.py`, is currently invoked by the admin view of the profile page component.
-
-This doesn't necessarily have to be done in this component, and it could be edited out of there and into another component, or made into its own standalone application that's run either manually or periodically.
-
-The script itself doesn't depend on any files used in the component.
-It just needs connecting colleagues python library `cc_matching.py` to be importable, and an access to a valid database.
-
-There is also an optional file `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their rendered png images.
-This file requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
+This component houses the profile page functionality.
+After user registration and log in, the user is redirected here.
+If user is redirected here fresh out of registration, they are then required to submit some additional information here.
+This information is used to initialize some other site functionalities.
 
 Dependencies:
 * Table 'app_users'
@@ -99,6 +104,41 @@ Installation:
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
+
+#### The matching algorithm
+This component also has the Python script which performs the matching of users into groups of any size.
+This is because currently this script, `run.py`, is currently invoked by the admin view of the profile page component.
+
+When running the algorithm for the first time (or if the configuration file is removed), a configuration file `run_config.json` will be created in the same folder.
+Currently the only setting that this sets, `python_cmd`, is what command is used to call the Python executable, by default "`python`".
+
+In most cases you can just provide the path to the `python` executable as the value of `python_cmd` setting, but if the path has spaces (like if it's under the `Program Files` folder in Windows), you need to handle it differently.
+On Linux you should be able to escape the space with a following backslash `\ `, but on Windows you must wrap the entire path in double-quotes `"`.
+
+Also don't forget that since this is JSON, you need to use a backslash to escape every backslash and every double-quote on the command.
+
+Example `run_config.json` on Windows with a Python path under `C:\`:
+```json
+{
+    "python_cmd": "C:\\Python39\\python.exe"
+}
+```
+
+Example `run_config.json` on Windows with the Python executable under the `Program Files` folder:
+```json
+{
+    "python_cmd": "\"C:\\Program Files\\Python39\\python.exe\""
+}
+```
+
+Calling the script doesn't necessarily have to be done from this component, and it could be moved out of there and into another component, or made entirely into its own standalone application that's run either manually or periodically.
+
+The script itself doesn't depend on any files used in the component.
+It just needs connecting colleagues python library `cc_matching.py` to be importable, and an access to a valid database.
+
+There is also an optional file `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their rendered png images.
+This file requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
+
 
 ## Navigation
 

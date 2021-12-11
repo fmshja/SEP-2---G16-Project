@@ -11,11 +11,36 @@ $options = array("version" => "auto");
 $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_profile_page/style.css');
 
 if(isset($_POST['matching-button'])){
-    $command = escapeshellcmd('python .\components\com_profile_page\run.py');
+    // find or create the config file
+    $cfg_path = '.\components\com_profile_page\run_config.json';
+    $valid_cfg_existed = false;
+    if(file_exists($cfg_path)) {
+        // config found, use it
+        $cfg = json_decode(file_get_contents($cfg_path), false);
+        if (json_last_error()) {
+            // failed to parse the json
+            echo '<span id="error">Error while decoding run_config.json (' . json_last_error_msg() . ')<br>' .
+                 '(Did you remember to escape the backslashes?)</span>';
+        } else {
+            $valid_cfg_existed = true;
+        }
+    }
+    if (!$valid_cfg_existed) {
+        // not found or it was invalid, create the default config
+        $cfg = new stdClass();
+        $cfg->python_cmd = 'python';
+
+        if (!file_exists($cfg_path)) {
+            // save the default config
+            file_put_contents($cfg_path, json_encode($cfg, JSON_PRETTY_PRINT));
+        }
+    }
+
+    $command = $cfg->python_cmd . ' .\components\com_profile_page\run.py';
     $output = shell_exec($command.' 2>&1');
     $output = nl2br($output); // change the linebreaks to <br> tags
     // Debug print
-    echo '<section class="console_output">Formed groups:<br>'. $output .'</section>';
+    echo '<section class="console_output">'. $output .'</section>';
 }
 ?>
 
