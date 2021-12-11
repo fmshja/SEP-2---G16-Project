@@ -109,36 +109,36 @@ Installation:
 This component also has the Python script which performs the matching of users into groups of any size.
 This is because currently this script, `run.py`, is currently invoked by the admin view of the profile page component.
 
-When running the algorithm for the first time (or if the configuration file is removed), a configuration file `run_config.json` will be created in the same folder.
+There is also an optional file, `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their png image renders.
+This script requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
+
+When running the algorithm for the first time (or running after the configuration file is removed), a configuration file `run_config.json` will be created in the same folder.
 Currently the only setting that this sets, `python_cmd`, is what command is used to call the Python executable, by default "`python`".
 
-In most cases you can just provide the path to the `python` executable as the value of `python_cmd` setting, but if the path has spaces (like if it's under the `Program Files` folder in Windows), you need to handle it differently.
-On Linux you should be able to escape the space with a following backslash `\ `, but on Windows you must wrap the entire path in double-quotes `"`.
+In most cases you can just provide the path to the `python` executable as the value of `python_cmd` setting, but if the path has spaces (like if it's under the `Program Files` folder in Windows), you need to handle it a bit differently.
+On Linux you should be able to escape the space-character with a following backslash `\ `, but on Windows you must wrap the entire path in double-quotes `"`.
 
 Also don't forget that since this is JSON, you need to use a backslash to escape every backslash and every double-quote on the command.
 
-Example `run_config.json` on Windows with a Python path under `C:\`:
+Example `run_config.json` on Windows with the Python folder under `C:\`:
 ```json
 {
     "python_cmd": "C:\\Python39\\python.exe"
 }
 ```
 
-Example `run_config.json` on Windows with the Python executable under the `Program Files` folder:
+Example `run_config.json` on Windows with the Python folder under the `Program Files` folder:
 ```json
 {
     "python_cmd": "\"C:\\Program Files\\Python39\\python.exe\""
 }
 ```
 
+#### Future development of the script
 Calling the script doesn't necessarily have to be done from this component, and it could be moved out of there and into another component, or made entirely into its own standalone application that's run either manually or periodically.
 
 The script itself doesn't depend on any files used in the component.
-It just needs connecting colleagues python library `cc_matching.py` to be importable, and an access to a valid database.
-
-There is also an optional file `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their rendered png images.
-This file requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
-
+It just needs the connecting colleagues Python library, `cc_matching.py`, to be importable, and an access to the correct database.
 
 ## Navigation
 
