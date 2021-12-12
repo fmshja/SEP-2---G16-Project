@@ -18,7 +18,7 @@ While installing Wampserver (or other such server), make sure to select MariaDB 
 
 You also need the mariadb python library for running the matching algorithm, which can be downloaded from the console with the command `pip install mariadb`.
 
-During the installation of Joomla, you should choose `_ncc` as the database prefix.
+During the installation of Joomla, you should choose `_cc` as the database prefix.
 The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
 
 Dependencies:
