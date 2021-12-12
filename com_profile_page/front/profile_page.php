@@ -30,8 +30,13 @@ catch(Exception $e){
 
 // Check if form was submitted.
 if(isset($_POST['submitUserData'])){ 
+    $user = JFactory::getUser();
     if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
         $message = "Please choose at least three (3) interests!";
+        echo "<script>alert('$message');</script>";
+    }
+    else if($user->id==0){
+        $message = "Session expired! Please log in.";
         echo "<script>alert('$message');</script>";
     }
     else {
@@ -96,7 +101,7 @@ if(isset($_POST['submitUserData'])){
             $db->setQuery($query);
             $db->execute();
         }
-        //If user has previous interest data for some reason (This should not be the case!)
+        //Update if user has previous interest data for some reason (This should not be the case!)
         else{
             $query->clear();
             $query
