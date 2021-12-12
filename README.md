@@ -15,7 +15,9 @@ There is also a pair of Python scripts which form the user matches by interactin
 
 The database runs on MariaDB and is provided by the server environment, such as Wampserver.
 While installing Wampserver (or other such server), make sure to select MariaDB as the database.
-You also need the mariadb python library for running the algorithm, which can be acquired by calling `pip install mariadb`.
+
+You also need the mariadb python library for running the matching algorithm, which can be downloaded from the console with the command `pip install mariadb`.
+
 During the installation of Joomla, you should choose `_ncc` as the database prefix.
 The database structure can be viewed from `database with foreign keys` folder from the picture `nokia_sql_diagram.png`
 
@@ -24,7 +26,7 @@ Dependencies:
 * MariaDB selected as the servers database
 
 Setting up the database goes as such:
-1. Navigate to http://localhost/phpmyadmin/
+1. Navigate to <http://localhost/phpmyadmin/>
 2. Log in, the default username is `root` and the password is empty, if nothing else was selected during the install.
 3. Open the SQL tab on the top navigation bar.
 4. From the folder `database with foreign keys`, paste the contents of the `nokia_db_creation.sql` to the servers SQL prompt and run. The server should return an empty result set.
@@ -56,9 +58,9 @@ When this component is accessed from the administration side, the admin can add 
 This component should only be visible to the logged in users.
 
 Dependencies:
-* Table 'app_user_interests'
-* Table 'app_interests'
-* Table 'app_interests_groups'
+* Table `'app_user_interests'`
+* Table `'app_interests'`
+* Table `'app_interests_groups'`
 
 Installation:
 1. Unzip com_interests.
@@ -74,9 +76,9 @@ User can send messages to other users who are matched in the same group as them 
 This component should only be visible to the logged in users.
 
 Dependencies:
-* Table 'app_users'
-* Table 'app_messages'
-* Table 'app_formed_user_groups'
+* Table `'app_users'`
+* Table `'app_messages'`
+* Table `'app_formed_user_groups'`
 
 Installation:
 1. Unzip com_message.
@@ -92,11 +94,11 @@ If user is redirected here fresh out of registration, they are then required to 
 This information is used to initialize some other site functionalities.
 
 Dependencies:
-* Table 'app_users'
-* Table 'app_user_interests'
-* Table 'app_interests_groups'
-* Table Table 'app_interests_groups'
-* path images/profile_pictures/ in Joomla.
+* Table `'app_users'`
+* Table `'app_user_interests'`
+* Table `'app_interests_groups'`
+* Table `'app_interests_groups'`
+* path `images/profile_pictures/` in Joomla.
 
 Installation:
 1. Unzip com_profile_page.
@@ -112,7 +114,8 @@ This is because currently this script, `run.py`, is currently invoked by the adm
 There is also an optional file, `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their png image renders.
 This script requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
 
-When loading the admin-side view of the component for the first time (or after the configuration file has been removed), a configuration file `run_config.json` will be created in the same folder.
+#### Configuration
+When loading the admin-side view of the component for the first time (or loading after the configuration file has been removed), a configuration file `run_config.json` will be created in the component's admin folder.
 
 Currently the settings and their defaults are:
 * `python_cmd`, default value is `"python"`
