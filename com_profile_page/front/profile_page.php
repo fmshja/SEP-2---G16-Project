@@ -72,19 +72,40 @@ if(isset($_POST['submitUserData'])){
         }
         // Encode the array to json-format
         $interests=json_encode($interests);
-        //echo $interests;
+
         // Save interests to database
         $query->clear();
         $query=$db->getQuery(true);
         $columns=array('User_Id','Interest_Id');
         $values=array($db->quote($user->id), $db->quote($interests));
 
-        $query
-            ->insert($db->quoteName('app_user_interests'))
-            ->columns($db->quoteName($columns))
-            ->values(implode(',', $values));
+        // Check if user has already saved interests (should always be null)
+        $query->select($db->quoteName('User_Id'))
+            ->from($db->quoteName('app_user_interests'))
+            ->where($db->quoteName('User_Id') . ' = '. $db->quote($user->id));
         $db->setQuery($query);
-        $db->execute();
+        $UserInt = $db->loadRowList();
+
+        // No previous interests
+        if ($UserInt == null) {
+            $query->clear();
+            $query
+                ->insert($db->quoteName('app_user_interests'))
+                ->columns($db->quoteName($columns))
+                ->values(implode(',', $values));
+            $db->setQuery($query);
+            $db->execute();
+        }
+        //If user has previous interest data for some reason (This should not be the case!)
+        else{
+            $query->clear();
+            $query
+                ->update($db->quoteName('app_user_interests'))
+                ->set($db->quoteName('Interest_Id') . ' = '. $db->quote($interests))
+                ->where($db->quoteName('User_Id') . ' = '. $db->quote($user->id));   
+            $db->setQuery($query);
+            $db->execute();
+        }
 
         //Save rest of the user data to the database
         $query->clear();
