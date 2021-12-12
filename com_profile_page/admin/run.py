@@ -24,7 +24,7 @@ db_cursor.execute("SELECT id, interest_name FROM app_interests;")
 all_interests: dict[int, str] = dict(db_cursor)
 
 # read the data for each user's name from the DB, for printing purposes
-db_cursor.execute("SELECT id, username FROM app_users;")
+db_cursor.execute("SELECT id, first_name FROM app_users;")
 all_users: dict[int, str] = dict(db_cursor)
 
 # read the old groups
