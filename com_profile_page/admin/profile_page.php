@@ -10,6 +10,8 @@ $document = Factory::getDocument();
 $options = array("version" => "auto");
 $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_profile_page/style.css');
 
+$console_output = "No console output";
+
 if(isset($_POST['matching-button'])){
     // find or create the config file
     $cfg_path = '.\components\com_profile_page\run_config.json';
@@ -37,10 +39,8 @@ if(isset($_POST['matching-button'])){
     }
 
     $command = $cfg->python_cmd . ' .\components\com_profile_page\run.py';
-    $output = shell_exec($command.' 2>&1');
-    $output = nl2br($output); // change the linebreaks to <br> tags
-    // Debug print
-    echo '<section class="console_output">'. $output .'</section>';
+    $console_output = shell_exec($command.' 2>&1');
+    $console_output = nl2br($console_output); // change the linebreaks to <br> tags
 }
 ?>
 
@@ -61,5 +61,6 @@ if(isset($_POST['matching-button'])){
             <input type="submit" name="matching-button" class="btn" value="Start the algorithm"/>
         </form>
     </section>
+    <section class="console_output"><?php echo $console_output ?></section>
 </body>
 </html>
