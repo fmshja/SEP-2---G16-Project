@@ -192,118 +192,123 @@ function readInterests(){
 </head>
 <body>
     <?php
-        if ($exist != null) {
-            echo "<section class=\"user-profile\">";
-                $userData = $exist;
-                $userData = $userData[0];
-                echo "<div class=\"profile-container flex-row\">";
-                    echo "<div class=\"side-bar-left flex-column\">";
-                        echo "<div class=\"profile-pic\">";
-                            echo "<img src=\"images/profile_pictures/". $userData[4]. "\" width=\"250\" height=\"250\" alt=\"User profile picture\"/>";
+        if($user->id != 0){
+            if ($exist != null) {
+                echo "<section class=\"user-profile\">";
+                    $userData = $exist;
+                    $userData = $userData[0];
+                    echo "<div class=\"profile-container flex-row\">";
+                        echo "<div class=\"side-bar-left flex-column\">";
+                            echo "<div class=\"profile-pic\">";
+                                echo "<img src=\"images/profile_pictures/". $userData[4]. "\" width=\"250\" height=\"250\" alt=\"User profile picture\"/>";
+                            echo "</div>";
+                            echo "<div><h3>". $userData[1]. " ". $userData[2]. "</h3></div>";
                         echo "</div>";
-                        echo "<div><h3>". $userData[1]. " ". $userData[2]. "</h3></div>";
+                        echo "<div class=\"content-area\">";
+                            echo "<h3>Your introduction</h3>";
+                            echo "<hr>";
+                            echo "<p>". $userData[5]."</p>";
+                        echo "</div>";
                     echo "</div>";
-                    echo "<div class=\"content-area\">";
-                        echo "<h3>Your introduction</h3>";
+                echo "</section>";
+            }
+            else {
+                echo "<section class=\"modal-box\">";
+                echo "<div class=\"modal-content\">";
+                echo "<form name=\"acc-details\" action=\"\" method=\"post\" enctype=\"multipart/form-data\">";
+                    echo "<div class=\"modal-instructions\">";
+                        echo "<h2>Welcome to Connecting Colleagues!</h2>";
+                        echo "<h3>Let's finalize your account details.</h3>";
+                        echo "<h3 id=\"tab-number\">Part 1 of 2</h3>";
                         echo "<hr>";
-                        echo "<p>". $userData[5]."</p>";
                     echo "</div>";
+
+                    // The start of the first page of the form.
+                    echo "<div class=\"tab1\">";
+                        echo "<div class=\"form-control\">";
+                            echo "<label for=\"fname\">Your first name</label>";
+                            echo "<input type=\"text\" name=\"fname\" class=\"text-input medium-input\" required>";
+                        echo "</div>";
+
+                        echo "<div class=\"form-control\">";
+                            echo "<label for=\"lname\">Your last name</label>";
+                            echo "<input type=\"text\" name=\"lname\" class=\"text-input medium-input\" required>";
+                        echo "</div>";
+
+                        echo "<div class=\"form-control\">";
+                            echo "<label for=\"introduction\">Write a short introduction of yourself</label>";
+                            echo "<textarea name=\"introduction\" class=\"text-input\" onkeyup=\"countChar(this);\" required></textarea>";
+                            echo "<p id=\"charNum\">Minimum 75 characters needed</p>";
+                        echo "</div>";
+
+                        echo "<div class=\"form-control\">";
+                            echo "<label for=\"propic\">Upload a profile picture</label>";
+                            echo "<input type=\"file\" name=\"propic\" class=\"photo-input\">";
+                        echo "</div>";
+                        
+                        echo "<div class=\"actions-buttons\">";
+                            echo "<hr>";
+                            echo "<div class=\"flex-row\">";
+                                echo "<input type=\"button\" id=\"tab1-save\" class=\"btn\" onclick=\"changePage()\" value=\"Next\">";
+                            echo "</div>";
+                        echo "</div>";
+                    echo "</div>";
+
+                    // The start of the second page of the form.
+                    echo "<div class=\"tab2\" style=\"display: none;\">";
+
+                        echo "<div class=\"form-control\">";
+                            echo "<div class=\"interests-instructions\">";
+                                echo "<p>Select at least three (3) interests.</p>";
+                            echo "</div>";
+                        
+                            // Get some intrests from the database for the user to choose from.
+                            $dbinterest=readInterests();
+                            $categories=readCategories();
+                        
+                            for ($i = 0; $i < count($categories); $i++) {
+                                $row = $categories[$i];
+        
+                                echo "<div class=\"interest-group\">";
+                                // Create a button with group name as text
+                                echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
+                                
+                                // Interests are inside div that is not displayed until group name is clicked
+                                echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
+
+                                // Loop the interest guery for interest names and echo them where id's match
+                                for ($j = 0; $j < count($dbinterest); $j++) {
+                                    $row2 = $dbinterest[$j];
+
+                                    if ($row[0] == $row2[2]) {
+                                        // Render the interest in a checkbox element.
+                                        echo "<div class=\"cbox-custom\">";
+                                        echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[0]. "\" value=\"". $row2[0]. "\">";
+                                        echo "<label for=\"". $row2[0]. "\">". $row2[1]. "</label>";
+                                        echo "</div>";
+                                    }
+                                }   
+                                echo "</div>";
+                                echo "</div>";
+                            }
+                        echo "</div>";
+
+                        echo "<div class=\"action-buttons\">";
+                            echo "<hr>";
+                            echo "<div class=\"flex-row\">";
+                                echo "<input type=\"button\" class=\"btn\" onclick=\"changePage()\" value=\"Back\">";
+                                echo "<input type=\"submit\" name=\"submitUserData\" id=\"save\" class=\"btn\" onclick=\"toggle()\" value=\"Save\">";
+                            echo "</div>";
+                        echo "</div>";
+
+                    echo "</div>";
+                echo "</form>";
                 echo "</div>";
-            echo "</section>";
+                echo "</section>";
+            }
         }
-        else {
-            echo "<section class=\"modal-box\">";
-            echo "<div class=\"modal-content\">";
-            echo "<form name=\"acc-details\" action=\"\" method=\"post\" enctype=\"multipart/form-data\">";
-                echo "<div class=\"modal-instructions\">";
-                    echo "<h2>Welcome to Connecting Colleagues!</h2>";
-                    echo "<h3>Let's finalize your account details.</h3>";
-                    echo "<h3 id=\"tab-number\">Part 1 of 2</h3>";
-                    echo "<hr>";
-                echo "</div>";
-
-                // The start of the first page of the form.
-                echo "<div class=\"tab1\">";
-                    echo "<div class=\"form-control\">";
-                        echo "<label for=\"fname\">Your first name</label>";
-                        echo "<input type=\"text\" name=\"fname\" class=\"text-input medium-input\" required>";
-                    echo "</div>";
-
-                    echo "<div class=\"form-control\">";
-                        echo "<label for=\"lname\">Your last name</label>";
-                        echo "<input type=\"text\" name=\"lname\" class=\"text-input medium-input\" required>";
-                    echo "</div>";
-
-                    echo "<div class=\"form-control\">";
-                        echo "<label for=\"introduction\">Write a short introduction of yourself</label>";
-                        echo "<textarea name=\"introduction\" class=\"text-input\" onkeyup=\"countChar(this);\" required></textarea>";
-                        echo "<p id=\"charNum\">Minimum 75 characters needed</p>";
-                    echo "</div>";
-
-                    echo "<div class=\"form-control\">";
-                        echo "<label for=\"propic\">Upload a profile picture</label>";
-                        echo "<input type=\"file\" name=\"propic\" class=\"photo-input\">";
-                    echo "</div>";
-                    
-                    echo "<div class=\"actions-buttons\">";
-                        echo "<hr>";
-                        echo "<div class=\"flex-row\">";
-                            echo "<input type=\"button\" id=\"tab1-save\" class=\"btn\" onclick=\"changePage()\" value=\"Next\">";
-                        echo "</div>";
-                    echo "</div>";
-                echo "</div>";
-
-                // The start of the second page of the form.
-                echo "<div class=\"tab2\" style=\"display: none;\">";
-
-                    echo "<div class=\"form-control\">";
-                        echo "<div class=\"interests-instructions\">";
-                            echo "<p>Select at least three (3) interests.</p>";
-                        echo "</div>";
-                    
-                        // Get some intrests from the database for the user to choose from.
-                        $dbinterest=readInterests();
-                        $categories=readCategories();
-                    
-                        for ($i = 0; $i < count($categories); $i++) {
-                            $row = $categories[$i];
-    
-                            echo "<div class=\"interest-group\">";
-                            // Create a button with group name as text
-                            echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
-                            
-                            // Interests are inside div that is not displayed until group name is clicked
-                            echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
-
-                            // Loop the interest guery for interest names and echo them where id's match
-                            for ($j = 0; $j < count($dbinterest); $j++) {
-                                $row2 = $dbinterest[$j];
-
-                                if ($row[0] == $row2[2]) {
-                                    // Render the interest in a checkbox element.
-                                    echo "<div class=\"cbox-custom\">";
-                                    echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[0]. "\" value=\"". $row2[0]. "\">";
-                                    echo "<label for=\"". $row2[0]. "\">". $row2[1]. "</label>";
-                                    echo "</div>";
-                                }
-                            }   
-                            echo "</div>";
-                            echo "</div>";
-                        }
-                    echo "</div>";
-
-                    echo "<div class=\"action-buttons\">";
-                        echo "<hr>";
-                        echo "<div class=\"flex-row\">";
-                            echo "<input type=\"button\" class=\"btn\" onclick=\"changePage()\" value=\"Back\">";
-                            echo "<input type=\"submit\" name=\"submitUserData\" id=\"save\" class=\"btn\" onclick=\"toggle()\" value=\"Save\">";
-                        echo "</div>";
-                    echo "</div>";
-
-                echo "</div>";
-            echo "</form>";
-            echo "</div>";
-            echo "</section>";
+        else{
+            echo "Please log in with your Connecting Colleagues account!";
         }
     ?>
     
