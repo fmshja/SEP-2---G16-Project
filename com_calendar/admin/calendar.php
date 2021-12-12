@@ -1,6 +1,6 @@
 <?php
 /**
- * this is admin side of component
+ * This is the admin side of the component-
  */
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
@@ -19,11 +19,8 @@ $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_conne
 </head>
 <body>
     <div class="guide-text bg">
-        <p>On front side of this componen is the calendar, nothing on the administrator side.</p>
+        <p>Sorry, there's nothing on the administrator side!</p>
+        <p>On front side of this component, there is the calendar for the users.</p>
     </div>
-
-    <script type="text/javascript">
-    //add javascript here
-    </script>
 </body>
 </html>
