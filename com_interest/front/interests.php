@@ -35,9 +35,14 @@ $groups=$db->loadRowList();
 
 // Save the formdata to database
 if (isset($_POST['SubmitButton'])) {
+    $user = JFactory::getUser();
     // The user has chosen less than three interests
     if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
         $message = "Please choose at least three (3) interests!";
+        echo "<script>alert('$message');</script>";
+    }
+    else if($user->id==0){
+        $message = "Session expired! Please log in.";
         echo "<script>alert('$message');</script>";
     }
     else {
@@ -131,7 +136,7 @@ $user = JFactory::getUser();
                     if ($row[0] == $row2[0]) {
                         // Render the interest in a checkbox element.
                         echo "<div class=\"cbox-custom\">";
-                            echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
+                            echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[2]. "\">";
                             echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
                         echo "</div>";
                     }
