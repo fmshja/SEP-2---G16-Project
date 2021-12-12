@@ -43,7 +43,7 @@ Dependencies:
 
 Installation:
 1. Unzip com_connecting_home-folder.
-2. Move contents of the zip-folder to the Joomla install-folder.
+2. Move contents of the folder to the Joomla install-folder.
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
@@ -62,7 +62,7 @@ Dependencies:
 
 Installation:
 1. Unzip com_interests.
-2. Move contents of the zip-folder to the Joomla install-folder.
+2. Move contents of the folder to the Joomla install-folder.
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
@@ -80,7 +80,7 @@ Dependencies:
 
 Installation:
 1. Unzip com_message.
-2. Move contents of the zip-folder to the Joomla install-folder.
+2. Move contents of the folder to the Joomla install-folder.
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
@@ -100,7 +100,7 @@ Dependencies:
 
 Installation:
 1. Unzip com_profile_page.
-2. Move contents of the zip-folder to the Joomla install-folder.
+2. Move contents of the folder to the Joomla install-folder.
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
