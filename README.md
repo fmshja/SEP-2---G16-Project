@@ -26,11 +26,13 @@ Dependencies:
 * MariaDB selected as the servers database
 
 Setting up the database goes as such:
-1. Navigate to <http://localhost/phpmyadmin/>
-2. Log in, the default username is `root` and the password is empty, if nothing else was selected during the install.
-3. Open the SQL tab on the top navigation bar.
-4. From the folder `database with foreign keys`, paste the contents of the `db_creation.sql` to the servers SQL prompt and run. The server should return an empty result set.
-5. The database should now be operable. If you wish to use the test data we created, run the contents of the `test_data.sql` from the folder on the SQL prompt.
+1. Start the server
+2. Navigate to <http://localhost/phpmyadmin/>
+3. Log in, the default username is `root` and the password is empty, if nothing else was selected during the install.
+4. Open the SQL tab on the top navigation bar.
+5. From the folder `database`, paste the contents of the `db_creation.sql` to the servers SQL prompt and run. The server should return an empty result set.
+6. `com_interests.sql` and `com_profile_page` wont work without some interest data in the tables, so `test_data_interests.sql` has some interests for that purpose, they can be insterted from the SQL prompt if wished.
+7. If user test data is needed, `test_data_users.sql` has some dummy user data that can be used.
 ## The components
 Here are short descriptions of each Joomla component in this repository.
 
