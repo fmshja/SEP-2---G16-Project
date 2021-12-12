@@ -80,13 +80,16 @@ function getGroup(){
     $user = JFactory::getUser();
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
+    $id=null;
     $query->select($db->quoteName(array('id_group','id_user')))
     ->from($db->quoteName('app_formed_user_groups'))
     ->where($db->quoteName('id_user') . ' = '. $db->quote($user->id));
     $db->setQuery($query);
     $group = $db->loadRowList();
-    $group=$group[0];
-    $id=$group[0];
+    if($group!=null){
+        $group=$group[0];
+        $id=$group[0];
+    }
     return $id;
 }
 
@@ -163,28 +166,34 @@ function getMessages(){
         
                 echo "<div class=\"flex fxdir-default\">";
                     $id=getGroup();
-                    $matches=getMatches($id);
-                    for ($i=0;$i<count($matches);$i++) {
-                        $userid=$matches[$i];
-                        if ($userid[0]!=$user->id) {
-                            $mdata=getMatchData($userid[0]);
-                            // $mdata now contains a matched user data
-                            $mdata=$mdata[0];
-                            // Fullname of the match
-                            $mname=$mdata[1]. " ". $mdata[2];
+                    if(is_null($id)==false){
+                        $matches=getMatches($id);
+                        for ($i=0;$i<count($matches);$i++) {
+                            $userid=$matches[$i];
+                            if ($userid[0]!=$user->id) {
+                                $mdata=getMatchData($userid[0]);
+                                // $mdata now contains a matched user data
+                                $mdata=$mdata[0];
+                                // Fullname of the match
+                                $mname=$mdata[1]. " ". $mdata[2];
 
-                            $recipientId=$mdata[0];
-                            $fname=getFullName();
-                            $email=$user->email;
+                                $recipientId=$mdata[0];
+                                $fname=getFullName();
+                                $email=$user->email;
 
-                            echo "<div class=\"flex-item\">";
+                                echo "<div class=\"flex-item\">";
                                 echo "<input id=". $i. " type=\"button\" class=\"matches mbtn btn\" onclick=\"toggleForm(this.id)\" value=". $mname .">";
                                 renderForm($i,$recipientId,$fname,$email);
-                            echo "</div>";
+                                echo "</div>";
+                            }
                         }
                     }
-                echo "</div>";
-            echo "</section>";
+                    else{
+                        echo "<p>There are no matches for you at this time.</p>";
+                        echo "<p>Please wait for the next matching period.</p>";
+                    }
+                    echo "</div>";
+                echo "</section>";
 
             // Messages addressed to the user.
             echo "<section class=\"received-msg\">";
