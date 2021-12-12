@@ -4,8 +4,8 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 $document = Factory::getDocument();
 $options = array("version" => "auto");
-$document->addStyleSheet("components/com_calendar/style.css");
-$document->addScript("components/com_calendar/script.js");
+$document->addStyleSheet(JURI::root(true) . '/components/com_calendar/style.css');
+$document->addScript('components/com_calendar/script.js');
 
 
 $user = JFactory::getUser();
@@ -31,8 +31,6 @@ if (isset($_POST['SubmitButton'])) {
 }
 
 if (isset($_POST['RemoveButton'])) {
-
-
     $query = $db->getQuery(true);
     $conditions = array($db->quoteName('Note_Id') . ' = ' . $db->quote($_POST['Note_Id']));
 
@@ -42,7 +40,6 @@ if (isset($_POST['RemoveButton'])) {
 
     $db->setQuery($query);
     $db->execute();
-
 }
 
 
@@ -53,40 +50,47 @@ $query->where($db->quoteName('User_Id') . ' = '. $db->quote($user->id));
 $db->setQuery($query);
 $results=$db->loadRowList();
 $resultsJSON = json_encode($results);
-
-
-
 ?>
+
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecting Colleagues</title>
+    <title>Calendar | Connecting Colleagues</title>
 </head>
 <body>
 
     <div class="container">
         <!-- Calendar area -->
         <section class="calendar-area">
+
             <section class="calendar-container">
+
                 <container class="date-bar">
-                    <section class=previous-month onclick="prevmonth()">
-                        <h2 id="prev">Previous month</h1>
+
+                    <section class="previous-month btn" onclick="prevmonth()">
+                        Previous month
                     </section>
-                    <section class=next-month onclick="nextmonth()">
-                        <h2 id="next">Next month</h1>
+
+                    <section class="next-month btn" onclick="nextmonth()">
+                        Next month
                     </section>
+
                     <section class="month-shown">
-                        <h2 id="month-shown">month</h1>
+                        <h2 id="month-shown">Month</h2>
                     </section>
+
                 </container>
-                <section class="calendar" id="calendar">
-                </section>
+
+                <section class="calendar" id="calendar"></section>
+
             </section>
+
             <section class="side-bar">
                 <h1 id="side"></h1>
             </section>
+
         </section>
     </div>
 
