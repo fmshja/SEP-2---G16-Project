@@ -101,19 +101,18 @@ $user = JFactory::getUser();
     <title>Interests | Connecting Colleagues</title>
 </head>
 <body>
-    <section class="guide-text">
-        <h2>Select your interests</h2>
-        <h3>Click a category to see more interests</h3>
-        <hr>
-    </section>
-
     <?php
-        //echo "<p>This user's id is {$user->id}</p>";
-    ?>
+        $user = JFactory::getUser();
+        if($user->id!=0){
+            echo "<section class=\"guide-text\">";
+                echo "<h2>Select your interests</h2>";
+                echo "<h3>Click a category to see more interests</h3>";
+                echo "<hr>";
+                echo "</section>";
 
-    <section class="select-interests">
-    <form action="" method="post">
-        <?php
+                    echo "<section class=\"select-interests\">";
+                    echo "<form action=\"\" method=\"post\">";
+        
             // Loop the second query for group names
             for ($i = 0; $i < count($groups); $i++) {
                 $row = $groups[$i];
@@ -121,34 +120,39 @@ $user = JFactory::getUser();
                 echo "<div class=\"interest-group\">";
                 // Create a button with group name as text
                 echo "<button id=". $i." type=\"button\" class=\"btn\" onclick=\"toggleInterest(this.id)\">". $row[1]. "</button>";
-            
+                
                 // Interests are inside div that is not displayed until group name is clicked
                 echo "<div class=". $i." \" flex fxdir-default\" style=\"display: none;\">";
-                    
+                        
                 // Loop the first guery for interest names and echo them where id's match
                 for ($j = 0; $j < count($results); $j++) {
                     $row2 = $results[$j];
-                    
+                        
                     if ($row[0] == $row2[0]) {
                         // Render the interest in a checkbox element.
                         echo "<div class=\"cbox-custom\">";
-                        echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
-                        echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
+                            echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[3]. "\">";
+                            echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
                         echo "</div>";
                     }
                 }
                 echo "</div>";
                 echo "</div>";
-            }
-        ?>
-        <div class="action-buttons">
-            <hr>
-            <div class="flex-row">
-                <input type="submit" name="SubmitButton" value="Submit" class="btn"/>
-            </div>
-        </div>
-    </form>
-    </section>
+                }
+            
+            echo "<div class=\"action-buttons\">";
+                echo "<hr>";
+                echo "<div class=\"flex-row\">";
+                    echo "<input type=\"submit\" name=\"SubmitButton\" value=\"Submit\" class=\"btn\"/>";
+                echo "</div>";
+            echo "</div>";
+            echo "</form>";
+            echo "</section>";
+        }
+        else{
+            echo "<p>Please log in with your Connecting Colleagues account!</p>";
+        }
+    ?>
 
     <script type="text/javascript">
         // Changes the visibility of interests based on if they are visible or not
