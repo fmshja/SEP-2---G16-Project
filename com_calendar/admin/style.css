@@ -1,0 +1,56 @@
+/* The font for the body text. */
+/* Work Sans */ 
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
+
+
+/* The color palette of the website. */
+:root {
+    --primary-color: #2D3F89;
+    --secondary-color: #ffffff;
+    --accent-color: #456EAF;
+}
+
+
+/* General settings for the page. */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: auto;
+    min-width: 100%;
+    min-height: 100%;
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.5;
+    color: var(--secondary-color);
+    background-color: var(--secondary-color);
+}
+
+
+/* General styles the layout of the page.*/
+.guide-text {
+    margin-bottom: 2em;
+}
+
+.bg {
+    background-color: rgba(69, 110, 175, 0.8);
+    padding: 2.5em;
+    border-radius: 15px 50px;
+}
+
+p {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: -0.3em
+}
