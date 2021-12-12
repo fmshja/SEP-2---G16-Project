@@ -112,25 +112,50 @@ This is because currently this script, `run.py`, is currently invoked by the adm
 There is also an optional file, `visualization.py`, which creates a simple visualization as a series of graphviz graphs and their png image renders.
 This script requires both the [graphiz python library](https://pypi.org/project/graphviz/), and the [graphviz software, dot](https://www.graphviz.org/download/).
 
-When running the algorithm for the first time (or running after the configuration file is removed), a configuration file `run_config.json` will be created in the same folder.
-Currently the only setting that this sets, `python_cmd`, is what command is used to call the Python executable, by default "`python`".
+When loading the admin-side view of the component for the first time (or after the configuration file has been removed), a configuration file `run_config.json` will be created in the same folder.
+
+Currently the settings and their defaults are:
+* `python_cmd`, default value is `"python"`
+    * Determines the command used to call the Python executable
+* `database`
+    * Determines the arguments used when connecting to the database
+    * `user`, default value is `"root"`;
+    * `password`, default value is `""`;
+    * `host`, default value is `"127.0.0.1"`;
+    * `port`, default value is `3306`;
+    * `name`, default value is `"cc_database"`
+        * The name of the database with the relevant tables
 
 In most cases you can just provide the path to the `python` executable as the value of `python_cmd` setting, but if the path has spaces (like if it's under the `Program Files` folder in Windows), you need to handle it a bit differently.
 On Linux you should be able to escape the space-character with a following backslash `\ `, but on Windows you must wrap the entire path in double-quotes `"`.
 
 Also don't forget that since this is JSON, you need to use a backslash to escape every backslash and every double-quote on the command.
 
-Example `run_config.json` on Windows with the Python folder under `C:\`:
+Example `run_config.json` on Windows with the Python folder under `C:\` and the default database settings:
 ```json
 {
-    "python_cmd": "C:\\Python39\\python.exe"
+    "python_cmd": "C:\\Python39\\python.exe",
+    "database": {
+        "user": "root",
+        "password": "",
+        "host": "127.0.0.1",
+        "port": 3306,
+        "name": "cc_database"
+    }
 }
 ```
 
-Example `run_config.json` on Windows with the Python folder under the `Program Files` folder:
+Example `run_config.json` on Windows with the Python folder under the `Program Files` and the default database settings:
 ```json
 {
-    "python_cmd": "\"C:\\Program Files\\Python39\\python.exe\""
+    "python_cmd": "\"C:\\Program Files\\Python39\\python.exe\"",
+    "database": {
+        "user": "root",
+        "password": "",
+        "host": "127.0.0.1",
+        "port": 3306,
+        "name": "cc_database"
+    }
 }
 ```
 

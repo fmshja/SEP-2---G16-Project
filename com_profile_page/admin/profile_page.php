@@ -10,34 +10,44 @@ $document = Factory::getDocument();
 $options = array("version" => "auto");
 $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_profile_page/style.css');
 
+$config_output = "";
 $console_output = "No console output";
 
+// find or create the config file
+$cfg_path = '.\components\com_profile_page\run_config.json';
+$valid_cfg_existed = false;
+if(file_exists($cfg_path)) {
+    // config found, use it
+    $cfg = json_decode(file_get_contents($cfg_path), false);
+    if (json_last_error()) {
+        // failed to parse the json
+        $config_output .=
+            '<p id="error">Error while decoding run_config.json (' . json_last_error_msg() . ')<br>' .
+            '(Did you remember to escape the backslashes?)</p>';
+    } else {
+        $valid_cfg_existed = true;
+    }
+}
+if (!$valid_cfg_existed) {
+    // not found or it was invalid, create the default config
+    $cfg = new stdClass();
+    $cfg->python_cmd = 'python';
+
+    $cfg->database = new stdClass();
+    $cfg->database->user = 'root';
+    $cfg->database->password = '';
+    $cfg->database->host = '127.0.0.1';
+    $cfg->database->port = 3306;
+    $cfg->database->name = 'cc_database';
+
+    if (!file_exists($cfg_path)) {
+        // save the default config
+        file_put_contents($cfg_path, json_encode($cfg, JSON_PRETTY_PRINT));
+        $config_output .= 'A default config created at "' . $cfg_path .'"';
+    }
+}
+
 if(isset($_POST['matching-button'])){
-    // find or create the config file
-    $cfg_path = '.\components\com_profile_page\run_config.json';
-    $valid_cfg_existed = false;
-    if(file_exists($cfg_path)) {
-        // config found, use it
-        $cfg = json_decode(file_get_contents($cfg_path), false);
-        if (json_last_error()) {
-            // failed to parse the json
-            echo '<span id="error">Error while decoding run_config.json (' . json_last_error_msg() . ')<br>' .
-                 '(Did you remember to escape the backslashes?)</span>';
-        } else {
-            $valid_cfg_existed = true;
-        }
-    }
-    if (!$valid_cfg_existed) {
-        // not found or it was invalid, create the default config
-        $cfg = new stdClass();
-        $cfg->python_cmd = 'python';
-
-        if (!file_exists($cfg_path)) {
-            // save the default config
-            file_put_contents($cfg_path, json_encode($cfg, JSON_PRETTY_PRINT));
-        }
-    }
-
     $command = $cfg->python_cmd . ' .\components\com_profile_page\run.py';
     $console_output = shell_exec($command.' 2>&1');
     $console_output = nl2br($console_output); // change the linebreaks to <br> tags
@@ -61,6 +71,11 @@ if(isset($_POST['matching-button'])){
             <input type="submit" name="matching-button" class="btn" value="Start the algorithm"/>
         </form>
     </section>
+    <?php
+    if ($config_output != "") {
+        echo '<section class="config_output">' . $config_output . '</section>';
+    }
+    ?>
     <section class="console_output"><?php echo $console_output ?></section>
 </body>
 </html>

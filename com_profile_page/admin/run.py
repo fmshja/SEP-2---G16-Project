@@ -1,19 +1,26 @@
+import os
 import mariadb
 import sys
 import json
 from cc_matching import form_user_groups, Interest, UserId
 
+config_path = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "run_config.json")
+config = json.load(open(config_path))
+db_cfg = config["database"]
+
 # connecting to database
 try:
     conn = mariadb.connect(
-        user="root",
-        password="",
-        host="127.0.0.1",
-        port=3306,
-        database="joomla_ncc"
+        user=db_cfg["user"],
+        password=db_cfg["password"],
+        host=db_cfg["host"],
+        port=db_cfg["port"],
+        database=db_cfg["name"]
     )
 except mariadb.Error as e:
-    print(f"Error connecting to MariaDB Platform: {e}")
+    print(f'<span id="error">Error connecting to MariaDB Platform: {e}')
+    print('(check run_config.json if you have the correct database settings)</span>')
     sys.exit(1)
 
 

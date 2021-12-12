@@ -38,6 +38,16 @@ body {
 
 /* Styling for the debugging */
 
+.config_output {
+    margin: 1.5em 6em;
+    padding: 1.5em;
+    border: 2px solid darkorange;
+    background-color: white;
+    color: black;
+    font-family: sans-serif;
+    text-align: left;
+}
+
 .console_output {
     margin: 1.5em 6em;
     padding: 1.5em;
