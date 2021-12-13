@@ -31,6 +31,8 @@ catch(Exception $e){
 // Check if form was submitted.
 if(isset($_POST['submitUserData'])){ 
     $user = JFactory::getUser();
+    $app = Factory::getApplication();
+    $input = $app->input;
     if (empty($_POST['interest']) || count($_POST['interest']) < 3) {
         $message = "Please choose at least three (3) interests!";
         echo "<script>alert('$message');</script>";
@@ -40,11 +42,13 @@ if(isset($_POST['submitUserData'])){
         echo "<script>alert('$message');</script>";
     }
     else {
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $introduction = $_POST['introduction'];
+        //Filter the input
+        $fname = $input->get('fname', 0, "string"); ;
+        $lname = $input->get('lname', 0, "string");
+        $introduction = $input->get('introduction', 0, "string"); ;
+
+        //Prepare variables
         $interests=array();
-        $user = JFactory::getUser();
         $imagelink=null;
 
         // If user submitted a profile picture
@@ -72,7 +76,7 @@ if(isset($_POST['submitUserData'])){
         }
 
         // Loop through the form and push the values to an array
-        foreach($_POST['interest'] as $value){
+        foreach($input->get('interest', 0, "array") as $value){
             array_push($interests, $value);
         }
         // Encode the array to json-format
