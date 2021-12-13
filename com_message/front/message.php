@@ -14,11 +14,12 @@ $query = $db->getQuery(true);
 
 //Send the message
 if(isset($_POST['sendMessage'])){
+    $input = Factory::getApplication()->input;
     //Saved variables
-    $recipientId=$_POST['recipient_id'];
-    $sender_name=$_POST['sender'];
-    $sender_email=$_POST['sender_email'];
-    $message=$_POST['message'];
+    $recipientId=$input->get('recipient_id', 0, "INT");
+    $sender_name=$input->get('sender', 0, "string");
+    $sender_email=$input->get('sender_email', 0, "string");
+    $message=$input->get('message', 0, "string");
     $meeting_date=$_POST['meeting'];
     $meeting_time=$_POST['mtime'];
 
