@@ -170,9 +170,30 @@ Calling the script doesn't necessarily have to be done from this component, and 
 The script itself doesn't depend on any files used in the component.
 It just needs the connecting colleagues Python library, `cc_matching.py`, to be importable, and an access to the correct database.
 
-## Navigation
+## Navigation on the Site
+The navigation for the end user starts from the Home Page. If the user doesn't have an account on the website yet, they are required to make one through the Log In module's Create an Account feature. After the account creation, the user has an account with initial details (username, password, email address) set up on the server.
+
+When the user has an account on the server, they can log in to the website. If they happen to be logged in to the website the first time, they are required to add the following information before accessing the website: 
+* Their first name
+* Their last name
+* A short introduction of themselves
+* A profile picture
+* At least three (3) interests from the directory of interests
+After this, the user will be redirected to the user profile page and have an access to the site's functionalities. The users who have already logged in to the website and have had their account information finalized have an access to the site's functionalities.
+
+The website's functionalities include the following page:
+* User Profile, which displays the user account details (a full name consisting of the first and the last name, an introduction, and a profile picture)
+* Messages, in which the matched user groups can send each other messages and meeting invitions
+* Interests, in which more interests can picked for the user account
+* Calendar, in which a user can add and remove notes regarding various meetings and other activities.
 
 ![User Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/User%20Navigation%20on%20the%20Website.png?raw=true)
+
+The navigation from the admin user starts from the Joomla Administrator Login page. After the log in, the admin user will be redirected to the Joomla Home Dashboard, whereof they can navigate to the Components menu and the following components under it:
+* Interests
+    * From this page, the admin user can add a new interest category, add a new interest and view the interest directory.
+* Profile Page
+    * From this page, the admin user can start the manual start-up for the matching algorithm
 
 ![Admin Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/Admin%20Navigation%20on%20the%20Website.png?raw=true)
 
