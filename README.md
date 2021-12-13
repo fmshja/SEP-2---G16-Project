@@ -172,3 +172,7 @@ It just needs the connecting colleagues Python library, `cc_matching.py`, to be 
 
 ## Navigation
 
+![User Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/User%20Navigation%20on%20the%20Website.png?raw=true)
+
+![Admin Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/Admin%20Navigation%20on%20the%20Website.png?raw=true)
+
