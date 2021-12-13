@@ -179,6 +179,7 @@ When the user has an account on the server, they can log in to the website. If t
 * A short introduction of themselves
 * A profile picture
 * At least three (3) interests from the directory of interests
+
 After this, the user will be redirected to the user profile page and have an access to the site's functionalities. The users who have already logged in to the website and have had their account information finalized have an access to the site's functionalities.
 
 The website's functionalities include the following page:
