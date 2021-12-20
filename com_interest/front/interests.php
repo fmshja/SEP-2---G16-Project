@@ -96,6 +96,28 @@ if (isset($_POST['SubmitButton'])) {
 
 $user = JFactory::getUser();
 
+// Fetches previous interests.
+function fetchArray(){
+    $db = JFactory::getDbo();
+    $user = JFactory::getUser();
+    $query = $db->getQuery(true);
+    $query->select($db->quoteName('Interest_Id'))
+        ->from($db->quoteName('app_user_interests'))
+        ->where($db->quoteName('User_Id') . ' = '. $db->quote($user->id));
+    $db->setQuery($query);
+    $previous = $db->loadRowList();
+    // Decode the json array if not null.
+    if($previous!=null){
+        $previous=$previous[0];
+        $previous=json_decode($previous[0]);
+    }
+    // Make an empty array.
+    else{
+        $previous=Array();
+    }
+    return $previous;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -109,6 +131,9 @@ $user = JFactory::getUser();
     <?php
         $user = JFactory::getUser();
         if($user->id!=0){
+            // Get array of previous selections fromm database.
+            $previous=fetchArray();
+
             echo "<section class=\"guide-text\">";
                 echo "<h2>Select your interests</h2>";
                 echo "<h3>Click a category to see more interests</h3>";
@@ -136,8 +161,15 @@ $user = JFactory::getUser();
                     if ($row[0] == $row2[0]) {
                         // Render the interest in a checkbox element.
                         echo "<div class=\"cbox-custom\">";
+                        // Check box if this was previously selected.
+                        if(in_array($row2[2],$previous)){
+                            echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[2]. "\" checked>";
+                        }
+                        // Otherwise render normal checkbox.
+                        else{
                             echo "<input type=\"checkbox\" name=\"interest[]\" id=\"". $row2[3]. "\" value=\"". $row2[2]. "\">";
-                            echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
+                        }
+                        echo "<label for=\"". $row2[3]. "\">". $row2[3]. "</label>";
                         echo "</div>";
                     }
                 }
