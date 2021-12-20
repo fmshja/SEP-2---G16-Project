@@ -18,7 +18,6 @@ While installing Wampserver (or other such server), make sure to select MariaDB 
 
 You also need the mariadb python library for running the matching algorithm, which can be downloaded from the console with the command `pip install mariadb`.
 
-During the installation of Joomla, you should choose `_cc` as the database prefix.
 The database structure can be viewed from `database` folder from the picture `sql_diagram.png`
 
 Dependencies:
@@ -108,6 +107,40 @@ Installation:
 3. Navigate to System Extensions:install in Joomla.
 4. Select "Install from Folder".
 5. Click "check & install".
+
+### Calendar, `com_calendar`
+This houses the calendar functionality.
+Users can use this component to mark down their planned meetings with other users. 
+
+Dependencies:
+* Table `'app_calendar_notes'`
+
+Installation:
+1. Unzip com_calendar.
+2. Move contents of the folder to the Joomla install-folder.
+3. Navigate to System Extensions:install in Joomla.
+4. Select "Install from Folder".
+5. Click "check & install".
+
+After component installation:
+
+Components must be set to the sites menu module in order to access the fronte end.
+In order to do this:
+1. Navigate to Menus:All menu items in Joomla Admin.
+2. Click new.
+3. Go to menu item type and select the component you want to add to the menu.
+4. Give the item an appropriate title (This is the name in the menu).
+5. If the component is connecting_home leave access to "public", otherwise set it to "registered".
+6. Click save&close.
+7. Repeat for all components.
+
+Set the login module correctly:
+1. Go to modules:login form in Joomla admin.
+2. Set Login Redirection Page to profile_page-component.
+3. Set Logout Redirection Page to connecting_home-component.
+4. Open menu assignment tab in login form.
+5. Set module assignment to only on pages selected.
+6. select the connecting_home-page.
 
 #### The matching algorithm
 This component also has the Python script which performs the matching of users into groups of any size.
