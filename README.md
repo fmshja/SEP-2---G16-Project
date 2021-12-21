@@ -360,3 +360,6 @@ Assign the `Module Assignment` property as "Only on the pages selected" and assi
 Click the `Save & Close` button.
 
 The set-up of the site module positions is now complete!
+
+## License
+This software is licensed under the GNU General Public License Version 2.0.
