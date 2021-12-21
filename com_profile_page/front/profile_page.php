@@ -77,7 +77,7 @@ if(isset($_POST['submitUserData'])){
 
         // Loop through the form and push the values to an array
         foreach($input->get('interest', 0, "array") as $value){
-            array_push($interests, $value);
+            array_push($interests, (int)$value);
         }
         // Encode the array to json-format
         $interests=json_encode($interests);
