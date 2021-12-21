@@ -296,7 +296,7 @@ def _calculate_group_spots(
     # to be divisible by the `group_size`
     for interest, count in spots_sorted:
         rem = count % group_size
-        if rem == 0:
+        if rem == 0 and not (count == 0 and popularity_of_interest[interest] >= group_size):
             continue  # the size is good already
 
         new_spots = group_size - rem
