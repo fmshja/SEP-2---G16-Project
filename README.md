@@ -203,17 +203,22 @@ Calling the script doesn't necessarily have to be done from this component, and 
 The script itself doesn't depend on any files used in the component.
 It just needs the connecting colleagues Python library, `cc_matching.py`, to be importable, and an access to the correct database.
 
-## Navigation on the Site
-The navigation for the end user starts from the Home Page. If the user doesn't have an account on the website yet, they are required to make one through the Log In module's Create an Account feature. After the account creation, the user has an account with initial details (username, password, email address) set up on the server.
 
-When the user has an account on the server, they can log in to the website. If they happen to be logged in to the website the first time, they are required to add the following information before accessing the website: 
+## Navigation on the Site
+The navigation for the end user starts from the Home Page.
+If the user doesn't have an account on the website yet, they are required to make one through the Log In module's Create an Account feature.
+After the account creation, the user has an account with initial details (username, password, email address) set up on the server.
+
+When the user has an account on the server, they can log in to the website.
+If they happen to be logged in to the website the first time, they are required to add the following information before accessing the website:
 * Their first name
 * Their last name
 * A short introduction of themselves
 * A profile picture
 * At least three (3) interests from the directory of interests
 
-After this, the user will be redirected to the user profile page and have an access to the site's functionalities. The users who have already logged in to the website and have had their account information finalized have an access to the site's functionalities.
+After this, the user will be redirected to the user profile page and have an access to the site's functionalities.
+The users who have already logged in to the website and have had their account information finalized have an access to the site's functionalities.
 
 The website's functionalities include the following page:
 * User Profile, which displays the user account details (a full name consisting of the first and the last name, an introduction, and a profile picture)
@@ -223,7 +228,8 @@ The website's functionalities include the following page:
 
 ![User Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/User%20Navigation%20on%20the%20Website.png?raw=true)
 
-The navigation from the admin user starts from the Joomla Administrator Login page. After the log in, the admin user will be redirected to the Joomla Home Dashboard, whereof they can navigate to the Components menu and the following components under it:
+The navigation from the admin user starts from the Joomla Administrator Login page.
+After the log in, the admin user will be redirected to the Joomla Home Dashboard, whereof they can navigate to the Components menu and the following components under it:
 * Interests
     * From this page, the admin user can add a new interest category, add a new interest and view the interest directory.
 * Profile Page
@@ -233,16 +239,20 @@ The navigation from the admin user starts from the Joomla Administrator Login pa
 
 
 ## Setting up the Main Menu Items for the Website
-Here are the instructions for setting the main menu and its menu items properly on the website. Before explaining the process, install all the components from the repository to the (local) Joomla server.
+Here are the instructions for setting the main menu and its menu items properly on the website.
+Before explaining the process, install all the components from the repository to the (local) Joomla server.
 
 ### STEP 1
-Go to the `Joomla Home Dashboard` if you are not on this page already. After this, click the `Menus` drop-down list open and select the `Main Menu` menu item from under it.
+Go to the `Joomla Home Dashboard` if you are not on this page already.
+After this, click the `Menus` drop-down list open and select the `Main Menu` menu item from under it.
 
 ### STEP 2
 On the `Templates: Styles (Site)` page, click the `+ New` button on the upper right side of the page to add the components as menu items on the main menu.
 
 ### STEP 2.1
-After clicking the `+ New` button, the view should be the same as the image below. From the `Menu Item Type` property, select a component. Set the `Title` property to be the same as the component name. Select the `Menu` property as Main Menu and the `Status` property as Published. The `Access` property depends on the component:
+After clicking the `+ New` button, the view should be the same as the image below. From the `Menu Item Type` property, select a component. Set the `Title` property to be the same as the component name. Select the `Menu` property as Main Menu and the `Status` property as Published.
+
+The `Access` property depends on the components:
 * Connecting Home: `Access` -> Public
 * Calendar, Interests, Messages, My Profile: `Access` -> Registered
 
@@ -253,7 +263,8 @@ After selecting the correct settings, click the `Save & Close` button and repeat
 ![The step 2.1 of setting up the main menu](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/menu_step_2.1.png?raw=true)
 
 ### STEP 3
-After adding the components as menu items, unpublish the default menu item `Home` by clicking the green checkmark in front of its title. Then set the `Connecting Home` menu item as Home by clicking the grey circle on its row.
+After adding the components as menu items, unpublish the default menu item `Home` by clicking the green checkmark in front of its title.
+Then set the `Connecting Home` menu item as Home by clicking the grey circle on its row.
 
 The page should look similiar to the image below.
 
@@ -264,34 +275,48 @@ The set-up for the main menu items is now complete! To make the main menu show u
 
 
 ## Applying the Template Style for the Site
-Here are the instructions for applying the default template Cassiopeia on the website. The template is included automatically in Joomla after installing Joomla locally.
+Here are the instructions for applying the default template Cassiopeia on the website.
+The template is included automatically in Joomla after installing Joomla locally.
 
 ### STEP 1
-Go to the `Joomla Home Dashboard` if you are not on this page already. After this, select the `System` menu item from the menu side bar on the left.
+Go to the `Joomla Home Dashboard` if you are not on this page already.
+After this, select the `System` menu item from the menu side bar on the left.
 
 ### STEP 2
-From the `System Dashboard` page, select the `Site Template Styles` item from the sub menu `Templates`. The `Site Template Styles` item is highlighted in red on the image below.
+From the `System Dashboard` page, select the `Site Template Styles` item from the sub menu `Templates`.
+The `Site Template Styles` item is highlighted in red on the image below.
 
 ![The step 2 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_2.png?raw=true)
 
 ### STEP 3
-On the `Templates: Styles (Site)` page, you will find a list of template styles. If the `Cassiopeia - Default` template has already been set as the default template (in other words, the icon inside the highlighted area in red in the image below is the same yellow star), you can skip the next paragraph.
+On the `Templates: Styles (Site)` page, you will find a list of template styles.
+If the `Cassiopeia - Default` template has already been set as the default template (in other words, the icon inside the highlighted area in red in the image below is the same yellow star), you can skip the next paragraph.
 
-Set the `Cassiopeia - Default` template (highlighted in lime green in the image below) as a default template for the website by clicking the grey circle under the `Default column`. The circle will turn into a yellow star in a circle (highlighted in red in the image below) if the template was successfully set as the default template.
+Set the `Cassiopeia - Default` template (highlighted in lime green in the image below) as a default template for the website by clicking the grey circle under the `Default column`.
+The circle will turn into a yellow star in a circle (highlighted in red in the image below) if the template was successfully set as the default template.
 
 After setting the default template, click the title for the `Cassiopeia - Default` template (highlighted in lime green in the image below).
 
 ![The step 3 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_3.png?raw=true)
 
 ### STEP 4
-On the `Templates: Edit Style` page, click on the `Advanced` tab. Although not strictly related to the template setup, you can change the logo on the header of the website on this tab. The process of changing the logo is descripted in the next paragraph. If you want to only complete the template setup, skip the following paragraph, click the `Menu Assignment` tab and move to the step 5.
+On the `Templates: Edit Style` page, click on the `Advanced` tab. Although not strictly related to the template setup, you can change the logo on the header of the website on this tab. The process of changing the logo is descripted in the next paragraph.
+If you want to only complete the template setup, skip the rest of this step and move to the step 5.
 
-To change the logo, you need to click on the toggle switch on the `Brand` property. This will make the options for the logo customization to appear. For the `Logo` property, download the logo image `cc-logo_white.png` provided to you on the `graphics` folder. For the `Title (alternative to logo)` property, write Connecting Colleagues to the field as shown on the image below. After you are done with the logo setup, click the `Menu Assignment` tab.
+To change the logo, you need to click on the toggle `Brand` switch.
+This will make the options for the logo customization to appear.
+For the `Logo` property you can use any logo you want, but a default "Connecting Colleagues" logo, `cc-logo_white.png`, is provided under the `graphics`-folder in this repository.
+
+For the `Title (alternative to logo)` property, write the alt-text for the logo.
+For the default logo you can write Connecting Colleagues to the field as shown on the image below.
 
 ![The step 4 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_4.png?raw=true)
 
 ### STEP 5
-You should now be on the `Menu Assignmnet` tab on the `Templates: Edit Style` page. Under this tab, there is a list of the menu items. Select all the menu items except `Home` as shown in the image below. Click the `Save & Close` button.
+Click the `Menu Assignmnet` tab on the `Templates: Edit Style` page.
+Under this tab, there is a list of the menu items.
+Select all the menu items except `Home` as shown in the image below. 
+Click the `Save & Close` button.
 
 ![The step 5 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_5.png?raw=true)
 
@@ -300,30 +325,37 @@ The application of the default template is now complete!
 
 
 ## Setting up the Positions for the Site Modules on the Website
-Here are the instructions for setting up the correct positions for the site modules `Main Menu` and `Login`. It is assumed thatyou have completed all the steps from the sections `Setting up the Main Menu for the Site` and `Applying the Template Style for the Site` before this section.
+Here are the instructions for setting up the correct positions for the site modules `Main Menu` and `Login`.
+It is assumed thatyou have completed all the steps from the sections `Setting up the Main Menu for the Site` and `Applying the Template Style for the Site` before this section.
 
 ### STEP 1
-Go to the `Joomla Home Dashboard` if you are not on this page already. After this, click the `Contents` drop-down list open and select the `Site Modules` menu item from under it.
+Go to the `Joomla Home Dashboard` if you are not on this page already.
+After this, click the `Contents` drop-down list open and select the `Site Modules` menu item from under it.
 
 ### STEP 2
 On the `Modules (Site)` page, click the `+ New` button on the upper right side of the page to add the modules for the steps 3 and 4 to the website
 
 ### STEP 3: MAIN MENU
-Search for the main menu module type with the search word "menu". Add the module type by clicking the menu module. (NOTE: On Joomla 3.x.x, the main menu module can be found by searching for "main menu".)
+Search for the main menu module type with the search word "menu".
+Add the module type by clicking the menu module. (NOTE: On Joomla 3.x.x, the main menu module can be found by searching for "main menu".)
 
-On the `Modules: Menu` page, set the `Title` property as "Main Menu". Click open the `Module` tab and assign the `Position` property as "search". Then click open the `Menu Assignment` tab and assign the `Module Assignment` property as "On all pages". 
+On the `Modules: Menu` page, set the `Title` property as "Main Menu".
+Click open the `Module` tab and assign the `Position` property as "search".
+Then click open the `Menu Assignment` tab and assign the `Module Assignment` property as "On all pages". 
 
 Click the `Save & Close` button.
 
 ### STEP 4: LOGIN
-Search for the login module type with the search word "login". Add the module type by clicking the login module.
+Search for the login module type with the search word "login".
+Add the module type by clicking the login module.
 
-On the `Modules: Menu` page, set the `Title` property as "Login". Click open the `Module` tab and assign 
+On the `Modules: Menu` page, set the `Title` property as "Login", click open the `Module` tab and assign:
 * the `Login Redirection Page` property as "My Profile" (the user profile),
 * the `Logout Redirection Page` property as "Connecting Home" (the public home page), and
 * the `Position` property as "sidebar-right".
 
-Click open the `Menu Assignment` tab. Assign the `Module Assignment` property as "Only on the pages selected" and assign the now appearing `Menu Selection` property as "Connecting Home" (the public home page) from the Main Menu drop-down list.
+Click open the `Menu Assignment` tab.
+Assign the `Module Assignment` property as "Only on the pages selected" and assign the now appearing `Menu Selection` property as "Connecting Home" (the public home page) from the Main Menu drop-down list.
 
 Click the `Save & Close` button.
 
