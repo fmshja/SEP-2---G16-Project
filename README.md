@@ -226,7 +226,7 @@ The website's functionalities include the following page:
 * Interests, in which more interests can picked for the user account
 * Calendar, in which a user can add and remove notes regarding various meetings and other activities.
 
-![User Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/User%20Navigation%20on%20the%20Website.png?raw=true)
+![User Navigation on the Website](graphics/User%20Navigation%20on%20the%20Website.png)
 
 The navigation from the admin user starts from the Joomla Administrator Login page.
 After the log in, the admin user will be redirected to the Joomla Home Dashboard, whereof they can navigate to the Components menu and the following components under it:
@@ -235,7 +235,7 @@ After the log in, the admin user will be redirected to the Joomla Home Dashboard
 * Profile Page
     * From this page, the admin user can start the manual start-up for the matching algorithm
 
-![Admin Navigation on the Website](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/Admin%20Navigation%20on%20the%20Website.png?raw=true)
+![Admin Navigation on the Website](graphics/Admin%20Navigation%20on%20the%20Website.png)
 
 
 ## Setting up the Main Menu Items for the Website
@@ -260,7 +260,7 @@ After selecting the correct settings, click the `Save & Close` button and repeat
 
 (NOTE: You can change the order of the menu items by editing the menu item's `Ordering` property afterwards.)
 
-![The step 2.1 of setting up the main menu](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/menu_step_2.1.png?raw=true)
+![The step 2.1 of setting up the main menu](graphics/instruction_images/menu_step_2.1.png)
 
 ### STEP 3
 After adding the components as menu items, unpublish the default menu item `Home` by clicking the green checkmark in front of its title.
@@ -268,7 +268,7 @@ Then set the `Connecting Home` menu item as Home by clicking the grey circle on 
 
 The page should look similiar to the image below.
 
-![The step 3 of setting up the main menu](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/menu_step_3.PNG?raw=true)
+![The step 3 of setting up the main menu](graphics/instruction_images/menu_step_3.png)
 
 ### STEP 4
 The set-up for the main menu items is now complete! To make the main menu show up on the website, read the section `Setting up the Positions for the Site Module on the Website` from this README.
@@ -286,7 +286,7 @@ After this, select the `System` menu item from the menu side bar on the left.
 From the `System Dashboard` page, select the `Site Template Styles` item from the sub menu `Templates`.
 The `Site Template Styles` item is highlighted in red on the image below.
 
-![The step 2 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_2.png?raw=true)
+![The step 2 of applying the template style](graphics/instruction_images/temp_step_2.png)
 
 ### STEP 3
 On the `Templates: Styles (Site)` page, you will find a list of template styles.
@@ -297,7 +297,7 @@ The circle will turn into a yellow star in a circle (highlighted in red in the i
 
 After setting the default template, click the title for the `Cassiopeia - Default` template (highlighted in lime green in the image below).
 
-![The step 3 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_3.png?raw=true)
+![The step 3 of applying the template style](graphics/instruction_images/temp_step_3.png)
 
 ### STEP 4
 On the `Templates: Edit Style` page, click on the `Advanced` tab. Although not strictly related to the template setup, you can change the logo on the header of the website on this tab. The process of changing the logo is descripted in the next paragraph.
@@ -310,7 +310,7 @@ For the `Logo` property you can use any logo you want, but a default "Connecting
 For the `Title (alternative to logo)` property, write the alt-text for the logo.
 For the default logo you can write Connecting Colleagues to the field as shown on the image below.
 
-![The step 4 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_4.png?raw=true)
+![The step 4 of applying the template style](graphics/instruction_images/temp_step_4.png)
 
 ### STEP 5
 Click the `Menu Assignmnet` tab on the `Templates: Edit Style` page.
@@ -318,7 +318,7 @@ Under this tab, there is a list of the menu items.
 Select all the menu items except `Home` as shown in the image below. 
 Click the `Save & Close` button.
 
-![The step 5 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_5.png?raw=true)
+![The step 5 of applying the template style](graphics/instruction_images/temp_step_5.png)
 
 ### STEP 6
 The application of the default template is now complete!
@@ -349,7 +349,7 @@ Click the `Save & Close` button.
 Search for the login module type with the search word "login".
 Add the module type by clicking the login module.
 
-On the `Modules: Menu` page, set the `Title` property as "Login", click open the `Module` tab and assign:
+On the `Modules: Menu` page, set the `Title` property as "Login", and click open the `Module` tab and assign:
 * the `Login Redirection Page` property as "My Profile" (the user profile),
 * the `Logout Redirection Page` property as "Connecting Home" (the public home page), and
 * the `Position` property as "sidebar-right".
@@ -359,5 +359,4 @@ Assign the `Module Assignment` property as "Only on the pages selected" and assi
 
 Click the `Save & Close` button.
 
-### STEP 5
 The set-up of the site module positions is now complete!
