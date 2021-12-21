@@ -1,6 +1,6 @@
 import random
 from typing import Any
-from cc_matching import calculate_group_spots, form_user_groups
+from cc_matching import _calculate_group_spots, form_user_groups
 
 
 def generate_test_data(users: int, seed: Any) -> dict[int, set[str]]:
@@ -162,7 +162,7 @@ def test_calculate_group_spots_with_minimum_maximum_group_size():
     min_group_size = 2
     group_size = 4
 
-    groups = calculate_group_spots(
+    groups = _calculate_group_spots(
         min_group_size,
         group_size,
         len(test_users_to_interests),
@@ -175,7 +175,7 @@ def test_calculate_group_spots_with_different_group_size_value():
     min_group_size = 1
     group_size = 5
 
-    groups = calculate_group_spots(
+    groups = _calculate_group_spots(
         min_group_size,
         group_size,
         len(test_users_to_interests),
@@ -188,7 +188,7 @@ def test_calculate_group_spots_with_minimum_group_size_zero():
     min_group_size = 0
     group_size = 4
 
-    groups = calculate_group_spots(
+    groups = _calculate_group_spots(
         min_group_size,
         group_size,
         len(test_users_to_interests),

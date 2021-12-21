@@ -28,7 +28,7 @@ class Group:
         self.interest = interest
 
 
-def shuffle(collection, rng: random.Random) -> list:
+def _shuffle(collection, rng: random.Random) -> list:
     """A helper function for shuffling collections."""
     return rng.sample(sorted(collection), len(collection))
 
@@ -83,7 +83,7 @@ def form_user_groups(
     # STEP 1:  ALLOT GROUP SLOTS
     ###
 
-    free_spots: dict[Interest, int] = calculate_group_spots(
+    free_spots: dict[Interest, int] = _calculate_group_spots(
         min_group_size,
         group_size,
         len(users_to_interests),
@@ -105,8 +105,8 @@ def form_user_groups(
 
     # Get the initial matchings
     # The order that the users are iterated and the interests are picked are randomized to avoid bias
-    for user, interests in shuffle(users_to_interests.items(), rng):
-        for interest in shuffle(interests, rng):
+    for user, interests in _shuffle(users_to_interests.items(), rng):
+        for interest in _shuffle(interests, rng):
             if free_spots[interest] > 0:
                 matchings[user] = interest
                 matchings_inverse.setdefault(interest, set()).add(user)
@@ -129,7 +129,7 @@ def form_user_groups(
         old_matchings = matchings.copy()
 
     # Run the algorithm until the maximal matching has been found
-    while hopcroft_karp(
+    while _hopcroft_karp(
         users_to_interests,
         interests_to_users,
         free_spots,
@@ -170,7 +170,7 @@ def form_user_groups(
     groups: list[Group] = list()
 
     for interest, users in matchings_inverse.items():
-        users = shuffle(list(users), rng)
+        users = _shuffle(list(users), rng)
 
         # ok groups
         group_canditates: set[frozenset[UserId]]
@@ -235,7 +235,7 @@ def form_user_groups(
     return set(groups)
 
 
-def calculate_group_spots(
+def _calculate_group_spots(
     min_group_size: int,
     group_size: int,
     number_of_users: int,
@@ -305,7 +305,7 @@ def calculate_group_spots(
     return spots_per_interest
 
 
-def hopcroft_karp(
+def _hopcroft_karp(
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
     free_spots: dict[Interest, int],
@@ -361,7 +361,7 @@ def hopcroft_karp(
                 spot_found = True
 
                 # Try to find an augmenting path with a depth-first-search
-                path: list[(Interest, UserId)] = dfs_augmenting_path(
+                path: list[(Interest, UserId)] = _dfs_augmenting_path(
                     users_to_interests,
                     interests_to_users,
                     matchings_inverse,
@@ -415,7 +415,7 @@ def hopcroft_karp(
     return new_matchings
 
 
-def dfs_augmenting_path(
+def _dfs_augmenting_path(
     users_to_interests: dict[UserId, set[Interest]],
     interests_to_users: dict[Interest, set[UserId]],
     matchings_inverse: dict[Interest, set[UserId]],
@@ -452,7 +452,7 @@ def dfs_augmenting_path(
         _users_visited.add(user)
         for interest in users_to_interests[user]:
             if interest not in _interests_visited:
-                path: list[(Interest, UserId)] = dfs_augmenting_path(
+                path: list[(Interest, UserId)] = _dfs_augmenting_path(
                     users_to_interests,
                     interests_to_users,
                     matchings_inverse,

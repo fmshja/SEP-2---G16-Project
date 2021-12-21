@@ -8,7 +8,7 @@
 
 import random
 import graphviz
-from cc_matching import form_user_groups, calculate_group_spots, Interest, UserId
+from cc_matching import form_user_groups, _calculate_group_spots, Interest, UserId
 
 # Controls whether the vizualization graphs are outputted as .gv and .png files with graphviz
 draw_vizualisations: bool = True
@@ -83,7 +83,7 @@ if draw_vizualisations:
                    pos=f"0,{height - i * user_y_factor}!")
 
     # for labeling purposes
-    free_spots: dict[Interest, int] = calculate_group_spots(
+    free_spots: dict[Interest, int] = _calculate_group_spots(
         2,
         2,
         len(test_users_to_interests),
