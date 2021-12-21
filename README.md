@@ -250,14 +250,14 @@ After selecting the correct settings, click the `Save & Close` button and repeat
 
 (NOTE: You can change the order of the menu items by editing the menu item's `Ordering` property afterwards.)
 
-![The step 2.1 of setting up the main menu]
+![The step 2.1 of setting up the main menu](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/menu_step_2.1.png?raw=true)
 
 ### STEP 3
 After adding the components as menu items, unpublish the default menu item `Home` by clicking the green checkmark in front of its title. Then set the `Connecting Home` menu item as Home by clicking the grey circle on its row.
 
 The page should look similiar to the image below.
 
-![The step 3 of setting up the main menu]
+![The step 3 of setting up the main menu](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/menu_step_3.PNG?raw=true)
 
 ### STEP 4
 The set-up for the main menu items is now complete! To make the main menu show up on the website, read the section `Setting up the Positions for the Site Module on the Website` from this README.
@@ -272,7 +272,7 @@ Go to the `Joomla Home Dashboard` if you are not on this page already. After thi
 ### STEP 2
 From the `System Dashboard` page, select the `Site Template Styles` item from the sub menu `Templates`. The `Site Template Styles` item is highlighted in red on the image below.
 
-![The step 2 of applying the template style]
+![The step 2 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_2.png?raw=true)
 
 ### STEP 3
 On the `Templates: Styles (Site)` page, you will find a list of template styles. If the `Cassiopeia - Default` template has already been set as the default template (in other words, the icon inside the highlighted area in red in the image below is the same yellow star), you can skip the next paragraph.
@@ -281,19 +281,19 @@ Set the `Cassiopeia - Default` template (highlighted in lime green in the image 
 
 After setting the default template, click the title for the `Cassiopeia - Default` template (highlighted in lime green in the image below).
 
-![The step 3 of applying the template style]
+![The step 3 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_3.png?raw=true)
 
 ### STEP 4
 On the `Templates: Edit Style` page, click on the `Advanced` tab. Although not strictly related to the template setup, you can change the logo on the header of the website on this tab. The process of changing the logo is descripted in the next paragraph. If you want to only complete the template setup, skip the following paragraph, click the `Menu Assignment` tab and move to the step 5.
 
 To change the logo, you need to click on the toggle switch on the `Brand` property. This will make the options for the logo customization to appear. For the `Logo` property, download the logo image `cc-logo_white.png` provided to you on the `graphics` folder. For the `Title (alternative to logo)` property, write Connecting Colleagues to the field as shown on the image below. After you are done with the logo setup, click the `Menu Assignment` tab.
 
-![The step 4 of applying the template style]
+![The step 4 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_4.png?raw=true)
 
 ### STEP 5
 You should now be on the `Menu Assignmnet` tab on the `Templates: Edit Style` page. Under this tab, there is a list of the menu items. Select all the menu items except `Home` as shown in the image below. Click the `Save & Close` button.
 
-![The step 5 of applying the template style]
+![The step 5 of applying the template style](https://github.com/fmshja/SEP-2---G16-Project/blob/main/graphics/instruction_images/temp_step_5.png?raw=true)
 
 ### STEP 6
 The application of the default template is now complete!
