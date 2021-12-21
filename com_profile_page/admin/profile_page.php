@@ -14,7 +14,7 @@ $config_output = "";
 $console_output = "No console output";
 
 // find or create the config file
-$cfg_path = '.\components\com_profile_page\run_config.json';
+$cfg_path = './components/com_profile_page/run_config.json';
 $valid_cfg_existed = false;
 if(file_exists($cfg_path)) {
     // config found, use it
@@ -48,7 +48,7 @@ if (!$valid_cfg_existed) {
 }
 
 if(isset($_POST['matching-button'])){
-    $command = $cfg->python_cmd . ' .\components\com_profile_page\run.py';
+    $command = $cfg->python_cmd . ' ./components/com_profile_page/run.py';
     $console_output = shell_exec($command.' 2>&1');
     $console_output = nl2br($console_output); // change the linebreaks to <br> tags
 }
