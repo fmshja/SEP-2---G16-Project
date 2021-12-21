@@ -52,7 +52,7 @@ if (isset($_POST['SubmitButton'])) {
         // Loop through the form and push the values to an array
         foreach ($_POST['interest'] as $value) {
             // $interests.=$value. " ";
-            array_push($interests, $value);
+            array_push($interests, (int)$value);
         }
         // Encode the array to json-format
         $interests = json_encode($interests);
