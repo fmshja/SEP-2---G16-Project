@@ -2,7 +2,15 @@
 
 Requires at least Python 3.9.
 
-The main function that you need to import and use is `form_groups`.
+# Usage
+The main function that you need to import and use is `form_user_groups`.
+
+If you want to do type ascription, you might want to import the types `UserId`, `Interest`, and maybe `Group` as well.
+
+Example import statement:
+```python
+from cc_matching import form_user_groups, Interest, UserId
+```
 """
 
 from collections import deque
@@ -19,7 +27,7 @@ class Group:
     """A group of users formed by the matching algorithm.
 
     Attributes:
-        users (list[userId]): The list of users in this group
+        users (list[UserId]): The list of users in this group
         interest (Interest): The interest that this group was formed around
     """
 
