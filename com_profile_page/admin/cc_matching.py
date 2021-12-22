@@ -295,12 +295,20 @@ def _calculate_group_spots(
     # Spread any remaining free spots with the interests and try to make as many of the spots for each interests
     # to be divisible by the `group_size`
     for interest, count in spots_sorted:
+        # the remainder
         rem = count % group_size
-        if rem == 0 and not (count == 0 and popularity_of_interest[interest] >= group_size):
+
+        # whether we are adding the first group for this interest
+        add_the_first_group = count == 0 and popularity_of_interest[interest] >= group_size
+
+        if rem == 0 and not add_the_first_group:
             continue  # the size is good already
 
         new_spots = group_size - rem
         if new_spots > free_spots:
+            if add_the_first_group and free_spots < min_group_size:
+                # don't add a too small group as the first group
+                continue
             # just add the rest
             new_spots = free_spots
 
